@@ -10,4 +10,4 @@
 
 ## What are some sample stories/scenarios? For example, as a regular user to your site, what types of things can I do? These are the ‘stories’ of your project.
 
-## Is the amount of work required in this proposal enough for five group members(kevin)
+## Is the amount of work required in this proposal enough for five group members?
