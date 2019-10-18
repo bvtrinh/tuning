@@ -23,4 +23,10 @@ Leaderboards will provide users the opportunity to compete with their friends an
 
 ## What are some sample stories/scenarios? For example, as a regular user to your site, what types of things can I do? These are the ‘stories’ of your project.
 
+Any user would be able to log in to their unique account and be given the option to either create a party,join a party, or start a solo game. If the user chose to create a party then others would be able to join the party using a password and they could play a multiplayer match. When playing, users will be given the option to pick their genre or era of music as well as the option of if they would like to play the standard text input version,  a multiple-choice version or potentially even a speech to text version. For example, if the user chose the text input version, they would be prompted to type the name of the song and artist after the sample snipper of the song has been done playing. If the user chose multiple choice version, there would be four choices to pick from and the user would need to select one. Each user would also have the option of viewing their personal leaderboards or global leader boards to check high scores and win/loss records.
+
+
 ## Is the amount of work required in this proposal enough for five group members?
+
+Yes, we believe it to be enough work. We plan on implementing different modes of play, such as text input, multiple choice, and potentially speech recognition. Along with options of multiplayer or solo play. There will also be the task of implementing two API’s, one for displaying the lyrics and the other for getting the artist and song information. Lastly, we would need to deal with the creation of profiles and linking these them to leaderboards.
+
