@@ -4,7 +4,7 @@
 
 ## How will this project make life better? Is it educational or just for entertainment?
 
-Tuning is a party game, where the players are groups of friends or strangers that compete against one another in a fast-paced game of guessing the song title, artist, or missing lyrics that is associated with a short 10-15seconds music clip that plays. The aim of Tuning is to provide entertainment and a fun activity for groups of friends or strangers to play on weekends, game nights, trivia nights, bars, etc. which gives them an opportunity to socialize and create closer bonds amongst each other, and make new friends. While, Tuning is more focused on providing entertainment, it does indirectly help make life easier by relieving stress and creating friendships through the fun gameplay and socialization opportunities.
+Tuning is a party game, where the players are groups of friends or strangers that compete against one another in a fast-paced game of guessing the song title, artist, or missing lyrics that is associated with a short 10-15 seconds music clip that plays. The aim of Tuning is to provide entertainment and a fun activity for groups of friends or strangers to play on weekends, game nights, trivia nights, bars, etc. which gives them an opportunity to socialize and create closer bonds amongst each other, and make new friends. While, Tuning is more focused on providing entertainment, it does indirectly help make life easier by relieving stress and creating friendships through the fun gameplay and socialization opportunities.
 
 ## Who is the target audience?
 
