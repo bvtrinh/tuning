@@ -2,19 +2,15 @@
 
 ## How is this problem solved currently (if at all)?
 
-While there are applications out there that allow you to guess the song based off of the lyrics or off of the music, they lack diversity. They are one dimensional, only giving the user the option of the lyrics or the music, depending on the application. [APP] will allow the user to choose how they want to play the game, allowing them to choose which mode they would prefer to play. All of the current applications are also targeted towards a mobile market, not currently available in a real time format on the web. On the web, the problem is solved with online quizzes.
+While there are applications out there that allow you to guess the song based off of the lyrics or off of the music, they lack diversity. They are one dimensional, only giving the user the option of the lyrics or the music, depending on the application. Tuning will allow the user to choose how they want to play the game, allowing them to choose which mode they would prefer to play. All of the current applications are also targeted towards a mobile market, not currently available in a real time format on the web. On the web, the problem is solved with online quizzes.
 
 ## How will this project make life better? Is it educational or just for entertainment?
 
-<<<<<<< HEAD
-[APP] is a party game, where the players are groups of friends or strangers that compete against one another in a fast-paced game of guessing the song title, artist, or missing lyrics that is associated with a short 10-15seconds music clip that plays. The aim of [APP] is to provide entertainment and a fun activity for groups of friends or strangers to play on weekends, game nights, trivia nights, bars, etc. which gives them an opportunity to socialize and create closer bonds amongst each other, and make new friends. While, [APP] is more focused on providing entertainment, it does indirectly help make life easier by relieving stress and creating friendships through the fun gameplay and socialization opportunities.
-=======
 Tuning is a party game, where the players are groups of friends or strangers that compete against one another in a fast-paced game of guessing the song title, artist, or missing lyrics that is associated with a short 10-15 seconds music clip that plays. The aim of Tuning is to provide entertainment and a fun activity for groups of friends or strangers to play on weekends, game nights, trivia nights, bars, etc. which gives them an opportunity to socialize and create closer bonds amongst each other, and make new friends. While, Tuning is more focused on providing entertainment, it does indirectly help make life easier by relieving stress and creating friendships through the fun gameplay and socialization opportunities.
->>>>>>> 5d905b785798203ac95af716619c48575b17b5e7
 
 ## Who is the target audience?
 
-Our target audience for [APP] is aimed towards young adults who are interested in playing party type games with their own friend groups. As well as, adults who are looking to socialize and create new friendships.
+Our target audience for Tuning is aimed towards young adults who are interested in playing party type games with their own friend groups. As well as, adults who are looking to socialize and create new friendships.
 
 ## Does this project have many individual features, or one main feature (possibility with many subproblems)? These are the ‘epics’ of your project.
 
