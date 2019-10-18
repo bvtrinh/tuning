@@ -16,14 +16,18 @@ Our target audience for Tuning is aimed towards young adults who are interested 
 
 ### Song guessing
 
+An epic that we will be splitting into smaller stories will be the main playable feature of the game itself, guessing the song name. We will be utilizing Spotify’s public API to grab the data (song name, artist, etc) for each song, and musicXMatch API to grab song lyrics. This feature will be broken down into playable categories that are split by different genres of music (eg: rock, pop, jazz), the era of when the song was created (eg: 1930’s), a multiple choice quiz version, and potentially a speech-to-text version. These separate categories and play modes will be our smaller stories, that we can further decompose into smaller, more actionable tasks through backlog grooming and technical decompositions.
+
 ### Leaderboards
 Leaderboards will provide users the opportunity to compete with their friends and to show off their knowledge of music. For each category of music (rock, hip-hop, modern) there will be two leaderboards associated with it: one for single-player and one for multiplayer. As well as a single and multiplayer global leaderboard that takes the cumulative score of all categories.  Leaderboards will contain the rankings of the top players, their win-loss ratio, how many ranks they gained in the past week and their score. Scores will determine the rankings of the top players on the leaderboards and will be referenced from a user’s profile. Scores will be determined by how quickly a user answers correctly. Leaderboards will be updated periodically every 3 hours (tentative).
 
 ### Profiles
 
+Each user will have a unique profile that is kept track of via logging in. These profiles will be what is used to keep track of our leaderboard feature. A profile will consist of a username and leaderboard features such as a personal highscore. In addition, some future features we can think about adding may include incorporating Google Play services or Facebook to help keep track of progress, and adding friends online. Lastly, data, such as most played category, can be recorded to show how much time a user spent on certain categories, which categories are currently the most popular among users, and other meaningful pieces of data that developers can take actions on.
+
 ### Multiplayer
 
-For the multiplayer aspect of the application, we would have a lot of different options as how we want to match players. We will give them the opportunity to compete against their friends, being able to send invitations to those they wish to compete against (potentially via social media). We will also be able to match players based off of the same rankings that are used in the scoreboards to ensure that we are matching players to other players with a matching skill level. 
+For the multiplayer aspect of the application, we would have a lot of different options as how we want to match players. We will give them the opportunity to compete against their friends, being able to send invitations to those they wish to compete against (potentially via social media). We will also be able to match players based off of the same rankings that are used in the scoreboards to ensure that we are matching players to other players with a matching skill level.
 
 ## What are some sample stories/scenarios? For example, as a regular user to your site, what types of things can I do? These are the ‘stories’ of your project.
 
