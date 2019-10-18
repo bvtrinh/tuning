@@ -12,6 +12,15 @@ Our target audience for [APP] is aimed towards young adults who are interested i
 
 ## Does this project have many individual features, or one main feature (possibility with many subproblems)? These are the ‘epics’ of your project.
 
+### Song guessing
+
+### Leaderboards
+Leaderboards will provide users the opportunity to compete with their friends and to show off their knowledge of music. For each category of music (rock, hip-hop, modern) there will be two leaderboards associated with it: one for single-player and one for multiplayer. As well as a single and multiplayer global leaderboard that takes the cumulative score of all categories.  Leaderboards will contain the rankings of the top players, their win-loss ratio, how many ranks they gained in the past week and their score. Scores will determine the rankings of the top players on the leaderboards and will be referenced from a user’s profile. Scores will be determined by how quickly a user answers correctly. Leaderboards will be updated periodically every 3 hours (tentative).
+
+### Profiles
+
+### Multiplayer
+
 ## What are some sample stories/scenarios? For example, as a regular user to your site, what types of things can I do? These are the ‘stories’ of your project.
 
 ## Is the amount of work required in this proposal enough for five group members?
