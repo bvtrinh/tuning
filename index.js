@@ -23,8 +23,10 @@ app.get('/login', (req, res) => {res.render('pages/login')});
 app.post('/sign_in', (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
+    
+    // Validate here
 
-    res.send(username);
+    res.send(username + ' is logged in!');
 
 });
 
