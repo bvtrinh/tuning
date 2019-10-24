@@ -18,4 +18,14 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {res.render('pages/index')});
 
+app.get('/login', (req, res) => {res.render('pages/login')});
+
+app.post('/sign_in', (req, res) => {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    res.send(username);
+
+});
+
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
