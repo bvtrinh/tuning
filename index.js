@@ -20,14 +20,28 @@ app.get('/', (req, res) => {res.render('pages/index')});
 
 app.get('/login', (req, res) => {res.render('pages/login')});
 
+app.get('/signup', (req,res) => {res.render('pages/signup')});
+
 app.post('/sign_in', (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
-    
+
     // Validate here
 
     res.send(username + ' is logged in!');
 
+});
+
+app.post('/sign_up', (req, res) => {
+    var username = req.body.username;
+    // query db and check if the username is already in username
+    //  if username is already in use, send error message and re-render page
+    //  else
+    //    var password = req.body.password;
+    //    if(password != req.body.confirmPassword)
+    //      send error message and re-render page (preferably with the same username)
+    //    insert into database values (username, password)
+    //    render homepage
 });
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
