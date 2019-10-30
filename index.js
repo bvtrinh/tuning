@@ -44,4 +44,12 @@ app.post('/sign_up', (req, res) => {
     //    render homepage
 });
 
+app.get('/play', (req, res) => {
+    res.render('pages/landing');
+});
+
+app.get('*', function(req, res){
+    res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
+  })
+  
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
