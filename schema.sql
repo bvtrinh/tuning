@@ -1,7 +1,8 @@
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
-    username VARCHAR(10),
+    username VARCHAR(20),
     password TEXT
+
 );
 
 INSERT INTO users(
