@@ -1,0 +1,18 @@
+body {
+    background-image: url(https://images.unsplash.com/photo-1526327760257-75f515c74478?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+}
+
+.card {
+    margin: 0;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+a {
+    font-size: 70%;
+    opacity: 0.4;
+    color: black;
+    text-decoration: underline;
+    margin: 29%;
+}
