@@ -1,0 +1,46 @@
+
+html, body{
+    height: 100%;
+}
+
+.nav-item{
+    padding-right: 15px;
+}
+
+.content{
+    height: 80%;
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+    top: 5%;
+    border: 2px solid darkgrey;
+    border-radius: 10px;
+    min-height: 300px;
+}
+
+.title{
+    text-align: center;
+    font-size: 70px;
+    position: relative;
+    top: 5%;
+}
+
+.game{
+    height: 100%;
+}
+.container{
+    height: 60%;
+    width: 60%;
+    position: relative;
+    top: 15%;
+}
+
+.gameOpt{
+    background: darkgrey;
+    width: 50%;
+    height: 40%;
+}
+
+.row{
+    margin-top: 6%;
+}
