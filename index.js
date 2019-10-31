@@ -6,6 +6,9 @@ const expressSession = require('express-session');
 const PORT = process.env.PORT || 5000
 var app = express();
 
+var bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const { Pool } = require('pg');
 var pool;
 pool = new Pool({
@@ -40,6 +43,7 @@ app.post('/sign_in', (req, res) => {
   var errors = null;
   // hash
   // validate on db
+  
 
   if(errors){
     res.render('pages/login', {errors: errors});
@@ -51,6 +55,8 @@ app.post('/sign_in', (req, res) => {
 
 app.post('/sign_up', [check('password','password is too short').isLength({ min: 5 }), check('username','username is too short').isLength({min:5})], (req, res) => {
   var username = req.body.username;
+  var password = req.body.password;
+  var confirmPassword = req.body.confirmPassword;
   // query db and check if the username is already in username
   //  if username is already in use, send error message and re-render page
   //  else
@@ -63,6 +69,12 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
   }else{
     //    hash
     //    insert into database values (username, password)
+    //    dont know db name yet, so swap out users with db name
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+      db.query('INSERT INTO users (username, password) VALUES (?,?)',(username,hash)), function(error,results, fields){
+        if (error) throw error;
+      })
+    });
     req.session.username = username;
     res.redirect('play');
   }
