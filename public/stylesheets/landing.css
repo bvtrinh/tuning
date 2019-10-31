@@ -3,11 +3,21 @@ html, body{
     height: 100%;
 }
 
+/* Set a background image by replacing the URL below */
+body {
+    background: url('https://images.unsplash.com/photo-1526327760257-75f515c74478?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
 .nav-item{
     padding-right: 15px;
 }
 
 .content{
+    background: white;
     height: 80%;
     width: 80%;
     margin: 0 auto;
@@ -16,6 +26,10 @@ html, body{
     border: 2px solid darkgrey;
     border-radius: 10px;
     min-height: 300px;
+}
+
+.arvo {
+    font-family: 'Arvo', serif;
 }
 
 .title{
