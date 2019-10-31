@@ -16,7 +16,11 @@ app.use(express.urlencoded({ extended: false }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {res.render('pages/index')});
+app.get('/', (req, res) => {
+    // Used to identify the current page to display login or username
+    // Once sessions are setup, used that variable instead to check if they are logged in
+    res.render('pages/index', {title: 'home'});
+});
 
 app.get('/login', (req, res) => {res.render('pages/login')});
 
@@ -45,7 +49,9 @@ app.post('/sign_up', (req, res) => {
 });
 
 app.get('/play', (req, res) => {
-    res.render('pages/landing');
+    // Used to identify the current page to display login or username
+    // Once sessions are setup, used that variable instead to check if they are logged in
+    res.render('pages/landing', {title: 'play'});
 });
 
 app.get('*', function(req, res){
