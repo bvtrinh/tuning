@@ -19,6 +19,7 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     // Used to identify the current page to display login or username
     // Once sessions are setup, used that variable instead to check if they are logged in
+    // Also change the variable in nav.ejs
     res.render('pages/index', {title: 'home'});
 });
 
