@@ -3,9 +3,9 @@
 
     <a class="navbar-brand arvo" href="/">
       <i class="fas fa-music"></i>  Tuning</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" 
-        data-target="#navbarTogglerDemo02" 
-        aria-controls="navbarTogglerDemo02" 
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#navbarTogglerDemo02"
+        aria-controls="navbarTogglerDemo02"
         aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,10 +17,10 @@
         <ul class="nav navbar-nav navbar-right">
         <% if (title == 'play') { %>
             <li class="navbar-right">
-                <a class="nav-link" href="/profile"><i class="fas fa-user"></i> username</a>
+                <a class="nav-link" href="/profile"><i class="fas fa-user"></i><%=username%></a>
             </li>
             <li class="navbar-right">
-                <a class="nav-link" href="/login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </li>
         <% } else { %>
             <li class="navbar-right">
