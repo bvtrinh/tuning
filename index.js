@@ -8,7 +8,8 @@ var app = express();
 
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
-
+//const db = require('./db');
+// for when we create database
 const { Pool } = require('pg');
 var pool;
 pool = new Pool({
@@ -43,14 +44,27 @@ app.post('/sign_in', (req, res) => {
   var errors = null;
   // hash
   // validate on db
-  bcrypt.compare(password, hash, function(err, res) {
-    if(res) {
-      req.session.username = username;
-      res.redirect('play');
-    } else {
-      res.render('pages/login', {errors: [{msg:'Incorrect Password'}]});
-    }
-  });
+  db.query('SELECT password FROM users WHERE username = ?',[username], function(err,results,fields) {
+    if (error) throw error;
+
+    //if (results.length == 0){
+    //
+    //}
+    const hash = results[0].password.toString();
+
+    bcrypt.compare(password,hash,function(err,response) {
+      if(response==true){
+        req.session.username = username;
+        res.redirect('play');
+      }
+      else{
+        res.render('pages/login', {errors: [{msg:'Password is incorrect'}]});
+      }
+    })
+
+
+  })
+
 
 
   if(errors){
@@ -79,10 +93,10 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
     //    insert into database values (username, password)
     //    dont know db name yet, so swap out users with db name
     bcrypt.hash(password, saltRounds, function(err, hash) {
-      
+
       db.query('INSERT INTO users (username, password) VALUES (?,?)',(username,hash)), function(error,results, fields){
         if (error) throw error;
-      })
+      }
     });
     req.session.username = username;
     res.redirect('play');
