@@ -31,3 +31,28 @@ body {
   background-size: cover;
   -o-background-size: cover;
 }
+
+#mainContent{
+    padding: 0 50px 50px 50px;
+}
+
+.row{
+    margin-top: 9%;
+}
+
+.container{
+    padding: 0px;
+}
+
+.auto-align{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+hr{
+    margin: 100px 0;
+}
+
+.dev{
+    margin-top:2% !important;
+}
