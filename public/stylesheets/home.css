@@ -1,5 +1,6 @@
 .jumbotron {
-    background: #EDF1FF;
+    background: #364167;
+    color: white;
 }
 
 h2.index-cap {
@@ -42,6 +43,8 @@ body {
 
 .container{
     padding: 0px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .auto-align{
@@ -55,4 +58,18 @@ hr{
 
 .dev{
     margin-top:2% !important;
+}
+
+.carousel{
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+}
+
+#bannerHr{
+    border-color:grey;
+    margin: 50px 0;
+}
+
+.list-group{
+    margin-top: 20px;
 }
