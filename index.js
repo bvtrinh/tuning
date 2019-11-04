@@ -79,7 +79,7 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
     }
 
     if (results.length != 0) {
-      res.render('pages/login', {errors: [{msg:'username is already in use'}]});
+      res.render('pages/signup', {errors: [{msg:'username is already in use'}]});
     }
   }
   //  else
