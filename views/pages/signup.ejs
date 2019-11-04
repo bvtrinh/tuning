@@ -24,17 +24,17 @@
               <form class="form-signin" method="POST" action="/sign_up">
                 <div class="form-label-group">
                   <label for="inputUsername">Username</label>
-                  <input type="text" id="inputUsername" class="form-control" name="username" required autofocus>
+                  <input type="text" id="inputUsername" class="form-control" name="username" minlength="5" required autofocus>
                 </div>
 
                 <div class="form-label-group">
                   <label for="inputPassword">Password</label>
-                  <input type="password" id="inputPassword" name="password" class="form-control" required>
+                  <input type="password" id="inputPassword" name="password" class="form-control" minlength="5" required>
                 </div>
 
                 <div class="form-label-group">
                   <label for="inputPassword">Confirm Password</label>
-                  <input type="password" id="inputPassword" name="confirmPassword" class="form-control" required>
+                  <input type="password" id="inputPassword" name="confirmPassword" class="form-control" minlength="5" required>
                 </div>
 
                 <hr class="my-4">
