@@ -49,23 +49,22 @@ app.post('/sign_in', (req, res) => {
       throw error;
     }
 
-    if (results.length == 0) {
+    if (results.rows.length == 0) {
       res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
-
     }
+    else {
 
-    const hash = results.rows[0].password.toString();
-
-    bcrypt.compare(password,hash,function(err,response) {
-      if(response==true){
-        req.session.username = username;
-        res.redirect('play');
-      }
-      else{
-        res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
-      }
-    });
-
+      const hash = results.rows[0].password.toString();
+      bcrypt.compare(password,hash,function(err,response) {
+        if(response) {
+          req.session.username = username;
+          res.redirect('play');
+        }
+        else {
+          res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
+        }
+      });
+    }
   });
 });
 
@@ -77,11 +76,12 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
     if (error) {
       throw error;
     }
+    console.log()
 
     if (results.length != 0) {
       res.render('pages/login', {errors: [{msg:'username is already in use'}]});
     }
-  }
+  });
   //  else
   var errors = validationResult(req);
   if(!(req.body.password === req.body.confirmPassword)){
