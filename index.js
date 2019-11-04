@@ -20,7 +20,7 @@ pool = new Pool({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(expressSession({secret: 'tuinng', saveUninitialized: false, resave: false}));
+app.use(expressSession({secret: 'tuning', saveUninitialized: false, resave: false}));
 app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -44,13 +44,17 @@ app.post('/sign_in', (req, res) => {
   var errors = null;
   // hash
   // validate on db
-  pool.query('SELECT password FROM users WHERE username = ?',[username], function(err,results,fields) {
-    if (error) throw error;
+  pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
+    if (error) {
+      throw error;
+    }
 
-    //if (results.length == 0){
-    //
-    //}
-    const hash = results[0].password.toString();
+    if (results.length == 0) {
+      res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
+
+    }
+
+    const hash = results.rows[0].password.toString();
 
     bcrypt.compare(password,hash,function(err,response) {
       if(response==true){
@@ -58,21 +62,11 @@ app.post('/sign_in', (req, res) => {
         res.redirect('play');
       }
       else{
-        res.render('pages/login', {errors: [{msg:'Password is incorrect'}]});
+        res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
       }
-    })
+    });
 
-
-  })
-
-
-
-  if(errors){
-    res.render('pages/login', {errors: errors});
-  }else{
-    req.session.username = username;
-    res.redirect('play');
-  }
+  });
 });
 
 app.post('/sign_up', [check('password','password is too short').isLength({ min: 5 }), check('username','username is too short').isLength({min:5})], (req, res) => {

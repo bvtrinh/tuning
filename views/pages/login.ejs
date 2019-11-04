@@ -14,15 +14,21 @@
             <div class="card-body">
               <h3></h3>
               <h4 class="card-title text-center">Sign In</h5>
+                <ul>
+                  <% if(errors){
+                      for(var e of errors){ %>
+                    <li><%= e.msg %></li>
+                  <% }} %>
+                </ul>
               <form class="form-signin" method="POST" action="/sign_in">
                 <div class="form-label-group">
                   <label for="inputUsername">Username</label>
-                  <input type="text" id="inputUsername" class="form-control" name="username" required autofocus>
+                  <input type="text" id="inputUsername" class="form-control" name="username" minlength="5" required autofocus>
                 </div>
   
                 <div class="form-label-group">
                   <label for="inputPassword">Password</label>
-                  <input type="password" id="inputPassword" name="password" class="form-control" required>
+                  <input type="password" id="inputPassword" name="password" class="form-control" minlength="5" required>
                 </div>
   
                 <hr class="my-4">
