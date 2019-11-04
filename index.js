@@ -73,8 +73,15 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
   var username = req.body.username;
   var password = req.body.password;
   var confirmPassword = req.body.confirmPassword;
-  // query db and check if the username is already in username
-  //  if username is already in use, send error message and re-render page
+  pool.query(`SELECT * FROM users WHERE username = '${username}'`, (error, results) => {
+    if (error) {
+      throw error;
+    }
+
+    if (results.length != 0) {
+      res.render('pages/login', {errors: [{msg:'username is already in use'}]});
+    }
+  }
   //  else
   var errors = validationResult(req);
   if(!(req.body.password === req.body.confirmPassword)){
