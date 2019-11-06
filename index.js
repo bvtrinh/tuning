@@ -34,6 +34,22 @@ app.get('/', (req, res) => {
     }
 });
 
+app.get('/playlists', (req, res) =>{
+  if(req.session.username){
+    res.render('pages/playlists');
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get('/profile', (req, res) =>{
+  if(req.session.username){
+    res.render('pages/profile');
+  }else{
+    res.redirect('login');
+  }
+});
+
 app.get('/login', (req, res) => {res.render('pages/login', {errors: null})});
 
 app.get('/signup', (req,res) => {res.render('pages/signup', {errors: null})});
@@ -49,22 +65,23 @@ app.post('/sign_in', (req, res) => {
       throw error;
     }
 
-    if (results.rows.length == 0) {
+    if (results.length == 0) {
       res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
-    }
-    else {
 
-      const hash = results.rows[0].password.toString();
-      bcrypt.compare(password,hash,function(err,response) {
-        if(response) {
-          req.session.username = username;
-          res.redirect('play');
-        }
-        else {
-          res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
-        }
-      });
     }
+
+    const hash = results.rows[0].password.toString();
+
+    bcrypt.compare(password,hash,function(err,response) {
+      if(response==true){
+        req.session.username = username;
+        res.redirect('play');
+      }
+      else{
+        res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
+      }
+    });
+
   });
 });
 
@@ -77,34 +94,34 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
       throw error;
     }
 
-    if (results.rows.length != 0) {
-      res.render('pages/signup', {errors: [{msg:'Username is already in use'}]});
-    }
-    else {
-
-      var errors = validationResult(req);
-      if(!(password === confirmPassword)) {
-        res.render('pages/signup', {errors: [{msg:'Passwords do not match'}]});
-      }
-      else if(!errors.isEmpty()) {
-        res.render('pages/signup', errors)
-      } 
-      else {
-        bcrypt.hash(password, saltRounds, (err,hash) => {
-
-          pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${hash}')`, (error) => {
-            if (error) {
-              throw error;
-            }
-          });
-
-        });
-
-        req.session.username = username;
-        res.redirect('play');
-      }
+    if (results.length != 0) {
+      res.render('pages/signup', {errors: [{msg:'username is already in use'}]});
     }
   });
+  //  else
+  var errors = validationResult(req);
+  if(!(req.body.password === req.body.confirmPassword)){
+    res.render('pages/signup', {errors: [{msg:'Passwords do not match'}]});
+  }
+  else if(!errors.isEmpty()){
+    res.render('pages/signup', errors)
+  }else{
+    //    hash
+    //    insert into database values (username, password)
+    //    dont know db name yet, so swap out users with db name
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+
+      pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${hash}')`, (error) => {
+        if (error) {
+          throw error;
+        }
+      });
+
+    });
+
+    req.session.username = username;
+    res.redirect('play');
+  }
 });
 
 app.get('/play', (req, res) => {
