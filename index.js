@@ -171,10 +171,6 @@ setTimeout(function(){
   updateSongDB()
 }, 10 * 24 * 60 * 60 * 1000)
 
-
-
-
-
 function updateSongDB() {
   //Grabs all unique artists for top 100 songs
   getChart('hot-100', function (err, chart) {
