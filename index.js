@@ -153,10 +153,6 @@ app.get('/logout', (req, res) => {
   }
 });
 
-app.get('/test', function (req, res) {
-  updateSongDB()
-})
-
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
 })
@@ -166,10 +162,11 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 //10 days we update the database
-setTimeout(function(){
-  console.log("------STARTING SONG DATABASE UPDATE------")
-  updateSongDB()
-}, 10 * 24 * 60 * 60 * 1000)
+console.log("------STARTING SONG DATABASE UPDATE------")
+updateSongDB()
+setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
+setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
+
 
 function updateSongDB() {
   //Grabs all unique artists for top 100 songs
@@ -203,7 +200,10 @@ function updateSongDB() {
     //Grab all the unique artists
     let uniqueArtists = seperatedArtists.filter(onlyUnique)
 
+    //console.log(uniqueArtists)
+    //console.log("----------------------------")
     //Used to limit our web api calls to 1 parallel connection at a time
+
     async.eachLimit(uniqueArtists, 5, function (artist, callback) {
       setTimeout(function () {
         spotify.search({ type: 'artist', query: artist }, function (err, data) {
@@ -217,7 +217,7 @@ function updateSongDB() {
           let artistName = artist.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); //escape special characters
           spotify.request(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=CA`, function (err, data) {
             if (err) {
-              return console.log(err)
+              return console.log("this is the error for top tracks query : " + err)
             }
 
             let hasPreviews = []
@@ -231,18 +231,7 @@ function updateSongDB() {
             if (hasPreviews.length == 0) {
               return console.log("No songs available for: " + artistName)
             }
-            /* 
-                        for (let i = 0; i < hasPreviews.length; i++) {
-                          console.log("=========================================")
-                          console.log("artists ID: " + artistId)
-                          console.log("Artists Name: " + artistName)
-                          console.log("Song ID " + hasPreviews[i].id)
-                          console.log("Song Name " + hasPreviews[i].name)
-                          console.log("Genres " + artistGenres)
-                          console.log("URL: " + hasPreviews[i].preview_url)
-                          console.log("=========================================")
-                        } 
-            */
+
             //escape all special characters in song name, so we can insert into db
             for (let i = 0; i < hasPreviews.length; i++) {
               hasPreviews[i].name = hasPreviews[i].name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -284,11 +273,10 @@ function updateSongDB() {
         return console.log(err)
       })
   })
-  return
 }
 
-function alertUploadDone() {
-  return console.log("--------DONE UPDATING DATABASE--------")
+function alertUpdate() {
+  return console.log("------STARTING SONG DATABASE UPDATE------")
 }
 
 //Used with .filter function to grab only unique artists in an array
