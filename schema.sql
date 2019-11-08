@@ -6,11 +6,11 @@ CREATE TABLE users(
 );
 
 CREATE TABLE songs(
-          artistID text,
+          artistID varchar,
           artistName text,
-          songID text PRIMARY KEY,
+          songID varchar PRIMARY KEY,
           songName text,
-          genre text[],
+          genre json,
           URL text
 );
 
