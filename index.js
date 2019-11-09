@@ -293,3 +293,5 @@ function onlyUnique(value, index, self) {
 function removeLilNasX(artists) {
   return (artists.includes("Lil Nas X") == false)
 }
+
+//select * from songs where genre::text like '%pop%' order by random() limit 5;
