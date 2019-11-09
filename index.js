@@ -299,5 +299,16 @@ function onlyUnique(value, index, self) {
 function removeLilNasX(artists) {
   return (artists.includes("Lil Nas X") == false)
 }
-
+//STEP 1
 //select * from songs where genre::text like '%pop%' order by random() limit 5;
+//
+//STEP 2
+//GET related artists/song depending on mode
+//use the artist id and https://api.spotify.com/v1/artists/{id}/related-artists for related artists 
+//Use artists ID grab songs made by them, and then just select 3 of them that does not include the right answer, and use them for the wrong answers
+//
+//Step 3
+//Put our list of songs to be played in json format
+//
+//STEP 4
+//Put it in a queue to pop at each round?
