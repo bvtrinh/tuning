@@ -56,9 +56,17 @@ app.get('/playlists', (req, res) => {
 
 app.get('/profile', (req, res) => {
   if (req.session.username) {
-    res.render('pages/profile');
+    res.render('pages/profile', {username: req.session.username});
   } else {
     res.redirect('login');
+  }
+});
+
+app.get('/reset', (req, res) =>{
+  if(req.session.username){
+    res.render('pages/reset', {username: req.session.username});
+  }else{
+    res.redirect('profile');
   }
 });
 
@@ -177,7 +185,7 @@ function updateSongDB() {
     }
     let topArtist = []
 
-    //grabs all the artists for top 100 songs 
+    //grabs all the artists for top 100 songs
     for (let i = 0; i < chart.songs.length; i++) {
       topArtist.push(chart.songs[i].artist)
     }
@@ -286,7 +294,7 @@ function onlyUnique(value, index, self) {
 
 //Not hating on Lil Nas X
 //Literally the X part of Lil Nas X messes up the updating of the song database
-//because when we use grab the artists from the top-songs of the month, it returns 
+//because when we use grab the artists from the top-songs of the month, it returns
 //all artist that participated in a track. For example, Kygo X Whitney Houston,
 //Our regex then splits up Kygo and Whitney Houston by detecting the X, but since Lil
 //Nas X has an X it splits Lil Nas X => [Lil Nas, ''], so now when we iterate through our list
