@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/change.css">
+    <title>Change Password</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark shadow-lg" style="background-color: #364167;">
+      <a class="navbar-brand" href="/play">
+      <img src="/img//logo/logo.png" class="img-fluid">
+      Tuning
+      </a>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="navbar-right">
+              <a class="nav-link" href="/profile"><i class="fas fa-user"></i> <%=username%></a>
+          </li>
+          <li class="navbar-right">
+              <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <<div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h5 class="card-title text-center">Reset Password</h5>
+              <form class="form-signin" method="POST" action="/reset">
+                <div class="form-label-group">
+                  <label for="currentPassword"> Current Password</label>
+                  <input type="password" id="currentPassword" name="Currentpassword" class="form-control" minlength="5" pattern ="^[a-zA-Z0-9]*$" title="The password you entered contains spaces" required>
+                </div>
+
+                <div class="form-label-group">
+                  <label for="newPassword">New Password</label>
+                  <input type="password" id="newPassword" name="Newpassword" class="form-control" minlength="5" pattern ="^[a-zA-Z0-9]*$" title="The password you entered contains spaces" required>
+                </div>
+
+                <div class="form-label-group">
+                  <label for="confirmNewPassword">Confirm New Password</label>
+                  <input type="password" id="confirmNewPassword" name="ConfirmNewpassword" class="form-control" minlength="5" pattern ="^[a-zA-Z0-9]*$" title="The password you entered contains spaces" required>
+                </div>
+                <hr class="my-4">
+                <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Confirm</button>
+                <a href="/play" class="btn btn-lg btn-warning btn-block text-uppercase">Cancel</a>
+               </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+  </html>

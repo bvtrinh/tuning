@@ -1,10 +1,95 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Profile</title>
-  </head>
-  <body>
-    
-  </body>
+<html>
+
+<head>
+  <% include ../partials/header.ejs %>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/profile.css">
+  <title>Profile</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-sm navbar-dark shadow-lg" style="background-color: #364167;">
+    <a class="navbar-brand" href="/play">
+    <img src="/img//logo/logo.png" class="img-fluid">
+    Tuning
+    </a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-right">
+            <a class="nav-link" href="/play"><i class="fas fa-home"></i>Home</a>
+        </li>
+        <li class="navbar-right">
+            <a class="nav-link" href="/profile"><i class="fas fa-user"></i> <%=username%></a>
+        </li>
+        <li class="navbar-right">
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content">
+      <div class="game">
+          <div class="title arvo">
+              <p><%=username%></p>
+          </div>
+          <div class="scoretitle">
+              <p>Recent Scores</p>
+          </div>
+          <div id=table>
+            <table class="table table-hover table-bordered table-sm table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Score</th>
+                  <th scope="col">Genre</th>
+                  <th scope="col">Mode</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">DateOfMatch</th>
+                  <td>300</td>
+                  <td>Playlist1</td>
+                  <td>Solo</td>
+                </tr>
+                <tr>
+                  <th scope="row">DateOfMatch</th>
+                  <td>300</td>
+                  <td>Playlist1</td>
+                  <td>Solo</td>
+                </tr>
+                <tr>
+                  <th scope="row">DateOfMatch</th>
+                  <td>300</td>
+                  <td>Playlist1</td>
+                  <td>Solo</td>
+                </tr>
+                <tr>
+                  <th scope="row">DateOfMatch</th>
+                  <td>300</td>
+                  <td>Playlist1</td>
+                  <td>Solo</td>
+                </tr>
+                <tr>
+                  <th scope="row">DateOfMatch</th>
+                  <td>300</td>
+                  <td>Playlist1</td>
+                  <td>Solo</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <br>
+          <a href="/reset"><p style="text-align:center">Change Password</p></a>
+      </div>
+  </div>
+
+
+</body>
+
 </html>
