@@ -166,7 +166,7 @@ app.get('/test', (req, res) => {
       /* var json = JSON.stringify(finalPlaylist)
       fs.writeFile('playlist.json', json, 'utf8', function(err, res){
         console.log(res)
-      }) */
+      })  */
       res.send(finalPlaylist)
     })
   })
@@ -381,12 +381,17 @@ function getRelatedSongs(playlist, callback) {
       let relatedSongsPool = []
 
       for (let j = 0; j < res.tracks.length; j++) {
-        relatedSongsPool.push(res.tracks[j].name);
+        relatedSongsPool.push({name: res.tracks[j].name, id: res.tracks[j].id});
       }
+
+      relatedSongsPool = relatedSongsPool.filter(function(song){
+        return song.id != returnPlaylist[i].songid
+      })
 
       // randomly select 3 of those top tracks 
       for (let i = 0; i < 3; i++) {
-        relatedSongs.push(relatedSongsPool.splice(Math.random() * relatedSongsPool.length - 1, 1).pop())
+        randomRelatedSong = relatedSongsPool.splice(Math.random() * relatedSongsPool.length - 1, 1).pop()
+        relatedSongs.push(randomRelatedSong.name)
       }
 
       // place related songs into playlist to return
