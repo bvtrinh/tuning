@@ -6,6 +6,7 @@ const expressSession = require('express-session');
 var Spotify = require('node-spotify-api') //newly added https://github.com/ceckenrode/node-spotify-api https://developer.spotify.com/documentation/web-api/reference/
 const { getChart } = require('billboard-top-100') //https://github.com/darthbatman/billboard-top-100
 var async = require("async") //https://www.npmjs.com/package/async
+let fs = require('fs'); //for writing to disk for json file
 
 const PORT = process.env.PORT || 5000
 
@@ -27,7 +28,6 @@ var spotify = new Spotify({
   id: 'c8d6a311fb184475bd84053aed97f3fb',
   secret: '2b8f0bc2b6cf493ba50bb93583ee4fcc',
 })
-
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
@@ -56,16 +56,16 @@ app.get('/playlists', (req, res) => {
 
 app.get('/profile', (req, res) => {
   if (req.session.username) {
-    res.render('pages/profile', {username: req.session.username});
+    res.render('pages/profile', { username: req.session.username });
   } else {
     res.redirect('login');
   }
 });
 
-app.get('/reset', (req, res) =>{
-  if(req.session.username){
-    res.render('pages/reset', {username: req.session.username});
-  }else{
+app.get('/reset', (req, res) => {
+  if (req.session.username) {
+    res.render('pages/reset', { username: req.session.username });
+  } else {
     res.redirect('profile');
   }
 });
@@ -86,24 +86,24 @@ app.post('/sign_in', (req, res) => {
     }
 
     if (results.rows.length == 0) {
-      res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
+      res.render('pages/login', { errors: [{ msg: 'Incorrect username and/or password' }] });
     }
     else {
       const hash = results.rows[0].password.toString();
-      bcrypt.compare(password,hash,function(err,response) {
-        if(response) {
+      bcrypt.compare(password, hash, function (err, response) {
+        if (response) {
           req.session.username = username;
           res.redirect('play');
         }
         else {
-          res.render('pages/login', {errors: [{msg:'Incorrect username and/or password'}]});
+          res.render('pages/login', { errors: [{ msg: 'Incorrect username and/or password' }] });
         }
       });
     }
   });
 });
 
-app.post('/sign_up', [check('password','password is too short').isLength({ min: 5 }), check('username','username is too short').isLength({min:5})], (req, res) => {
+app.post('/sign_up', [check('password', 'password is too short').isLength({ min: 5 }), check('username', 'username is too short').isLength({ min: 5 })], (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var confirmPassword = req.body.confirmPassword;
@@ -113,19 +113,19 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
     }
 
     if (results.rows.length != 0) {
-      res.render('pages/signup', {errors: [{msg:'Username is already in use'}]});
+      res.render('pages/signup', { errors: [{ msg: 'Username is already in use' }] });
     }
     else {
 
       var errors = validationResult(req);
-      if(!(password === confirmPassword)) {
-        res.render('pages/signup', {errors: [{msg:'Passwords do not match'}]});
+      if (!(password === confirmPassword)) {
+        res.render('pages/signup', { errors: [{ msg: 'Passwords do not match' }] });
       }
-      else if(!errors.isEmpty()) {
+      else if (!errors.isEmpty()) {
         res.render('pages/signup', errors)
-      } 
+      }
       else {
-        bcrypt.hash(password, saltRounds, (err,hash) => {
+        bcrypt.hash(password, saltRounds, (err, hash) => {
 
           pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${hash}')`, (error) => {
             if (error) {
@@ -143,9 +143,9 @@ app.post('/sign_up', [check('password','password is too short').isLength({ min: 
 });
 
 app.get('/play', (req, res) => {
-  if(req.session.username){
-    res.render('pages/landing', {username: req.session.username, title: 'play'});
-  }else{
+  if (req.session.username) {
+    res.render('pages/landing', { username: req.session.username, title: 'play' });
+  } else {
     res.redirect('login');
   }
 });
@@ -158,6 +158,19 @@ app.get('/logout', (req, res) => {
     res.redirect('login');
   }
 });
+
+//to be removed
+app.get('/test', (req, res) => {
+  getRelatedArtists('pop', function (returnVal) {
+    getRelatedSongs(returnVal, function (finalPlaylist) {
+      /* var json = JSON.stringify(finalPlaylist)
+      fs.writeFile('playlist.json', json, 'utf8', function(err, res){
+        console.log(res)
+      }) */
+      res.send(finalPlaylist)
+    })
+  })
+})
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
@@ -299,9 +312,98 @@ function onlyUnique(value, index, self) {
 function removeLilNasX(artists) {
   return (artists.includes("Lil Nas X") == false)
 }
-//STEP 1
-//select * from songs where genre::text like '%pop%' order by random() limit 5;
-//
+
+// *************************** PLAYLIST PAGE **********************************
+
+
+/*  
+Purpose: Create a playlist of 5 (tbd) songs based on selected genre and grab 3 randomly selected related artists and insert it into the playlist
+Params: genre -> the selected genre
+Return: return the updated playlist with related artists
+*/
+
+function getRelatedArtists(genre, callback) {
+  let returnPlaylist = []
+  pool.query(`select * from songs where genre::text like '%${genre}%' order by random() limit 5`, function (err, result) {
+    if (err) {
+      return console.log(err)
+    }
+
+    returnPlaylist = JSON.parse(JSON.stringify(result.rows))
+    // grab related artists
+    for (let i = 0; i < result.rowCount; i++) {
+      let relatedArtists = []
+      spotify.request(`https://api.spotify.com/v1/artists/${result.rows[i].artistid}/related-artists`, function (err, res) {
+        if (err) {
+          return console.log(err)
+        }
+
+        let relatedArtistsPool = []
+
+        // related artists names
+        for (let j = 0; j < res.artists.length; j++) {
+          relatedArtistsPool.push(res.artists[j].name)
+        }
+
+        // select 3 random related artists
+        for (let k = 0; k < 3; k++) {
+          relatedArtists.push(relatedArtistsPool.splice(Math.random() * (relatedArtistsPool.length - 1), 1).pop())
+        }
+
+        //add new key value pair to its respective location in the playlist
+        returnPlaylist[i].related_artists = relatedArtists
+        //for some reason if the callback it outside the scope, it doesn't keep the newly added key-pair value relatedArtist = [...]
+        if (i == result.rowCount - 1) {
+          callback(returnPlaylist)
+        }
+      })
+    }
+  })
+  // we have to refactor all this once its done -> into a new js controller eg: playlist.js
+}
+
+/*
+Purpose: grab 3 randomly selected related songs based off of related artists to be used as wrong answers and insert it into the playlist
+Params: relatedArtists -> related artists of selected artist in playlist
+Return: return the updated playlist with related songs
+*/
+function getRelatedSongs(playlist, callback) {
+  let returnPlaylist = JSON.parse(JSON.stringify(playlist))
+  // grab top tracks info of related artists 
+  for (let i = 0; i < returnPlaylist.length; i++) {
+    let relatedSongs = [];
+    spotify.request(`https://api.spotify.com/v1/artists/${returnPlaylist[i].artistid}/top-tracks?country=CA`, function (err, res) {
+      if (err) {
+        return console.log(err);
+      }
+
+      // store top tracks names into pool (array)
+      let relatedSongsPool = []
+
+      for (let j = 0; j < res.tracks.length; j++) {
+        relatedSongsPool.push(res.tracks[j].name);
+      }
+
+      // randomly select 3 of those top tracks 
+      for (let i = 0; i < 3; i++) {
+        relatedSongs.push(relatedSongsPool.splice(Math.random() * relatedSongsPool.length - 1, 1).pop())
+      }
+
+      // place related songs into playlist to return
+      returnPlaylist[i].related_songs = relatedSongs;
+
+      if (i == returnPlaylist.length - 1) {
+        callback(returnPlaylist)
+      }
+    })
+  }
+}
+
+
+
+//gonna make food, the last part is i have to use callback functions, because the code runs synchronously so we have to make it async
+//you'll run into this problem too
+
 //STEP 2
 //GET related artists/song depending on mode
 //use the artist id and https://api.spotify.com/v1/artists/{id}/related-artists for related artists 
@@ -312,3 +414,4 @@ function removeLilNasX(artists) {
 //
 //STEP 4
 //Put it in a queue to pop at each round?
+// do u see 

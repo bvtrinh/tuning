@@ -34,6 +34,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "express-validator": "^6.2.0",
+    "fs": "0.0.1-security",
+    "jsonfile": "^5.0.0",
     "node-spotify-api": "^1.1.1",
     "nodemon": "^1.19.4",
     "pg": "^7.12.1"
