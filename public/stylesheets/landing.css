@@ -17,15 +17,14 @@ body {
 }
 
 .content{
-    background: white;
     height: 80%;
     width: 80%;
     margin: 0 auto;
     position: relative;
     top: 5%;
-    border: 2px solid darkgrey;
     border-radius: 10px;
     min-height: 300px;
+    
 }
 
 .arvo {
@@ -36,17 +35,23 @@ body {
     text-align: center;
     font-size: 70px;
     position: relative;
-    top: 5%;
+    top: 4%;
+    color: white;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
 }
 
 .game{
     height: 100%;
 }
 .container{
-    height: 60%;
-    width: 60%;
+    height: 80%;
+    width: 90%;
     position: relative;
-    top: 15%;
+    top: 10%;
 }
 
 .gameOpt{
@@ -57,5 +62,20 @@ body {
 
 .row{
     margin-top: 6%;
+    text-align: center;
 }
 
+.btn {
+    background-color: #364167;
+    font-size: 48px;
+    height: 200%;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000;
+        border-color: white;
+    width: 320px;
+    margin-bottom: 6%;
+    align-content: center;
+}
