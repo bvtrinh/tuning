@@ -125,11 +125,11 @@ app.post('/reset', (req, res) => {
           res.redirect('play');
         }
         else{
-          res.render('reset', { username: req.session.username , errors: [{ msg: 'Passwords do not match' }] });
+          res.render('pages/reset', { username: req.session.username , errors: [{ msg: 'Passwords do not match' }] });
         }
       }
       else{
-        res.render('reset', { username: req.session.username , errors: [{ msg: 'Incorrect password' }] });     
+        res.render('pages/reset', { username: req.session.username , errors: [{ msg: 'Incorrect password' }] });     
       }
     });
   });
