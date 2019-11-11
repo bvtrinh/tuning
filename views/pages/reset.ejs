@@ -33,6 +33,12 @@
           <div class="card card-signin my-5">
             <div class="card-body">
               <h5 class="card-title text-center">Reset Password</h5>
+              <ul>
+                <% if(errors){
+                    for(var e of errors){ %>
+                  <li><%= e.msg %></li>
+                <% }} %>
+              </ul>
               <form class="form-signin" method="POST" action="/reset">
                 <div class="form-label-group">
                   <label for="currentPassword"> Current Password</label>
