@@ -76,16 +76,13 @@ app.get('/login', (req, res) => { res.render('pages/login', { errors: null }) })
 app.get('/genre/:genre', (req,res) => {
   if(req.session.username){
     req.session.genre = req.params.genre;
+    var results = {
+      username: req.session.username,
+      title: 'play'
+    };
+    
+    res.render('pages/game', results);
     // redirect to the play page passing req.session.genre as the genre variable
-    getRelatedArtists(req.session.genre, function (returnVal) {
-      getRelatedSongs(returnVal, function (finalPlaylist) {
-        /* var json = JSON.stringify(finalPlaylist)
-        fs.writeFile('playlist.json', json, 'utf8', function(err, res){
-          console.log(res)
-        })  */
-        res.send(finalPlaylist)
-      })
-    })
   } else{
     res.redirect('profile');
   }
@@ -221,21 +218,14 @@ app.get('/logout', (req, res) => {
     res.redirect('login');
   }
 });
-app.get('/game', (req, res) => {
-
-
-  var results = {};
-  results.username = 'testuser';
-  results.title = 'play';
-
-  res.render('pages/game', results);
-});
 
 app.post('/playlist', (req, res) => {
-  fs.readFile('playlist.json', 'utf8', (err,contents) => {
-    var playlist = contents;
-    res.send(playlist);
-  });
+
+  getRelatedArtists(req.session.genre, function (returnVal) {
+    getRelatedSongs(returnVal, function (finalPlaylist) {
+      res.send(finalPlaylist);
+    })
+  })
 });
 
 

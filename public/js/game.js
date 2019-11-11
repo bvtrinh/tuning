@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-    var genre = "pop";
-
     // Set the initial volume
     $("#audio-playback").prop("volume", 0.5);
     $("#score").html("Score: 0");
@@ -26,13 +24,9 @@ $(document).ready(function () {
     $.ajax({
         url: "/playlist",
         method: "POST",
-        data: {
-            genre: genre,
-        },
         dataType: "JSON",
         success: function(data) {
             gameplay(data, score);
-
         },
         error: function(err) {
             console.log(err)
