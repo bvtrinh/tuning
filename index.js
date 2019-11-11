@@ -186,10 +186,10 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 //10 days we update the database
-// console.log("------STARTING SONG DATABASE UPDATE------")
-// updateSongDB()
-// setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
-// setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
+console.log("------STARTING SONG DATABASE UPDATE------")
+updateSongDB()
+setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
+setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
 
 
 function updateSongDB() {
