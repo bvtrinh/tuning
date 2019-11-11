@@ -1,0 +1,71 @@
+html, body{
+    height: 100%;
+}
+
+/* Set a background image by replacing the URL below */
+body {
+    background: url('https://images.unsplash.com/photo-1526327760257-75f515c74478?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.content{
+    height: 80%;
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+    top: 5%;
+    border-radius: 10px;
+    min-height: 300px;
+    
+}
+
+.arvo {
+    font-family: 'Arvo', serif;
+}
+
+.title{
+    text-align: center;
+    font-size: 70px;
+    position: relative;
+    top: 4%;
+    color: white;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+}
+
+.playlists{
+    height: 100%;
+}
+
+.container{
+    height: 80%;
+    width: 90%;
+    position: relative;
+    top: 10%;
+}
+
+.row {
+    margin-top: 6%;
+    text-align: center;
+    margin-bottom: 10%;
+}
+
+.playlistBtns {
+    background-color: #364167;
+    font-size: 48px;
+    height: 175%;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000;
+        border-color: white;
+    width: 300px;
+    margin-bottom: 6%;
+}

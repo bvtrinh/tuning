@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Playlists</title>
-  </head>
-  <body>
-    
-  </body>
+<html>
+
+<head>
+  <% include ../partials/header.ejs %>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/playlists.css">
+  <title>Single Player</title>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-sm navbar-dark shadow-lg" style="background-color: #364167;">
+    <a class="navbar-brand" href="/play">
+    <img src="/img//logo/logo.png" class="img-fluid">
+    Tuning
+    </a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-right">
+          <a class="nav-link" href="/play"><i class="fas fa-border-all"></i> Main Menu</a>
+        </li>
+        <li class="navbar-right">
+          <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="playlists">
+
+      <div class="title arvo">
+        Playlists
+      </div>
+
+      <div class="container">
+
+        <div class="row">
+          <div class="col-4 col-md-4 btn-row">
+            <button type="button" class="btn btn-outline-light btn-lg playlistBtns">Pop</button>
+          </div>
+          <div class="col-4 col-md-4 btn-row">
+            <button type="button" class="btn btn-outline-light btn-lg playlistBtns">Playlist 2</button>
+          </div>
+          <div class="col-4 col-md-4 btn-row">
+            <button type="button" class="btn btn-outline-light btn-lg playlistBtns">Playlist 3</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-1 col-md-1 btn-row"></div>
+          <div class="col-5 col-md-5 btn-row">
+            <button type="button" class="btn btn-outline-light btn-lg playlistBtns">Playlist 4</button>
+          </div>
+          <div class="col-5 col-md-5 btn-row">
+            <button type="button" class="btn btn-outline-light btn-lg playlistBtns">Playlist 5</button>
+          </div>
+          <div class="col-1 col-md-1 btn-row"></div>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+</body>
 </html>
