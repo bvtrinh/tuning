@@ -6,6 +6,7 @@ const expressSession = require('express-session');
 var Spotify = require('node-spotify-api') //newly added https://github.com/ceckenrode/node-spotify-api https://developer.spotify.com/documentation/web-api/reference/
 const { getChart } = require('billboard-top-100') //https://github.com/darthbatman/billboard-top-100
 var async = require("async") //https://www.npmjs.com/package/async
+var fs = require('fs');
 
 const PORT = process.env.PORT || 5000
 
@@ -158,20 +159,37 @@ app.get('/logout', (req, res) => {
     res.redirect('login');
   }
 });
+app.get('/game', (req, res) => {
+
+
+  var results = {};
+  results.username = 'testuser';
+  results.title = 'play';
+
+  res.render('pages/game', results);
+});
+
+app.post('/playlist', (req, res) => {
+  fs.readFile('playlist.json', 'utf8', (err,contents) => {
+    var playlist = contents;
+    res.send(playlist);
+  });
+});
+
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
-})
+});
 
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 //10 days we update the database
-console.log("------STARTING SONG DATABASE UPDATE------")
-updateSongDB()
-setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
-setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
+// console.log("------STARTING SONG DATABASE UPDATE------")
+// updateSongDB()
+// setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
+// setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
 
 
 function updateSongDB() {
