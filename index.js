@@ -77,7 +77,15 @@ app.get('/genre/:genre', (req,res) => {
   if(req.session.username){
     req.session.genre = req.params.genre;
     // redirect to the play page passing req.session.genre as the genre variable
-    res.redirect('playlists');  // temporary response
+    getRelatedArtists(req.session.genre, function (returnVal) {
+      getRelatedSongs(returnVal, function (finalPlaylist) {
+        /* var json = JSON.stringify(finalPlaylist)
+        fs.writeFile('playlist.json', json, 'utf8', function(err, res){
+          console.log(res)
+        })  */
+        res.send(finalPlaylist)
+      })
+    })
   } else{
     res.redirect('profile');
   }
@@ -86,7 +94,7 @@ app.get('/genre/:genre', (req,res) => {
 app.get('/playtype/:playtype', (req,res) => {
   if(req.session.username){
     req.session.playtype = req.params.playtype;
-    res.redirect('playlists');
+    res.render('pages/playlists');
   } else{
     res.redirect('profile');
   }
@@ -180,19 +188,6 @@ app.get('/logout', (req, res) => {
     res.redirect('login');
   }
 });
-
-//to be removed
-app.get('/test', (req, res) => {
-  getRelatedArtists('pop', function (returnVal) {
-    getRelatedSongs(returnVal, function (finalPlaylist) {
-      /* var json = JSON.stringify(finalPlaylist)
-      fs.writeFile('playlist.json', json, 'utf8', function(err, res){
-        console.log(res)
-      })  */
-      res.send(finalPlaylist)
-    })
-  })
-})
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
