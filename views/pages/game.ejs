@@ -12,23 +12,26 @@
     <% include ../partials/nav.ejs %>
     <div class="container content">
 
-        <h1 class="title arvo px-5 py-5">
+        <h2 align="right" class="pt-3" id="song_counter"></h2>
+        <h1 id="page-title" class="title arvo px-3 py-3">
             Guess the Song!
         </h1>
+        <h2 id="score" align="center" class="pt-3"></h2>
+
         <hr>
 
-        <div class="progress">
-            <div class="pb-5 progress-bar progress-bar-striped progress-bar-animated" 
-                role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" 
-                id="progressbar" style="width: 75%"></div>
+        <div id="progress-box" class="progress">
+            <div class="pb-5 progress-bar" 
+                role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                id="progressbar" style="width: 0%"></div>
         </div>
 
-        <h2 align="center" id="countdown" class="pt-5">
-        </h2>
+        <h1 align="center" id="countdown" class="pt-5">
+        </h1>
 
-        <div class="audio-playback">
-            <audio id="playback">
-                <source src="<%= song_url %>" type="audio/mpeg">
+        <div class="playback">
+            <audio id="audio-playback">
+                <source id="song-playback" type="audio/mpeg">
             </audio>
         </div>
         
@@ -36,12 +39,17 @@
 
         </div>
 
-        <div class="input-group pt-5">
-
-            <input type="text" class="form-control" name="guess" id="guess" autocomplete="off" autofocus>
+        <div id="guess-box" class="input-group">
+            <input type="text" class="form-control pr-3" name="guess" id="guess" autocomplete="off" autofocus>
             <span class="input-group-btn">
-                <button id="guess_ans" type="submit" class="btn btn-primary">Submit</button>
+                <button id="guess-ans" type="submit" class="btn btn-primary">Submit</button>
             </span>
+        </div>
+
+        <div align="center" id="result-btns" class="px-5 py-5">
+            <a href="/play" class="btn btn-primary">Return to Home</a>
+            <a href="/play" class="btn btn-primary">Select a different genre</a>
+            <a href="/play" class="btn btn-primary">Play again</a>
         </div>
 
     </div>

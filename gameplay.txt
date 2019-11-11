@@ -1,0 +1,65 @@
+
+    a/ This is the pseudocode for gameplay
+
+Pre:
+    User clicks on the desired playlist to play.
+    User also selected to play via input text.
+
+Param: 
+    playlist: A JSON object containing all the songs of the playlist, each song will have the song name,
+    artist, and song url
+    ex. of playlist:
+        {
+            songs: 
+            {
+                {name: "me, myself and i", artist: "g eazy", song_url: "https://asdfasdf213123.com"},
+                {name: "me, myself and i", artist: "g eazy", song_url: "https://asdfasdf213123.com"},
+                {name: "me, myself and i", artist: "g eazy", song_url: "https://asdfasdf213123.com"}
+            },
+            genre: "hip hop",
+        }
+
+Post:
+    User is given a results screen showing their final score
+
+gameplay(playlist):
+
+    for (song in playlist.songs):
+
+        // Show score and what song out of 5 they are on (ex. 1/5 and score of 1200)
+        update_view()
+        countdown_timer(5 seconds)
+
+        play_song(song.url)
+
+        while (song is playing):
+
+            // Wait for user to guess
+
+            // This assumes we are using just text input to guess,
+            // otherwise we would add another field on each song
+            // with a list of the multiple choice guesses
+            if (guess  == song.name OR guess == song.artist)
+                stop_song(song.url)
+                alert user that they correctly answered
+                award user with points and increment score
+                break;
+            else:
+                stop_song(song.url)
+                alert user that they incorrectly answered
+                break;
+            
+        // Could use some sort of flag here?
+        if (song stops playing due to end of preview)
+            alert user that they ran out of time and don't receive any points
+
+        // delay in between songs
+        clear_input()
+        countdown_timer(5 seconds)
+
+
+    // Last song has been guessed, show results screen
+    results_screen(score)
+
+    // Server call to update the database
+    record_score(userid, playlist.genre, game_mode, score)
