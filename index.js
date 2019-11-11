@@ -48,6 +48,7 @@ app.get('/', (req, res) => {
 
 app.get('/playlists', (req, res) => {
   if (req.session.username) {
+    req.session.genre = null;
     res.render('pages/playlists');
   } else {
     res.redirect('login');
@@ -71,6 +72,25 @@ app.get('/reset', (req, res) => {
 });
 
 app.get('/login', (req, res) => { res.render('pages/login', { errors: null }) });
+
+app.get('/genre/:genre', (req,res) => {
+  if(req.session.username){
+    req.session.genre = req.params.genre;
+    // redirect to the play page passing req.session.genre as the genre variable
+    res.redirect('playlists');  // temporary response
+  } else{
+    res.redirect('profile');
+  }
+});
+
+app.get('/playtype/:playtype', (req,res) => {
+  if(req.session.username){
+    req.session.playtype = req.params.playtype;
+    res.redirect('playlists');
+  } else{
+    res.redirect('profile');
+  }
+});
 
 app.get('/signup', (req, res) => { res.render('pages/signup', { errors: null }) });
 
@@ -144,6 +164,8 @@ app.post('/sign_up', [check('password', 'password is too short').isLength({ min:
 
 app.get('/play', (req, res) => {
   if (req.session.username) {
+    req.session.playtype = null;
+    req.session.genre = null;
     res.render('pages/landing', { username: req.session.username, title: 'play' });
   } else {
     res.redirect('login');
@@ -316,7 +338,7 @@ function removeLilNasX(artists) {
 // *************************** PLAYLIST PAGE **********************************
 
 
-/*  
+/*
 Purpose: Create a playlist of 5 (tbd) songs based on selected genre and grab 3 randomly selected related artists and insert it into the playlist
 Params: genre -> the selected genre
 Return: return the updated playlist with related artists
@@ -369,7 +391,7 @@ Return: return the updated playlist with related songs
 */
 function getRelatedSongs(playlist, callback) {
   let returnPlaylist = JSON.parse(JSON.stringify(playlist))
-  // grab top tracks info of related artists 
+  // grab top tracks info of related artists
   for (let i = 0; i < returnPlaylist.length; i++) {
     let relatedSongs = [];
     spotify.request(`https://api.spotify.com/v1/artists/${returnPlaylist[i].artistid}/top-tracks?country=CA`, function (err, res) {
@@ -388,7 +410,7 @@ function getRelatedSongs(playlist, callback) {
         return song.id != returnPlaylist[i].songid
       })
 
-      // randomly select 3 of those top tracks 
+      // randomly select 3 of those top tracks
       for (let i = 0; i < 3; i++) {
         randomRelatedSong = relatedSongsPool.splice(Math.random() * relatedSongsPool.length - 1, 1).pop()
         relatedSongs.push(randomRelatedSong.name)
@@ -411,7 +433,7 @@ function getRelatedSongs(playlist, callback) {
 
 //STEP 2
 //GET related artists/song depending on mode
-//use the artist id and https://api.spotify.com/v1/artists/{id}/related-artists for related artists 
+//use the artist id and https://api.spotify.com/v1/artists/{id}/related-artists for related artists
 //Use artists ID grab songs made by them, and then just select 3 of them that does not include the right answer, and use them for the wrong answers
 //
 //Step 3
@@ -419,4 +441,4 @@ function getRelatedSongs(playlist, callback) {
 //
 //STEP 4
 //Put it in a queue to pop at each round?
-// do u see 
+// do u see
