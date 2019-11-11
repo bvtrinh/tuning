@@ -221,10 +221,27 @@ app.get('/logout', (req, res) => {
     res.redirect('login');
   }
 });
+app.get('/game', (req, res) => {
+
+
+  var results = {};
+  results.username = 'testuser';
+  results.title = 'play';
+
+  res.render('pages/game', results);
+});
+
+app.post('/playlist', (req, res) => {
+  fs.readFile('playlist.json', 'utf8', (err,contents) => {
+    var playlist = contents;
+    res.send(playlist);
+  });
+});
+
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
-})
+});
 
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
