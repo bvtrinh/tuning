@@ -57,7 +57,7 @@ app.get('/playlists', (req, res) => {
 
 app.get('/profile', (req, res) => {
   if (req.session.username) {
-    res.render('pages/profile', { username: req.session.username , errors: null });
+    res.render('pages/profile', { username: req.session.username });
   } else {
     res.redirect('login');
   }
@@ -65,7 +65,7 @@ app.get('/profile', (req, res) => {
 
 app.get('/reset', (req, res) => {
   if (req.session.username) {
-    res.render('pages/reset', { username: req.session.username });
+    res.render('pages/reset', { username: req.session.username, errors: null});
   } else {
     res.redirect('profile');
   }
