@@ -1,0 +1,90 @@
+[
+    {
+        "artistid": "7z5WFjZAIYejWy0NI5lv4T",
+        "artistname": "Shay",
+        "songid": "3ZsLuJ8uU0lE6rGTkDaqEg",
+        "songname": "Alone Together",
+        "genre": [
+            "contemporary country",
+            "pop"
+        ],
+        "url": "https://p.scdn.co/mp3-preview/a9253908cdf1ab8cc887a346196c7f55eac94b05?cid=c8d6a311fb184475bd84053aed97f3fb",
+        "related_artists": [
+            "Maddie & Tae",
+            "Dylan Scott",
+            "Michael Ray"
+        ]
+    },
+    {
+        "artistid": "7z5WFjZAIYejWy0NI5lv4T",
+        "artistname": "Dan",
+        "songid": "08tq1XcHwVt5PHXUo87i0D",
+        "songname": "All To Myself",
+        "genre": [
+            "contemporary country",
+            "pop"
+        ],
+        "url": "https://p.scdn.co/mp3-preview/65db44647a32d7b351b163a7f674af68ff3d3e68?cid=c8d6a311fb184475bd84053aed97f3fb",
+        "related_artists": [
+            "Dylan Scott",
+            "Dylan Schneider",
+            "Jordan Davis"
+        ]
+    },
+    {
+        "artistid": "6LuN9FCkKOj5PcnpouEgny",
+        "artistname": "Khalid",
+        "songid": "70eFcWOvlMObDhURTqT4Fv",
+        "songname": "Beautiful People (feat. Khalid)",
+        "genre": [
+            "pop"
+        ],
+        "url": "https://p.scdn.co/mp3-preview/f94d8d0c1b37773ff493e7d83930545e3425ccd3?cid=c8d6a311fb184475bd84053aed97f3fb",
+        "related_artists": [
+            "Summer Walker",
+            "H.E.R.",
+            "Marc E. Bassy"
+        ],
+        "related_songs": [
+            "Trigger",
+            "Better",
+            "Talk (feat. Disclosure)"
+        ]
+    },
+    {
+        "artistid": "7bXgB6jMjp9ATFy66eO08Z",
+        "artistname": "Chris Brown",
+        "songid": "3hsmbFKT5Cujb5GQjqEU39",
+        "songname": "Look At Me Now (feat. Lil&#039; Wayne &amp; Busta Rhymes)",
+        "genre": [
+            "dance pop",
+            "pop",
+            "pop rap",
+            "r&b",
+            "rap"
+        ],
+        "url": "https://p.scdn.co/mp3-preview/6f77e5c215d0fdb77d2240fdb17601451b29a550?cid=c8d6a311fb184475bd84053aed97f3fb"
+    },
+    {
+        "artistid": "3fMbdgg4jU18AjLCKBhRSm",
+        "artistname": "Michael Jackson",
+        "songid": "3S2R0EVwBSAVMd5UMgKTL0",
+        "songname": "Thriller",
+        "genre": [
+            "pop",
+            "r&b",
+            "soul"
+        ],
+        "url": "https://p.scdn.co/mp3-preview/dd0621b7f11364a37c96031dbedbca6b88dbfa7d?cid=c8d6a311fb184475bd84053aed97f3fb",
+        "related_artists": [
+            "Stevie Wonder",
+            "Kenny Loggins",
+            "Bobby Brown"
+        ],
+        "related_songs": [
+            "Billie Jean",
+            "The Way You Make Me Feel - 2012 Remaster",
+            "Beat It - Single Version"
+        ]
+    }
+]
