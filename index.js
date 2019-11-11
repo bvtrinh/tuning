@@ -102,6 +102,39 @@ app.get('/playtype/:playtype', (req,res) => {
 
 app.get('/signup', (req, res) => { res.render('pages/signup', { errors: null }) });
 
+app.post('/reset', (req, res) => {
+  var oldpassword = req.body.Currentpassword;
+  var newpassword = req.body.Newpassword;
+  var confirm = req.body.ConfirmNewpassword;
+  var username = req.session.username;
+
+  //hash oldpassword and compare this with password in database
+  pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
+    if(error){
+      throw error;
+    }
+    const hash = results.rows[0].password.toString();
+    bcrypt.compare(oldpassword, hash, function (err, response) {
+      if (response) {
+        //check to new if new passwords match
+        if(newpassword==confirm){
+          //hash new password and update db with new passwords
+          bcrypt.hash(newpassword, saltRounds, (err, hash) => {
+            pool.query(`UPDATE users SET password = '${hash}' WHERE username = '${username}'`);
+          });
+          res.redirect('play');
+        }
+        else{
+          res.render('reset', { errors: [{ msg: 'Passwords do not match' }] });
+        }
+      }
+      else{
+        res.render('reset', { errors: [{ msg: 'Incorrect password' }] });     
+      }
+    });
+  });
+});
+
 app.post('/sign_in', (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
@@ -420,5 +453,3 @@ function getRelatedSongs(playlist, callback) {
     })
   }
 }
-
-
