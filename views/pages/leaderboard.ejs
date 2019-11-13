@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../partials/header.ejs %>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/profile.css">
+  <title>Leaderboard</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-sm navbar-dark shadow-lg" style="background-color: #364167;">
+    <a class="navbar-brand" href="/play">
+    <img src="/img//logo/logo.png" class="img-fluid">
+    Tuning
+    </a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-right">
+            <a class="nav-link" href="/play"><i class="fas fa-home"></i>Home</a>
+        </li>
+        <li class="navbar-right">
+            <a class="nav-link" href="/profile"><i class="fas fa-user"></i> <%=username%></a>
+        </li>
+        <li class="navbar-right">
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="content">
+      <div class="game">
+          <div class="title arvo">
+              <p>Leaderboard</p>
+          </div>
+          <div class="scoretitle">
+              <p>Possibly a drop box here for selecting time frame???</p>
+          </div>
+          <div id=table>
+            <table class="table table-hover table-bordered table-sm table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Total Score</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Best Genre ????</th>
+                  <th scope="col">Genre Scores???</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if(data){
+                    for(var d of data){ %>
+                  <tr>
+                    <th scope="row"><%= d.score %></th>
+                    <td><%= d.username %></td>
+                    <td><%= d.bestgenre %></td>
+                    <td><%= d.genrescores %></td>
+                  </tr>
+                <% }} %>
+              </tbody>
+            </table>
+          </div>
+      </div>
+  </div>
+
+
+</body>
+
+</html>

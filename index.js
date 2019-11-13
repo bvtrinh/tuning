@@ -55,6 +55,18 @@ app.get('/playlists', (req, res) => {
   }
 });
 
+app.get('/leaderboard', (req, res) => {
+  if(req.session.username){
+    // just in case we access this straigh after a game, we reset the genre and playtype
+    req.session.genre = null;
+    req.session.playtype = null;
+    // query here
+    res.render('pages/leaderboard', {username: req.session.username,/* data would normally be obtained form the query */ data: {score: 300, username: "test", bestgenre: "pop", genrescores: 300}});
+  } else{
+    res.redirect('login');
+  }
+});
+
 app.get('/profile', (req, res) => {
   if (req.session.username) {
     res.render('pages/profile', { username: req.session.username });
@@ -80,7 +92,7 @@ app.get('/genre/:genre', (req,res) => {
       username: req.session.username,
       title: 'play'
     };
-    
+
     res.render('pages/game', results);
     // redirect to the play page passing req.session.genre as the genre variable
   } else{
@@ -126,7 +138,7 @@ app.post('/reset', (req, res) => {
         }
       }
       else{
-        res.render('pages/reset', { username: req.session.username , errors: [{ msg: 'Incorrect password' }] });     
+        res.render('pages/reset', { username: req.session.username , errors: [{ msg: 'Incorrect password' }] });
       }
     });
   });
