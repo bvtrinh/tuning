@@ -223,6 +223,7 @@ app.post('/playlist', (req, res) => {
 
   getRelatedArtists(req.session.genre, function (returnVal) {
     getRelatedSongs(returnVal, function (finalPlaylist) {
+      console.log(finalPlaylist)
       res.send(finalPlaylist);
     })
   })
@@ -237,10 +238,10 @@ app.get('*', function (req, res) {
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 //10 days we update the database
-// console.log("------STARTING SONG DATABASE UPDATE------")
-// updateSongDB()
-// setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
-// setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
+console.log("------STARTING SONG DATABASE UPDATE------")
+updateSongDB()
+setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
+setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
 
 
 function updateSongDB() {
@@ -288,7 +289,10 @@ function updateSongDB() {
 
           //we use index 0, because that is the most popular artists -> the artist we queried
           let artistId = data.artists.items[0].id
-          let artistGenres = data.artists.items[0].genres
+          let artistGenres = {}
+          for(let n = 0; n < data.artists.items[0].genres.length; n++){
+            artistGenres[data.artists.items[0].genres[n]] = 1
+          }
           let artistName = artist.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); //escape special characters
           spotify.request(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=CA`, function (err, data) {
             if (err) {
@@ -297,6 +301,7 @@ function updateSongDB() {
 
             let hasPreviews = []
 
+            //put genre into a json format
             for (let i = 0; i < data.tracks.length; i++) {
               if (data.tracks[i].preview_url != null) {
                 hasPreviews.push(data.tracks[i])
@@ -381,7 +386,7 @@ Return: return the updated playlist with related artists
 
 function getRelatedArtists(genre, callback) {
   let returnPlaylist = []
-  pool.query(`select * from songs where genre::text like '%${genre}%' order by random() limit 5`, function (err, result) {
+  pool.query(`select * from songs s where (s.genre -> '${genre}') is not null order by random() limit 5`, function (err, result) {
     if (err) {
       return console.log(err)
     }
