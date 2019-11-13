@@ -1,0 +1,50 @@
+<!-- START NAVBAR -->
+<nav class="navbar navbar-expand-sm navbar-dark shadow-lg" style="background-color: #364167;">
+
+        <a class="navbar-brand arvo" href="/">
+            <img src="/img//logo/logo.png" class="img-fluid">
+        Tuning</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+            <ul class="nav navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="navbar-center">
+                    <a class="nav-link" href="">&nbsp;</a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav">
+                <li class="navbar-center">
+                    <a class="nav-link" href=""><i class="fas fa-music"></i> Pop</a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav mr-auto mt-2 mt-lg-0">
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <% if (title == 'play') { %>
+                <li class="navbar-right">
+                    <a class="nav-link" href="/profile"><i class="fas fa-user"></i>
+                        <%=username%></a>
+                </li>
+                <li class="navbar-right">
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+                <% } else { %>
+                <li class="navbar-right">
+                    <a class="nav-link" href="/signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </li>
+                <li class="navbar-right">
+                    <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+    
+    </nav>
+    <!-- END NAVBAR -->

@@ -9,14 +9,14 @@
 
 <body>
 
-    <% include ../partials/nav.ejs %>
+    <% include ../partials/game_nav.ejs %>
     <div class="container">
 
-        <h2 align="right" class="pt-3" id="song_counter"></h2>
+        <h2 align="right" class="pt-3" id="song_counter">3/5</h2>
         <h1 id="page-title" class="title arvo px-3 py-3">
             Guess the Song!
         </h1>
-        <h2 id="score" align="center" class="pt-3"></h2>
+        <h2 id="score" align="center" class="pt-3">Score: 420</h2>
 
         <hr>
 
@@ -27,6 +27,7 @@
         </div>
 
         <h1 align="center" id="countdown" class="pt-5">
+            &nbsp;
         </h1>
 
         <div class="playback">
@@ -39,22 +40,29 @@
 
         </div>
 
-        <div id="guess-box" class="input-group">
-            <input type="text" class="form-control pr-3" name="guess" id="guess" autocomplete="off" autofocus>
-            <span class="input-group-btn">
-                <button id="guess-ans" type="submit" class="btn btn-primary">Submit</button>
-            </span>
+        <div class="row justify-content-center">
+            <div class="col-lg-6 btn-row">
+                <button type="button" class="btn btn-primary">Primary</button>
+            </div>
+            <div class="col-lg-6 btn-row">
+                <button type="button" class="btn btn-secondary">Secondary</button>
+            </div>
+            <div class="col-lg-6 btn-row">
+                <button type="button" class="btn btn-success">Success</button>
+            </div>
+            <div class="col-lg-6 btn-row">
+                <button type="button" class="btn btn-danger">Danger</button>
+            </div>
         </div>
 
-        <div align="center" id="result-btns" class="px-5 py-5">
+        <!-- <div align="center" id="result-btns" class="px-5 py-5">
             <a href="/play" class="btn btn-primary">Return to Home</a>
             <a href="/play" class="btn btn-primary">Select a different genre</a>
             <a href="/play" class="btn btn-primary">Play again</a>
-        </div>
+        </div> -->
 
     </div>
 
-    <script src="/js/game.js"></script>
 </body>
 
 </html>

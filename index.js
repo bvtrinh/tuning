@@ -228,11 +228,20 @@ app.post('/playlist', (req, res) => {
     })
   })
 });
+app.get('/tylertest', (req, res) => {
+    req.session.genre = 'pop';
+    var results = {
+    username: 'testuser',
+    title: 'play'
+    };
+    res.render('pages/test', results);
 
+});
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
 });
+
 
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));

@@ -1,0 +1,48 @@
+/* Set a background image by replacing the URL below */
+body {
+    background: url('https://images.unsplash.com/photo-1526327760257-75f515c74478?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.container {
+    background: white;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.arvo {
+    font-family: 'Arvo', serif;
+}
+
+.title{
+    text-align: center;
+    font-size: 70px;
+    position: relative;
+    top: 4%;
+    color: black;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000;
+}
+
+.btn {
+    padding: 5rem 7rem;
+    width: 100%;
+    margin: 3px;
+}
+
+.center-menu {
+    float: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
