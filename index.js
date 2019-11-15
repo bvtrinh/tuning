@@ -91,13 +91,14 @@ app.get('/genre/:genre', (req, res) => {
     req.session.genre = req.params.genre;
     var results = {
       username: req.session.username,
-      title: 'play'
+      title: 'game',
+      genre: capitalize_words(req.session.genre)
     };
 
-    res.render('pages/game', results);
+    res.render('pages/game_mc', results);
     // redirect to the play page passing req.session.genre as the genre variable
   } else {
-    res.redirect('profile');
+    res.redirect('/profile');
   }
 });
 
@@ -106,7 +107,7 @@ app.get('/playtype/:playtype', (req, res) => {
     req.session.playtype = req.params.playtype;
     res.render('pages/playlists');
   } else {
-    res.redirect('profile');
+    res.redirect('/profile');
   }
 });
 
@@ -241,15 +242,6 @@ app.post('/playlist', (req, res) => {
     })
   })
 });
-app.get('/tylertest', (req, res) => {
-  req.session.genre = 'pop';
-  var results = {
-    username: 'testuser',
-    title: 'play'
-  };
-  res.render('pages/test', results);
-
-});
 
 app.post('/upScore', (req, res) => {
 
@@ -288,6 +280,10 @@ updateSongDB()
 setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
 setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
 
+//capitalize_Words 
+function capitalize_words(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
 function updateSongDB() {
   //Grabs all unique artists for top 100 songs

@@ -30,10 +30,9 @@ $(document).ready(function () {
         // Disable the button so user's don't accidentally submit before song is loaded
         $(".btn").attr('disabled', true);
 
-        countdown_timer();
-
-        // Update the song url and what current song the user is on
-        update_song_view(playlist[curr_song], curr_song, num_songs);
+        // Countdown between next songs, update the song url and what current song the user is on
+        // Display the multiple choice answers in the buttons
+        countdown_update(playlist[curr_song], curr_song, num_songs);
 
         // The case where the user doesn't submit any answers before the preview ends
         $("#audio-playback").on("ended", function() {
@@ -89,7 +88,7 @@ $(document).ready(function () {
     }
 
     // Displays a countdown timer in between songs
-    function countdown_timer() {
+    function countdown_update(song, curr_song, num_songs) {
 
         // Number of seconds in between songs
         var time2play = 3;
@@ -106,6 +105,7 @@ $(document).ready(function () {
                 $("#audio-playback").trigger("play");
                 $(".btn").attr('disabled', false);
                 $("#countdown").html("&nbsp;");
+                update_song_view(song, curr_song, num_songs);
             }
         },1000);
 
@@ -155,8 +155,7 @@ $(document).ready(function () {
         }
         else {
             // Songs still remaining
-            countdown_timer();
-            update_song_view(song, curr_song, num_songs);
+            countdown_update(song, curr_song, num_songs);
         }
 
     }
