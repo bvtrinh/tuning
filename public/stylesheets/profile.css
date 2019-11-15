@@ -25,6 +25,9 @@ body {
     border: 2px solid darkgrey;
     border-radius: 10px;
     min-height: 300px;
+    display: block;
+    overflow-y: auto;
+
 }
 
 .arvo {
