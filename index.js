@@ -7,6 +7,7 @@ var Spotify = require('node-spotify-api') //newly added https://github.com/cecke
 const { getChart } = require('billboard-top-100') //https://github.com/darthbatman/billboard-top-100
 var async = require("async") //https://www.npmjs.com/package/async
 let fs = require('fs'); //for writing to disk for json file
+var bodyparser = require('body-parser');
 
 const PORT = process.env.PORT || 5000
 
@@ -23,7 +24,6 @@ pool = new Pool({
   //ssl: true
 });
 
-//newly added
 var spotify = new Spotify({
   id: 'c8d6a311fb184475bd84053aed97f3fb',
   secret: '2b8f0bc2b6cf493ba50bb93583ee4fcc',
@@ -31,7 +31,8 @@ var spotify = new Spotify({
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyparser.json())
 app.use(expressSession({ secret: 'tuning', saveUninitialized: false, resave: false }));
 app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
@@ -56,13 +57,13 @@ app.get('/playlists', (req, res) => {
 });
 
 app.get('/leaderboard', (req, res) => {
-  if(req.session.username){
+  if (req.session.username) {
     // just in case we access this straigh after a game, we reset the genre and playtype
     req.session.genre = null;
     req.session.playtype = null;
     // query here
-    res.render('pages/leaderboard', {username: req.session.username,/* data would normally be obtained form the query */ data: {score: 300, username: "test", bestgenre: "pop", genrescores: 300}});
-  } else{
+    res.render('pages/leaderboard', { username: req.session.username,/* data would normally be obtained form the query */ data: { score: 300, username: "test", bestgenre: "pop", genrescores: 300 } });
+  } else {
     res.redirect('login');
   }
 });
@@ -77,7 +78,7 @@ app.get('/profile', (req, res) => {
 
 app.get('/reset', (req, res) => {
   if (req.session.username) {
-    res.render('pages/reset', { username: req.session.username , errors: null });
+    res.render('pages/reset', { username: req.session.username, errors: null });
   } else {
     res.redirect('profile');
   }
@@ -85,8 +86,8 @@ app.get('/reset', (req, res) => {
 
 app.get('/login', (req, res) => { res.render('pages/login', { errors: null }) });
 
-app.get('/genre/:genre', (req,res) => {
-  if(req.session.username){
+app.get('/genre/:genre', (req, res) => {
+  if (req.session.username) {
     req.session.genre = req.params.genre;
     var results = {
       username: req.session.username,
@@ -95,16 +96,16 @@ app.get('/genre/:genre', (req,res) => {
 
     res.render('pages/game', results);
     // redirect to the play page passing req.session.genre as the genre variable
-  } else{
+  } else {
     res.redirect('profile');
   }
 });
 
-app.get('/playtype/:playtype', (req,res) => {
-  if(req.session.username){
+app.get('/playtype/:playtype', (req, res) => {
+  if (req.session.username) {
     req.session.playtype = req.params.playtype;
     res.render('pages/playlists');
-  } else{
+  } else {
     res.redirect('profile');
   }
 });
@@ -119,26 +120,26 @@ app.post('/reset', (req, res) => {
 
   //hash oldpassword and compare this with password in database
   pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
-    if(error){
+    if (error) {
       throw error;
     }
     const hash = results.rows[0].password.toString();
     bcrypt.compare(oldpassword, hash, function (err, response) {
       if (response) {
         //check to new if new passwords match
-        if(newpassword==confirm){
+        if (newpassword == confirm) {
           //hash new password and update db with new passwords
           bcrypt.hash(newpassword, saltRounds, (err, hash) => {
             pool.query(`UPDATE users SET password = '${hash}' WHERE username = '${username}'`);
           });
           res.redirect('play');
         }
-        else{
-          res.render('pages/reset', { username: req.session.username , errors: [{ msg: 'Passwords do not match' }] });
+        else {
+          res.render('pages/reset', { username: req.session.username, errors: [{ msg: 'Passwords do not match' }] });
         }
       }
-      else{
-        res.render('pages/reset', { username: req.session.username , errors: [{ msg: 'Incorrect password' }] });
+      else {
+        res.render('pages/reset', { username: req.session.username, errors: [{ msg: 'Incorrect password' }] });
       }
     });
   });
@@ -241,14 +242,37 @@ app.post('/playlist', (req, res) => {
   })
 });
 app.get('/tylertest', (req, res) => {
-    req.session.genre = 'pop';
-    var results = {
+  req.session.genre = 'pop';
+  var results = {
     username: 'testuser',
     title: 'play'
-    };
-    res.render('pages/test', results);
+  };
+  res.render('pages/test', results);
 
 });
+
+app.post('/upScore', (req, res) => {
+
+  let username = req.session.username
+  let score = req.body.userScore
+  let genre = req.session.genre
+  let gamemode = req.session.playtype
+  let d = new Date()
+
+  //format date properly
+  dformat = [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-')
+    + ' ' + [d.getHours(),
+    d.getMinutes(),
+    d.getSeconds()].join(':');
+
+
+  pool.query(`INSERT INTO scores values ('${username}',${score}, '${gamemode}', '${genre}', '${dformat}')`, function (err, res) {
+    if (err) {
+      return console.log(err)
+    }
+
+  })
+})
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
@@ -311,7 +335,7 @@ function updateSongDB() {
           //we use index 0, because that is the most popular artists -> the artist we queried
           let artistId = data.artists.items[0].id
           let artistGenres = {}
-          for(let n = 0; n < data.artists.items[0].genres.length; n++){
+          for (let n = 0; n < data.artists.items[0].genres.length; n++) {
             artistGenres[data.artists.items[0].genres[n]] = 1
           }
           let artistName = artist.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); //escape special characters
@@ -396,27 +420,32 @@ function removeLilNasX(artists) {
   return (artists.includes("Lil Nas X") == false)
 }
 
+
 // *************************** PLAYLIST PAGE **********************************
-
-
 /*
 Purpose: Create a playlist of 5 (tbd) songs based on selected genre and grab 3 randomly selected related artists and insert it into the playlist
 Params: genre -> the selected genre
 Return: return the updated playlist with related artists
 */
-
 function getRelatedArtists(genre, callback) {
-  let returnPlaylist = []
   pool.query(`select * from songs s where (s.genre -> '${genre}') is not null order by random() limit 5`, function (err, result) {
     if (err) {
       return console.log(err)
     }
 
-    returnPlaylist = JSON.parse(JSON.stringify(result.rows))
-    // grab related artists
+    var returnPlaylist = JSON.parse(JSON.stringify(result.rows))
+
+    let artistsId = []
+
     for (let i = 0; i < result.rowCount; i++) {
+      artistsId.push(result.rows[i].artistid)
+    }
+    let counter = 0;
+
+    async.eachLimit(artistsId, 1, function (artist, callback) {
+      counter += 1
       let relatedArtists = []
-      spotify.request(`https://api.spotify.com/v1/artists/${result.rows[i].artistid}/related-artists`, function (err, res) {
+      spotify.request(`https://api.spotify.com/v1/artists/${artist}/related-artists`, function (err, res) {
         if (err) {
           return console.log(err)
         }
@@ -432,17 +461,16 @@ function getRelatedArtists(genre, callback) {
         for (let k = 0; k < 3; k++) {
           relatedArtists.push(relatedArtistsPool.splice(Math.random() * (relatedArtistsPool.length - 1), 1).pop())
         }
-
         //add new key value pair to its respective location in the playlist
-        returnPlaylist[i].related_artists = relatedArtists
-        //for some reason if the callback it outside the scope, it doesn't keep the newly added key-pair value relatedArtist = [...]
-        if (i == result.rowCount - 1) {
-          callback(returnPlaylist)
-        }
+        returnPlaylist[counter - 1].related_artists = relatedArtists
+        callback()
       })
-    }
+    },
+      function (err) {
+        callback(returnPlaylist)
+      })
+
   })
-  // we have to refactor all this once its done -> into a new js controller eg: playlist.js
 }
 
 /*
@@ -452,10 +480,20 @@ Return: return the updated playlist with related songs
 */
 function getRelatedSongs(playlist, callback) {
   let returnPlaylist = JSON.parse(JSON.stringify(playlist))
-  // grab top tracks info of related artists
+
+  let artistId = []
+
   for (let i = 0; i < returnPlaylist.length; i++) {
-    let relatedSongs = [];
-    spotify.request(`https://api.spotify.com/v1/artists/${returnPlaylist[i].artistid}/top-tracks?country=CA`, function (err, res) {
+    artistId.push(returnPlaylist[i].artistid)
+  }
+
+  let counter = 0
+
+  async.eachLimit(artistId, 1, function (artist, callback) {
+    counter += 1
+    let relatedSongs = []
+
+    spotify.request(`https://api.spotify.com/v1/artists/${artist}/top-tracks?country=CA`, function (err, res) {
       if (err) {
         return console.log(err);
       }
@@ -464,11 +502,11 @@ function getRelatedSongs(playlist, callback) {
       let relatedSongsPool = []
 
       for (let j = 0; j < res.tracks.length; j++) {
-        relatedSongsPool.push({name: res.tracks[j].name, id: res.tracks[j].id});
+        relatedSongsPool.push({ name: res.tracks[j].name, id: res.tracks[j].id });
       }
 
-      relatedSongsPool = relatedSongsPool.filter(function(song){
-        return song.id != returnPlaylist[i].songid
+      relatedSongsPool = relatedSongsPool.filter(function (song) {
+        return song.id != returnPlaylist[counter-1].songid
       })
 
       // randomly select 3 of those top tracks
@@ -478,11 +516,11 @@ function getRelatedSongs(playlist, callback) {
       }
 
       // place related songs into playlist to return
-      returnPlaylist[i].related_songs = relatedSongs;
-
-      if (i == returnPlaylist.length - 1) {
-        callback(returnPlaylist)
-      }
+      returnPlaylist[counter-1].related_songs = relatedSongs;
+      callback()
     })
-  }
+  },
+    function (err) {
+      callback(returnPlaylist)
+    })
 }
