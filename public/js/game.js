@@ -27,6 +27,7 @@ $(document).ready(function () {
         method: "POST",
         dataType: "JSON",
         success: function(data) {
+            console.log(data);
             gameplay(data, score);
         },
         error: function(err) {
@@ -40,9 +41,9 @@ $(document).ready(function () {
         var curr_song = 0;
 
         // Disable the button so user's don't accidentally submit before song is loaded
-        $('#guess-ans').attr('disabled', true);
-        countdown_timer();
+        $(".btn").attr('disabled', true);
         // Update the song url and what current song the user is on
+        countdown_timer();
         update_song_view(playlist[curr_song], curr_song, num_songs);
 
         // The case where the user doesn't submit any answers before the preview ends
@@ -58,13 +59,13 @@ $(document).ready(function () {
         });
 
         // A user submits an answer, the answer is marked and the user is alerted accordingly
-        $("#guess-ans").click(function() {
-            var guess_ans = $("#guess").val();
+        $(".btn").click(function() {
+            var guess_ans = $(this).html();
+
             $("#audio-playback").trigger("pause");
 
             // For now the current answer can be the song name or artist
-            mark_guess(guess_ans.toLowerCase(), playlist[curr_song].artistname.toLowerCase(), 
-                playlist[curr_song].songname.toLowerCase());
+            mark_guess(guess_ans, playlist[curr_song].songname);
 
             // Go to the next song in the playlist
             curr_song++;
@@ -115,26 +116,44 @@ $(document).ready(function () {
                 $('#countdown').delay(1000).fadeOut(500);
                 $("#audio-playback").trigger("load");
                 $("#audio-playback").trigger("play");
-                $('#guess-ans').attr('disabled', false);
+                $(".btn").attr('disabled', false);
             }
         },1000);
 
+    }
+
+    function shuffle(arr) {
+
+        const len = arr.length;
+        var temp;
+        var rand_int;
+        for (var i=0; i < len; i++) {
+            rand_int = Math.floor(Math.random() * (len-i)) + i
+            temp = arr[i];
+            arr[i] = arr[rand_int];
+            arr[rand_int] = temp;
+        }
+        return arr;
     }
 
     // Updates the song url and current song number
     function update_song_view(song, i, num_songs) {
         $("#song_counter").html(parseFloat(i + 1) + "/" + num_songs);
         $("#song-playback").attr("src", song.url);
+        var songs = song.related_songs;
+        songs.push(song.songname);
+        songs = shuffle(songs);
+
+        for (var i=0; i < 4; i++) {
+            $("#btn"+i).html(songs[i]);
+        }
     }
 
     // Load the next song in the playlist
     function next_song(song, curr_song, num_songs, score) {
-        // Reset the input field and focus back on it
-        $('#guess').val('');
-        $('#guess').focus();
 
-        // Display submit button to prevent accidental submissions
-        $('#guess-ans').attr('disabled', true);
+        // Disable buttons to prevent accidental submissions
+        $(".btn").attr('disabled', true);
 
         // Check if the last song in the playlist has played
         if (is_finished(curr_song, num_songs)) {
@@ -147,15 +166,15 @@ $(document).ready(function () {
         }
         else {
             // Songs still remaining
-            update_song_view(song, curr_song, num_songs);
             countdown_timer();
+            update_song_view(song, curr_song, num_songs);
         }
 
     }
 
     // Check if the user has guessed correctly
-    function mark_guess(guess, artist, songname) {
-        if (guess != "" && (artist.includes(guess) || songname.includes(guess))) {
+    function mark_guess(guess, songname) {
+        if (guess == songname) {
             $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
             $('#guess-feedback').html("<div class=\"alert alert-success\" \
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
@@ -180,7 +199,7 @@ $(document).ready(function () {
 
     // Hide the input and progress divs and show the redirect buttons
     function show_results() {
-        $('#guess-box').hide();
+        $('#mc_btns').hide();
         $('#progress-box').hide();
         $('#result-btns').show();
         $('#page-title').html('Results').hide().fadeIn(500);
