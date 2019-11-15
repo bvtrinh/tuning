@@ -26,13 +26,14 @@ $(document).ready(function () {
     function gameplay(playlist) {
         var num_songs = playlist.length;
         var curr_song = 0;
+        var correct_num;
 
         // Disable the button so user's don't accidentally submit before song is loaded
         $(".btn").attr('disabled', true);
 
         // Countdown between next songs, update the song url and what current song the user is on
         // Display the multiple choice answers in the buttons
-        countdown_update(playlist[curr_song], curr_song, num_songs);
+        correct_num = countdown_update(playlist[curr_song], curr_song, num_songs);
 
         // The case where the user doesn't submit any answers before the preview ends
         $("#audio-playback").on("ended", function() {
@@ -48,21 +49,20 @@ $(document).ready(function () {
 
             // Go to the next song in the playlist
             curr_song++;
-            next_song(playlist[curr_song], curr_song, num_songs)
+            correct_num = next_song(playlist[curr_song], curr_song, num_songs)
         });
 
         // A user submits an answer, the answer is marked and the user is alerted accordingly
         $(".btn").click(function() {
-            var guess_ans = $(this).html();
-
+            var id_num = $(this).attr("id").slice(3,4);
             $("#audio-playback").trigger("pause");
 
-            // For now the current answer can be the song name or artist
-            mark_guess(guess_ans, playlist[curr_song].songname);
+            // The correct answer is one of the buttons which is determined when updating the view
+            mark_guess(id_num, correct_num);
 
             // Go to the next song in the playlist
             curr_song++;
-            next_song(playlist[curr_song], curr_song, num_songs)
+            correct_num = next_song(playlist[curr_song], curr_song, num_songs)
 
         });
 
@@ -105,10 +105,9 @@ $(document).ready(function () {
                 $("#audio-playback").trigger("play");
                 $(".btn").attr('disabled', false);
                 $("#countdown").html("&nbsp;");
-                update_song_view(song, curr_song, num_songs);
             }
         },1000);
-
+        return update_song_view(song, curr_song, num_songs);
     }
 
     function shuffle(arr) {
@@ -129,13 +128,15 @@ $(document).ready(function () {
     function update_song_view(song, i, num_songs) {
         $("#song_counter").html(parseFloat(i + 1) + "/" + num_songs);
         $("#song-playback").attr("src", song.url);
-        var songs = song.related_songs;
-        songs.push(song.songname);
-        songs = shuffle(songs);
+        var btn_nums = [0, 1, 2, 3];
+        btn_nums = shuffle(btn_nums);
+        var correct_btn = btn_nums.pop()
+        $("#btn" + correct_btn).html(song.songname);
 
-        for (var i=0; i < 4; i++) {
-            $("#btn"+i).html(songs[i]);
+        for (var i=0; i < 3; i++) {
+            $("#btn"+ btn_nums.pop()).html(song.related_songs[i]);
         }
+        return correct_btn;
     }
 
     // Load the next song in the playlist
@@ -155,14 +156,14 @@ $(document).ready(function () {
         }
         else {
             // Songs still remaining
-            countdown_update(song, curr_song, num_songs);
+            return countdown_update(song, curr_song, num_songs);
         }
 
     }
 
     // Check if the user has guessed correctly
-    function mark_guess(guess, songname) {
-        if (guess == songname) {
+    function mark_guess(btn_num, correct_btn_num) {
+        if (btn_num == correct_btn_num) {
             $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
             $('#guess-feedback').html("<div class=\"alert alert-success\" \
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
