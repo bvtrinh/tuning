@@ -8,25 +8,13 @@ $(document).ready(function () {
     // Should hide this div with css
     $("#result-btns").hide();
 
-    // Enable enter key to submit answer
-    $("#guess").on("keyup", function(event) {
-        // Number 13 is the "Enter" key on the keyboard
-        if (event.keyCode === 13) {
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            document.getElementById("guess-ans").click();
-        }
-    });
-
-
-
     // Get the playlist object from the server
     $.ajax({
         url: "/playlist",
         method: "POST",
         dataType: "JSON",
         success: function(data) {
+            console.log(data);
             gameplay(data, score);
         },
         error: function(err) {
@@ -38,12 +26,14 @@ $(document).ready(function () {
     function gameplay(playlist) {
         var num_songs = playlist.length;
         var curr_song = 0;
+        var correct_num;
 
         // Disable the button so user's don't accidentally submit before song is loaded
-        $('#guess-ans').attr('disabled', true);
-        countdown_timer();
-        // Update the song url and what current song the user is on
-        update_song_view(playlist[curr_song], curr_song, num_songs);
+        $(".btn").attr('disabled', true);
+
+        // Countdown between next songs, update the song url and what current song the user is on
+        // Display the multiple choice answers in the buttons
+        correct_num = countdown_update(playlist[curr_song], curr_song, num_songs);
 
         // The case where the user doesn't submit any answers before the preview ends
         $("#audio-playback").on("ended", function() {
@@ -52,29 +42,28 @@ $(document).ready(function () {
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
             </button> <strong>You ran out of time :(</strong></div>").fadeIn(300);
 
+            // Hide the alert after a 3s 
+            $(".alert").fadeTo(3000, 500).slideUp(500, function(){
+                $(".alert").slideUp(500);
+            });
+
             // Go to the next song in the playlist
             curr_song++;
-            next_song(playlist[curr_song], curr_song, num_songs)
+            correct_num = next_song(playlist[curr_song], curr_song, num_songs)
         });
 
         // A user submits an answer, the answer is marked and the user is alerted accordingly
-        $("#guess-ans").click(function() {
-            var guess_ans = $("#guess").val();
+        $(".btn").click(function() {
+            var id_num = $(this).attr("id").slice(3,4);
             $("#audio-playback").trigger("pause");
 
-            // For now the current answer can be the song name or artist
-            mark_guess(guess_ans.toLowerCase(), playlist[curr_song].artistname.toLowerCase(), 
-                playlist[curr_song].songname.toLowerCase());
+            // The correct answer is one of the buttons which is determined when updating the view
+            mark_guess(id_num, correct_num);
 
             // Go to the next song in the playlist
             curr_song++;
-            next_song(playlist[curr_song], curr_song, num_songs)
+            correct_num = next_song(playlist[curr_song], curr_song, num_songs)
 
-        });
-
-        // This is suppose to hide the alert after a set amount of time but it isn't working
-        $(".alert").fadeTo(2000, 500).slideUp(500, function(){
-            $(".alert").slideUp(500);
         });
 
         // Update the progress bar visually to match the current time of the song
@@ -99,42 +88,62 @@ $(document).ready(function () {
     }
 
     // Displays a countdown timer in between songs
-    function countdown_timer() {
+    function countdown_update(song, curr_song, num_songs) {
 
         // Number of seconds in between songs
         var time2play = 3;
         var countdown = setInterval(function() {
-            $('#countdown').fadeIn(500);
-            var timer = document.getElementById('countdown');
-            timer.innerHTML = time2play;
+            $("#countdown").fadeIn(500);
+            $("#countdown").html(time2play);
             time2play--;
 
             if (time2play < 0) {
                 clearInterval(countdown);
-                timer.innerHTML = 'GO!';
+                $("#countdown").html("GO!");
                 $('#countdown').delay(1000).fadeOut(500);
                 $("#audio-playback").trigger("load");
                 $("#audio-playback").trigger("play");
-                $('#guess-ans').attr('disabled', false);
+                $(".btn").attr('disabled', false);
+                $("#countdown").html("&nbsp;");
             }
         },1000);
+        return update_song_view(song, curr_song, num_songs);
+    }
 
+    function shuffle(arr) {
+
+        const len = arr.length;
+        var temp;
+        var rand_int;
+        for (var i=0; i < len; i++) {
+            rand_int = Math.floor(Math.random() * (len-i)) + i
+            temp = arr[i];
+            arr[i] = arr[rand_int];
+            arr[rand_int] = temp;
+        }
+        return arr;
     }
 
     // Updates the song url and current song number
     function update_song_view(song, i, num_songs) {
         $("#song_counter").html(parseFloat(i + 1) + "/" + num_songs);
         $("#song-playback").attr("src", song.url);
+        var btn_nums = [0, 1, 2, 3];
+        btn_nums = shuffle(btn_nums);
+        var correct_btn = btn_nums.pop()
+        $("#btn" + correct_btn).html(song.songname);
+
+        for (var i=0; i < 3; i++) {
+            $("#btn"+ btn_nums.pop()).html(song.related_songs[i]);
+        }
+        return correct_btn;
     }
 
     // Load the next song in the playlist
     function next_song(song, curr_song, num_songs, score) {
-        // Reset the input field and focus back on it
-        $('#guess').val('');
-        $('#guess').focus();
 
-        // Display submit button to prevent accidental submissions
-        $('#guess-ans').attr('disabled', true);
+        // Disable buttons to prevent accidental submissions
+        $(".btn").attr('disabled', true);
 
         // Check if the last song in the playlist has played
         if (is_finished(curr_song, num_songs)) {
@@ -147,15 +156,14 @@ $(document).ready(function () {
         }
         else {
             // Songs still remaining
-            update_song_view(song, curr_song, num_songs);
-            countdown_timer();
+            return countdown_update(song, curr_song, num_songs);
         }
 
     }
 
     // Check if the user has guessed correctly
-    function mark_guess(guess, artist, songname) {
-        if (guess != "" && (artist.includes(guess) || songname.includes(guess))) {
+    function mark_guess(btn_num, correct_btn_num) {
+        if (btn_num == correct_btn_num) {
             $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
             $('#guess-feedback').html("<div class=\"alert alert-success\" \
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
@@ -171,6 +179,11 @@ $(document).ready(function () {
             </button> <strong>That's incorrect...</strong></div>").fadeIn(300);
         }
 
+        // This is hides the alert after a set amount of time 
+        $(".alert").fadeTo(3000, 500).slideUp(500, function(){
+            $(".alert").slideUp(500);
+        });
+
     }
 
     // Check if its the last song in the playlist
@@ -180,7 +193,7 @@ $(document).ready(function () {
 
     // Hide the input and progress divs and show the redirect buttons
     function show_results() {
-        $('#guess-box').hide();
+        $('#mc_btns').hide();
         $('#progress-box').hide();
         $('#result-btns').show();
         $('#page-title').html('Results').hide().fadeIn(500);
