@@ -1,3 +1,4 @@
+var percent
 $(document).ready(function () {
 
     // Set the initial volume
@@ -78,18 +79,22 @@ $(document).ready(function () {
 
         // Update the progress bar visually to match the current time of the song
         $("#audio-playback").on("playing", function() {
+            percent = 100
             var progress = setInterval(function() {
                 var audio = document.getElementById("audio-playback");
                 var duration = audio.duration;
                 var curr_time = audio.currentTime;
-                var incr = 10 / duration;
-                var percent = Math.min(incr * curr_time * 10, 100);
-                $("#progressbar").css("width", percent + "%");
+                percent = (duration - curr_time)/duration * 100
 
-                if (curr_time >= duration && audio.paused) {
+                $("#progressbar").css("width", percent + "%").attr( "aria-valuenow", percent);
+
+                if (curr_time > duration || audio.paused) {
+                    $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
                     clearInterval(progress);
+
                 }
             },100);
+            
         });
     }
 
@@ -124,7 +129,6 @@ $(document).ready(function () {
 
     // Load the next song in the playlist
     function next_song(song, curr_song, num_songs, score) {
-
         // Reset the input field and focus back on it
         $('#guess').val('');
         $('#guess').focus();
@@ -134,12 +138,14 @@ $(document).ready(function () {
 
         // Check if the last song in the playlist has played
         if (is_finished(curr_song, num_songs)) {
-
+            var score = $("#score").html();
+            score = parseFloat(score.slice(6, score.length));
             // Show the final score and button to redirect to other pages
+            upload_score(score)
             show_results(score);
+
         }
         else {
-
             // Songs still remaining
             update_song_view(song, curr_song, num_songs);
             countdown_timer();
@@ -150,13 +156,13 @@ $(document).ready(function () {
     // Check if the user has guessed correctly
     function mark_guess(guess, artist, songname) {
         if (guess != "" && (artist.includes(guess) || songname.includes(guess))) {
-
+            $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
             $('#guess-feedback').html("<div class=\"alert alert-success\" \
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
             </button> <strong>You got it right!</strong></div>").fadeIn(300);
             var score = $("#score").html();
             score = parseFloat(score.slice(6, score.length));
-            score = score + 100;
+            score = score + parseInt(1000*(percent/100))
             $("#score").html("Score: " + score);
         }
         else {
@@ -178,5 +184,21 @@ $(document).ready(function () {
         $('#progress-box').hide();
         $('#result-btns').show();
         $('#page-title').html('Results').hide().fadeIn(500);
+    }
+
+    function upload_score(score){
+
+        $.ajax({
+            url: "/upScore",
+            method: "POST",
+            data: {userScore: score},
+            dataType: "application/json",
+            success: function() {
+                console.log("success")
+            },
+            error: function(err) {
+                console.log(err)
+            },
+        });
     }
 });
