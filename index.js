@@ -70,11 +70,27 @@ app.get('/leaderboard', (req, res) => {
 
 app.get('/profile', (req, res) => {
   if (req.session.username) {
-    res.render('pages/profile', { username: req.session.username });
+
+
+
+    pool.query(`SELECT score, dateplayed, genre, mode FROM scores WHERE username = '${req.session.username}' ORDER BY dateplayed DESC LIMIT 5`, (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.render(
+        'pages/profile',
+        {
+          username: req.session.username,
+          results: results.rows
+        }
+      );
+    });
+
   } else {
     res.redirect('login');
   }
 });
+
 
 app.get('/reset', (req, res) => {
   if (req.session.username) {
@@ -280,7 +296,7 @@ updateSongDB()
 setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
 setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
 
-//capitalize_Words 
+//capitalize_Words
 function capitalize_words(str) {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }

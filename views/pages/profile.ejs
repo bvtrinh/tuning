@@ -50,36 +50,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">DateOfMatch</th>
-                  <td>300</td>
-                  <td>Playlist1</td>
-                  <td>Solo</td>
-                </tr>
-                <tr>
-                  <th scope="row">DateOfMatch</th>
-                  <td>300</td>
-                  <td>Playlist1</td>
-                  <td>Solo</td>
-                </tr>
-                <tr>
-                  <th scope="row">DateOfMatch</th>
-                  <td>300</td>
-                  <td>Playlist1</td>
-                  <td>Solo</td>
-                </tr>
-                <tr>
-                  <th scope="row">DateOfMatch</th>
-                  <td>300</td>
-                  <td>Playlist1</td>
-                  <td>Solo</td>
-                </tr>
-                <tr>
-                  <th scope="row">DateOfMatch</th>
-                  <td>300</td>
-                  <td>Playlist1</td>
-                  <td>Solo</td>
-                </tr>
+                <% for (let i=0; i < results.length; i++){ %>
+                  <tr>
+                    <th scope="row"><%=results[i].dateplayed%></th>
+                    <td><%=results[i].score%></td>
+                    <td><%=results[i].genre%></td>
+                    <td><%=results[i].mode%></td>
+                  </tr>
+                <% } %>
               </tbody>
             </table>
           </div>
