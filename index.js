@@ -502,7 +502,7 @@ function getRelatedSongs(playlist, callback) {
       }
 
       relatedSongsPool = relatedSongsPool.filter(function (song) {
-        return song.id != returnPlaylist[counter-1].songid
+        return ((song.id != returnPlaylist[counter-1].songid) || !(song.name.includes(returnPlaylist[counter-1].songname)))
       })
 
       // randomly select 3 of those top tracks
