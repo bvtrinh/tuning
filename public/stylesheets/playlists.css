@@ -58,7 +58,7 @@ body {
 
 .playlistBtns {
     background-color: #364167;
-    font-size: 48px;
+    font-size: 4vw;
     height: 175%;
     text-shadow:
 		-1px -1px 0 #000,
@@ -66,6 +66,6 @@ body {
 		-1px 1px 0 #000,
         1px 1px 0 #000;
         border-color: white;
-    width: 300px;
+    width: 100%;
     margin-bottom: 6%;
 }

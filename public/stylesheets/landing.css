@@ -67,7 +67,7 @@ body {
 
 .btn {
     background-color: #364167;
-    font-size: 48px;
+    font-size: 3vw;
     height: 200%;
     text-shadow:
 		-1px -1px 0 #000,
@@ -75,7 +75,7 @@ body {
 		-1px 1px 0 #000,
         1px 1px 0 #000;
         border-color: white;
-    width: 320px;
+    width: 100%;
     margin-bottom: 6%;
     align-content: center;
 }
