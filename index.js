@@ -66,7 +66,7 @@ app.get('/leaderboard', (req, res) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genrescores: "placeholder for now"});
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", gamesplayed: "placeholder for now"});
       }
     });
   } else {
