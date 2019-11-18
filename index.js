@@ -61,8 +61,14 @@ app.get('/leaderboard', (req, res) => {
     // just in case we access this straigh after a game, we reset the genre and playtype
     req.session.genre = null;
     req.session.playtype = null;
-    // query here
-    res.render('pages/leaderboard', { username: req.session.username,/* data would normally be obtained form the query */ data: { score: 300, username: "test", bestgenre: "pop", genrescores: 300 } });
+
+    pool.query(`select * from scores order by score desc limit 10`, (err, res) => {
+      if (err) {
+        throw err;
+      }else {
+        res.render('pages/leaderboard', {username: req.session.username, data: res.rows, bestgenre: "placeholder for now", genrescores: "placeholder for now"});
+      }
+    });
   } else {
     res.redirect('login');
   }
