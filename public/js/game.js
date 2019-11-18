@@ -14,7 +14,6 @@ $(document).ready(function () {
         method: "POST",
         dataType: "JSON",
         success: function(data) {
-            console.log(data);
             gameplay(data, score);
         },
         error: function(err) {
