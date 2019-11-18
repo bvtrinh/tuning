@@ -9,8 +9,28 @@
 
 <body>
 
-<% include ../partials/nav.ejs %>
+  <nav class="navbar navbar-expand-sm navbar-dark shadow-lg" style="background-color: #364167;">
+    <a class="navbar-brand" href="/play">
+    <img src="/img//logo/logo.png" class="img-fluid">
+    Tuning
+    </a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-right">
+            <a class="nav-link" href="/play"><i class="fas fa-home"></i>Home</a>
+        </li>
+        <li class="navbar-right">
+            <a class="nav-link" href="/profile"><i class="fas fa-user"></i> <%=username%></a>
+        </li>
+        <li class="navbar-right">
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div class="content">
       <div class="game">
           <div class="title arvo">
@@ -32,10 +52,10 @@
               <tbody>
                 <% for (let i=0; i < results.length; i++){ %>
                   <tr>
-                    <th scope="row"><%=results[i].dateplayed%></th>
-                    <td><%=results[i].score%></td>
-                    <td><%=results[i].genre%></td>
-                    <td><%=results[i].mode%></td>
+                    <th scope="row" width='40%'><%=results[i].dateplayed.toString().substr(0,results[i].dateplayed.toString().indexOf(' GMT'))%></th>
+                    <td width='2o%'><%=results[i].score%></td>
+                    <td width='2o%'><%=results[i].genre%></td>
+                    <td width='2o%'><%=results[i].mode%></td>
                   </tr>
                 <% } %>
               </tbody>
