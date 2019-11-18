@@ -32,7 +32,7 @@
               </thead>
               <tbody>
                 <% if(data){
-                    var i=0
+                    var i=0;
                     for(var d of data){ %>
                   <tr>
                     <td><%= i %></td>
@@ -41,6 +41,7 @@
                     <td><%= d.genre %></td>
                   <!--  <td><%= bestgenre %></td>
                     <td><%= gamesplayed %></td> -->
+                    <% i++; %>
                   </tr>
                 <% }} %>
               </tbody>
