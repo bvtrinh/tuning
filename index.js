@@ -62,7 +62,7 @@ app.get('/leaderboard', (req, res) => {
     req.session.genre = null;
     req.session.playtype = null;
 
-    pool.query(`select * from scores order by score desc limit 10`, (err, results) => {
+    pool.query(`select score, username, genre, sum (score) as overallscore from scores group by username order by score desc limit 10`, (err, results) => {
       if (err) {
         throw err;
       }else {

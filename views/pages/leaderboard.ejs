@@ -22,10 +22,11 @@
             <table class="table table-hover table-bordered table-sm table-striped">
               <thead class="thead-dark">
                 <tr>
-                  <th scope="col">Total Score</th>
+                  <th scope="col">Overall Score</th>
+                  <th scope="col">Score</th>
                   <th scope="col">Username</th>
+                  <th scope="col">Genre</th>
                 <!--  <th scope="col">Best Genre</th>
-                  <th scope="col">Genre ???</th>
                   <th scope="col">Games Played</th> -->
                 </tr>
               </thead>
@@ -33,10 +34,11 @@
                 <% if(data){
                     for(var d of data){ %>
                   <tr>
-                    <th scope="row"><%= d.score %></th>
+                    <td><%= d.overallscore %></td>
+                    <td><%= d.score %></td>
                     <td><%= d.username %></td>
+                    <td><%= d.genre %></td>
                   <!--  <td><%= bestgenre %></td>
-                    <td><%= genre %></td>
                     <td><%= gamesplayed %></td> -->
                   </tr>
                 <% }} %>
