@@ -22,7 +22,7 @@
             <table class="table table-hover table-bordered table-sm table-striped">
               <thead class="thead-dark">
                 <tr>
-                  <th scope="col">Overall Score</th>
+                  <th scope="col">Rank</th>
                   <th scope="col">Score</th>
                   <th scope="col">Username</th>
                   <th scope="col">Genre</th>
@@ -32,9 +32,10 @@
               </thead>
               <tbody>
                 <% if(data){
+                    var i=0
                     for(var d of data){ %>
                   <tr>
-                    <td><%= d.overallscore %></td>
+                    <td><%= i %></td>
                     <td><%= d.score %></td>
                     <td><%= d.username %></td>
                     <td><%= d.genre %></td>
