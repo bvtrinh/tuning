@@ -299,8 +299,29 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 //10 days we update the database
 console.log("------STARTING SONG DATABASE UPDATE------")
 updateSongDB()
+setTimeout(function(){
+  updateSongDBSpecific('2016-08-27')
+}, 30000)
+
+setTimeout(function(){
+  updateSongDBSpecific('2013-08-27')
+}, 60000)
+
+setTimeout(function(){
+  updateSongDBSpecific('2010-08-27')
+}, 90000)
+
+setTimeout(function(){
+  updateSongDBSpecific('2007-08-27')
+}, 120000)
+
+setTimeout(function(){
+  updateSongDBSpecific('2004-08-27')
+}, 150000)
+
 setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
 setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
+
 
 //capitalize_Words
 function capitalize_words(str) {
@@ -310,6 +331,117 @@ function capitalize_words(str) {
 function updateSongDB() {
   //Grabs all unique artists for top 100 songs
   getChart('hot-100', function (err, chart) {
+    if (err) {
+      console.log(err)
+      return
+    }
+    let topArtist = []
+
+    //grabs all the artists for top 100 songs
+    for (let i = 0; i < chart.songs.length; i++) {
+      topArtist.push(chart.songs[i].artist)
+    }
+
+    topArtist = topArtist.filter(removeLilNasX)
+    //Regex for seperating Artists from a song, like if a song features another artists
+    let re = /[&,+]|\bFeaturing\b|\b X \b/g
+
+    let seperatedArtists = []
+
+    for (let i = 0; i < topArtist.length; i++) {
+      seperatedArtists = seperatedArtists.concat(topArtist[i].split(re))
+    }
+
+    //Cleaning up spaces at end and beginning of an artist name string
+    for (let i = 0; i < seperatedArtists.length; i++) {
+      seperatedArtists[i] = seperatedArtists[i].trim()
+    }
+
+    //Grab all the unique artists
+    let uniqueArtists = seperatedArtists.filter(onlyUnique)
+
+    //console.log(uniqueArtists)
+    //console.log("----------------------------")
+    //Used to limit our web api calls to 1 parallel connection at a time
+
+    async.eachLimit(uniqueArtists, 5, function (artist, callback) {
+      setTimeout(function () {
+        spotify.search({ type: 'artist', query: artist }, function (err, data) {
+          if (err) {
+            return console.log('Error occurred: ' + err);
+          }
+
+          //we use index 0, because that is the most popular artists -> the artist we queried
+          let artistId = data.artists.items[0].id
+          let artistGenres = {}
+          for (let n = 0; n < data.artists.items[0].genres.length; n++) {
+            artistGenres[data.artists.items[0].genres[n]] = 1
+          }
+          let artistName = artist.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); //escape special characters
+          spotify.request(`https://api.spotify.com/v1/artists/${artistId}/top-tracks?country=CA`, function (err, data) {
+            if (err) {
+              return console.log("this is the error for top tracks query : " + err)
+            }
+
+            let hasPreviews = []
+
+            //put genre into a json format
+            for (let i = 0; i < data.tracks.length; i++) {
+              if (data.tracks[i].preview_url != null) {
+                hasPreviews.push(data.tracks[i])
+              }
+            }
+
+            if (hasPreviews.length == 0) {
+              return console.log("No songs available for: " + artistName)
+            }
+
+            //escape all special characters in song name, so we can insert into db
+            for (let i = 0; i < hasPreviews.length; i++) {
+              hasPreviews[i].name = hasPreviews[i].name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            }
+
+            for (let i = 0; i < hasPreviews.length; i++) {
+              pool.query(`select * from songs where songid = '${hasPreviews[i].id}'`, function (err, res) {
+                if (err) {
+                  return console.log(err)
+                }
+
+                if (res.rowCount == 0) {
+                  pool.query(`INSERT INTO songs values('${artistId}', '${artistName}', '${hasPreviews[i].id}', '${hasPreviews[i].name}', '${JSON.stringify(artistGenres)}', '${hasPreviews[i].preview_url}')`, function (err, res) {
+                    if (err) {
+                      console.log("=========================================")
+                      console.log("artists ID: " + artistId)
+                      console.log("Artists Name: " + artistName)
+                      console.log("Song ID " + hasPreviews[i].id)
+                      console.log("Song Name " + hasPreviews[i].name)
+                      console.log("Genres " + artistGenres)
+                      console.log("URL: " + hasPreviews[i].preview_url)
+                      console.log("=========================================")
+                      return console.log(err)
+                    }
+                    console.log("OK")
+                  })
+                }
+              })
+
+            }
+          })
+        });
+        console.log("Done upload artist: " + artist)
+        callback()
+      }, 3000)
+
+    },
+      function (err) {
+        return console.log(err)
+      })
+  })
+}
+
+function updateSongDBSpecific(year) {
+  //Grabs all unique artists for top 100 songs
+  getChart('hot-100', year, function (err, chart) {
     if (err) {
       console.log(err)
       return
