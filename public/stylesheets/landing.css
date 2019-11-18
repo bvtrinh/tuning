@@ -68,14 +68,14 @@ body {
 .btn {
     background-color: #364167;
     font-size: 3vw;
-    height: 200%;
+    height: 15vw;
     text-shadow:
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
 		-1px 1px 0 #000,
         1px 1px 0 #000;
         border-color: white;
-    width: 100%;
+    width: 23vw;
     margin-bottom: 6%;
     align-content: center;
 }
