@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
     res.redirect('play');
   }
   else {
-    res.render('pages/index', { title: 'home' });
+    res.render('pages/index');
   }
 });
 
@@ -113,7 +113,6 @@ app.get('/genre/:genre', (req, res) => {
     req.session.genre = req.params.genre;
     var results = {
       username: req.session.username,
-      title: 'game',
       genre: capitalize_words(req.session.genre)
     };
 
@@ -127,7 +126,7 @@ app.get('/genre/:genre', (req, res) => {
 app.get('/playtype/:playtype', (req, res) => {
   if (req.session.username) {
     req.session.playtype = req.params.playtype;
-    res.render('pages/playlists');
+    res.render('pages/playlists', {username: req.session.username});
   } else {
     res.redirect('/profile');
   }
@@ -240,7 +239,7 @@ app.get('/play', (req, res) => {
   if (req.session.username) {
     req.session.playtype = null;
     req.session.genre = null;
-    res.render('pages/landing', { username: req.session.username, title: 'play' });
+    res.render('pages/landing', { username: req.session.username});
   } else {
     res.redirect('login');
   }

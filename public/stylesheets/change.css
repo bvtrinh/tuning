@@ -5,3 +5,7 @@ body {
     background-size: cover;
     -o-background-size: cover;
 }
+
+.arvo {
+    font-family: 'Arvo', serif;
+}

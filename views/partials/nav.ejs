@@ -11,10 +11,12 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-
+            <li class="navbar-right">
+                <a class="nav-link" href="/play"><i class="fas fa-home"></i> Home</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <% if (title == 'play') { %>
+            <% if (username) { %>
             <li class="navbar-right">
                 <a class="nav-link" href="/profile"><i class="fas fa-user"></i>
                     <%=username%></a>
