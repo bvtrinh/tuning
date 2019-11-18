@@ -62,11 +62,11 @@ app.get('/leaderboard', (req, res) => {
     req.session.genre = null;
     req.session.playtype = null;
 
-    pool.query(`select * from scores order by score desc limit 10`, (err, res) => {
+    pool.query(`select * from scores order by score desc limit 10`, (err, results) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: res.rows, bestgenre: "placeholder for now", genrescores: "placeholder for now"});
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genrescores: "placeholder for now"});
       }
     });
   } else {
