@@ -16,7 +16,7 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <% if (username) { %>
+            <% if (typeof username !== 'undefined') { %>
             <li class="navbar-right">
                 <a class="nav-link" href="/profile"><i class="fas fa-user"></i>
                     <%=username%></a>
