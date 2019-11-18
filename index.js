@@ -196,7 +196,7 @@ app.post('/sign_in', (req, res) => {
   });
 });
 
-app.post('/sign_up', [check('password', 'password is too short').isLength({ min: 5 }), check('password', 'password is too long').isLength({ max: 15}), check('username', 'username is too short').isLength({ min: 5 })], (req, res) => {
+app.post('/sign_up', [check('password', 'password is too short').isLength({ min: 5 }), check('username', 'username is too long').isLength({ max: 15}), check('username', 'username is too short').isLength({ min: 5 })], (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var confirmPassword = req.body.confirmPassword;
