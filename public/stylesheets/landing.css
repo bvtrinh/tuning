@@ -67,15 +67,14 @@ body {
 
 .btn {
     background-color: #364167;
-    font-size: 3vw;
-    height: 15vw;
+    font-size: 2.5vw;
     text-shadow:
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
 		-1px 1px 0 #000,
         1px 1px 0 #000;
         border-color: white;
-    width: 23vw;
+    width: 100%;
     margin-bottom: 6%;
     align-content: center;
 }
