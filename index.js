@@ -141,9 +141,18 @@ app.get('/playtype/multiplayer', (req, res) => {
     req.session.playtype = req.params.playtype;
     res.render('pages/multiplayer', {username: req.session.username});
   } else {
-    res.redirect('/profile');
+    res.redirect('/login');
   }
 });
+
+app.get('/multiplayer/create', (req, res) => {
+  if(req.session.username){
+    res.render('pages/lobby', {username: req.session.username, room: 'create'});
+  }
+  else{
+    res.redirect('/login')
+  }
+})
 
 app.get('/signup', (req, res) => { res.render('pages/signup', { errors: null }) });
 
@@ -300,9 +309,23 @@ app.post('/upScore', (req, res) => {
   })
 })
 
-app.get('/test', function(req, res){
-  res.sendFile(__dirname + '/lobbytest.html')
-})
+// Join 
+app.get('/multiplayer/join', (req, res) => {
+  if (req.session.username) {
+    var roomCode = req.body.roomCode;
+    console.log(req.body)
+    console.log(roomCode);
+    if(rooms.includes(roomCode)){
+      res.render('pages/lobby', {username: req.session.username, room: 'join', code: roomCode});
+    }
+    else{
+      res.render('pages/multiplayer', {username: req.session.username, error: "yes"})
+    }
+    // io.join(roomCode);
+  } else {
+    res.redirect('/login');
+  }
+});
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
@@ -690,14 +713,94 @@ function getRelatedSongs(playlist, callback) {
 
 // ***** MULTIPLAYER *****
 
-// Join 
-app.get('/multiplayer/join', (req, res) => {
-  if (req.session.username) {
-    var roomCode = req.body.roomCode;
-    console.log(roomCode);
-    res.redirect('play');
-    // io.join(roomCode);
-  } else {
-    res.redirect('/profile');
+//User goes press create room
+
+// generate alphanumeric lobby code of length 4
+// eg: 4GK9, F671, KP2L
+function generateCode() {
+  var code = '';
+  // alphanumeric chars
+  var chars = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  for (var i = 6; i > 0; --i) {
+    code += chars[Math.floor(Math.random() * chars.length)];
   }
-});
+  return code;
+}
+
+
+var server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const io = socketIO(server)
+
+
+
+
+var rooms = []
+
+io.on('connection', (socket) =>{
+  console.log("made socket connection")
+  var roomID
+  var username 
+  socket.on('create', function(){
+    let roomCode
+
+    do{
+      roomCode = generateCode()
+    }while(rooms.includes(roomCode))
+    
+    rooms[roomCode] = {
+      id: roomCode,
+      players: [],
+      started: false,
+      pCount: 0,
+      genre: 'pop',
+    }
+    // console.log(roomCode)
+    // console.log(rooms)
+    socket.emit('roomcode', roomCode)
+  })
+
+  socket.on('join', function(room, user){
+    roomID = room
+    username = user
+    console.log(room)
+    // console.log(username)
+    if(room in rooms){
+      socket.join(room)
+      rooms[room].players.push(user)
+      rooms[room].pCount += 1
+      console.log(rooms[room])
+      io.sockets.in(room).emit('message', user)
+    }
+    else{
+      console.log("no room")
+    }
+  })
+
+  socket.on('ready', function(){
+
+  })
+
+  socket.on('unready', function(){
+
+  })
+
+  socket.on('message', function(){
+
+  })
+
+  socket.on('genre', function(){
+
+  })
+
+  socket.on('disconnect', function(){
+    rooms[roomID].players.pop(username)
+    rooms[roomID].pCount -= 1
+    if(rooms[roomID].pCount == 0){
+      delete rooms[roomID]
+    }
+    console.log(rooms)
+    console.log('user disconnected');
+  });
+})
+
