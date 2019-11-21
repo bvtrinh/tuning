@@ -35,9 +35,11 @@
     "express-session": "^1.17.0",
     "express-validator": "^6.2.0",
     "fs": "0.0.1-security",
+    "http": "0.0.0",
     "jsonfile": "^5.0.0",
     "node-spotify-api": "^1.1.1",
     "nodemon": "^1.19.4",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "socket.io": "^2.3.0"
   }
 }

@@ -9,7 +9,11 @@ var async = require("async") //https://www.npmjs.com/package/async
 let fs = require('fs'); //for writing to disk for json file
 var bodyparser = require('body-parser');
 
-const PORT = process.env.PORT || 5001
+const http = require('http')
+const socketIO = require('socket.io')
+
+
+const PORT = process.env.PORT || 5002
 
 var app = express();
 
@@ -287,39 +291,40 @@ app.post('/upScore', (req, res) => {
   })
 })
 
+app.get('/test', function(req, res){
+  res.sendFile(__dirname + '/lobbytest.html')
+})
+
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
 });
 
 
+// //10 days we update the database
+// console.log("------STARTING SONG DATABASE UPDATE------")
+// updateSongDB()
+// setTimeout(function(){
+//   updateSongDBSpecific('2016-08-27')
+// }, 30000)
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+// setTimeout(function(){
+//   updateSongDBSpecific('2013-08-27')
+// }, 60000)
 
-//10 days we update the database
-console.log("------STARTING SONG DATABASE UPDATE------")
-updateSongDB()
-setTimeout(function(){
-  updateSongDBSpecific('2016-08-27')
-}, 30000)
+// setTimeout(function(){
+//   updateSongDBSpecific('2010-08-27')
+// }, 90000)
 
-setTimeout(function(){
-  updateSongDBSpecific('2013-08-27')
-}, 60000)
+// setTimeout(function(){
+//   updateSongDBSpecific('2007-08-27')
+// }, 120000)
 
-setTimeout(function(){
-  updateSongDBSpecific('2010-08-27')
-}, 90000)
+// setTimeout(function(){
+//   updateSongDBSpecific('2004-08-27')
+// }, 150000)
 
-setTimeout(function(){
-  updateSongDBSpecific('2007-08-27')
-}, 120000)
-
-setTimeout(function(){
-  updateSongDBSpecific('2004-08-27')
-}, 150000)
-
-setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
-setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
+// setInterval(alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20)
+// setInterval(updateSongDB, 10 * 24 * 60 * 60 * 1000)
 
 
 //capitalize_Words
