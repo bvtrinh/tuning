@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5001
 const app = express();
 
 // Load environment variables
-require('dotenv').config();
+// require('dotenv').config();
 
 // Configuration settings
 app.use(express.static(path.join(__dirname, 'public')));
@@ -41,6 +41,7 @@ app.get('*', function (req, res) {
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
+console.log("Loading " + process.env.NODE_ENV + " environment...");
 //10 days we update the database
 if (process.env.NODE_ENV == 'production') {
     console.log("------STARTING SONG DATABASE UPDATE------");

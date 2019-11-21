@@ -35,9 +35,6 @@ $(document).ready(function () {
         // The case where the user doesn't submit any answers before the preview ends
         $("#audio-playback").on("ended", function() {
 
-            $('#guess-feedback').html("<div class=\"alert alert-danger\" \
-            role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
-            </button> <strong>You ran out of time :(</strong></div>").fadeIn(300);
             chg_btn_color(get_btn_i(playlist[curr_song].songname), 'green');
             // Hide the alert after a 3s 
             $(".alert").fadeTo(3000, 500).slideUp(500, function(){
@@ -179,21 +176,18 @@ $(document).ready(function () {
 
     // Check if the user has guessed correctly
     function mark_guess(song_guess, correct_song, guess_id) {
+
+        // There are escaped HTML characters in the string for "'"
         correct_song = correct_song.replace("&#039;","'");
+
         if (song_guess == correct_song ) {
             $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
-            $('#guess-feedback').html("<div class=\"alert alert-success\" \
-            role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
-            </button> <strong>You got it right!</strong></div>").fadeIn(300);
             var score = $("#score").html();
             score = parseFloat(score.slice(6, score.length));
             score = score + parseInt(1000*(percent/100))
             $("#score").html("Score: " + score);
         }
         else {
-            $('#guess-feedback').html("<div id=\"alert\" class=\"alert alert-danger\" \
-            role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
-            </button> <strong>That's incorrect...</strong></div>").fadeIn(300);
             chg_btn_color(guess_id,'red');
         }
 
