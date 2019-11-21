@@ -65,6 +65,11 @@
     if(type == "create"){
         socket.emit('create')
     }
+    else{
+        roomCode = "<%=code%>"
+        console.log(roomCode)
+        socket.emit('join', roomCode, user)
+    }
     
     socket.on('roomcode', function(code){
         roomCode = code
@@ -74,6 +79,8 @@
     socket.on('message', function(name){
         console.log(name)
     })
+
+    
     
 
     
