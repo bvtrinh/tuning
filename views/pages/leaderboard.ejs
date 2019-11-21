@@ -16,7 +16,9 @@
               <p>Leaderboard</p>
           </div>
           <div class="scoretitle">
-            <!--  <p>Possibly a drop box here for selecting time frame???</p> -->
+            <% for(var genre in genres){ %>
+            <form method="get" action=<% '"/leaderboard/:'+ genre + '"' %>><button type="submit" class="btn btn-sm text-uppercase"><%=genre%></button></form>
+            <% } %>
           </div>
           <div id=table>
             <table class="table table-hover table-bordered table-sm table-striped">

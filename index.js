@@ -11,6 +11,8 @@ var bodyparser = require('body-parser');
 
 const PORT = process.env.PORT || 5001
 
+const genres = {'pop', 'rap', 'country', 'hip hop', 'rock', 'trap'};
+
 var app = express();
 
 var bcrypt = require('bcrypt');
@@ -66,7 +68,25 @@ app.get('/leaderboard', (req, res) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now"});
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now", genres});
+      }
+    });
+  } else {
+    res.redirect('login');
+  }
+});
+
+app.get('/leaderboard:genre', (req, res) => {
+  if (req.session.username) {
+    // just in case we access this straigh after a game, we reset the genre and playtype
+    req.session.genre = null;
+    req.session.playtype = null;
+
+    pool.query(`select * from scores where genre = '${req.prarams.genre}' order by score desc limit 10`, (err, results) => {
+      if (err) {
+        throw err;
+      }else {
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now", genres});
       }
     });
   } else {
