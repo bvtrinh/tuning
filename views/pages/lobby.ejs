@@ -61,13 +61,14 @@
     var roomCode
     var type = "<%=room%>"
     var user = "<%=username%>"
-    
+
     if(type == "create"){
         socket.emit('create')
     }
     else{
-        roomCode = "<%=code%>"
         console.log(roomCode)
+        if("<%=code%>")
+        roomCode = "<%=code%>"
         socket.emit('join', roomCode, user)
     }
     

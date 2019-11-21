@@ -147,7 +147,7 @@ app.get('/playtype/multiplayer', (req, res) => {
 
 app.get('/multiplayer/create', (req, res) => {
   if(req.session.username){
-    res.render('pages/lobby', {username: req.session.username, room: 'create'});
+    res.render('pages/lobby', {username: req.session.username, room: 'create', code: null});
   }
   else{
     res.redirect('/login')
@@ -313,9 +313,7 @@ app.post('/upScore', (req, res) => {
 app.post('/multiplayer/join', (req, res) => {
   if (req.session.username) {
     var roomCode = req.body.roomCode;
-    console.log(req.body)
-    console.log(roomCode);
-    if(rooms.includes(roomCode)){
+    if(roomCode in rooms){
       res.render('pages/lobby', {username: req.session.username, room: 'join', code: roomCode});
     }
     else{
@@ -746,7 +744,7 @@ io.on('connection', (socket) =>{
 
     do{
       roomCode = generateCode()
-    }while(rooms.includes(roomCode))
+    }while(roomCode in rooms)
     
     rooms[roomCode] = {
       id: roomCode,
@@ -763,8 +761,9 @@ io.on('connection', (socket) =>{
   socket.on('join', function(room, user){
     roomID = room
     username = user
-    console.log(room)
+    console.log("this is " + room)
     // console.log(username)
+
     if(room in rooms){
       socket.join(room)
       rooms[room].players.push(user)
