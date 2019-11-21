@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 const pool = require('../db/connection');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const genres = {'pop', 'rap', 'country', 'hip hop', 'rock', 'trap'};
+const genres = ['pop', 'rap', 'country', 'hip hop', 'rock', 'trap'];
 
 
 router.get('/signup', (req, res) => {
