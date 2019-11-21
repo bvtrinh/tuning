@@ -9,12 +9,15 @@ const music = require('./scripts/music')
 const PORT = process.env.PORT || 5001
 const app = express();
 
+// Load environment variables
+require('dotenv').config();
+
 // Configuration settings
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyparser.json())
-app.use(expressSession({ secret: 'tuning', saveUninitialized: false, resave: false }));
+app.use(expressSession({ secret: process.env.SESSION_SECRET, saveUninitialized: false, resave: false }));
 app.use(cookieParser());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -39,27 +42,29 @@ app.get('*', function (req, res) {
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 //10 days we update the database
-console.log("------STARTING SONG DATABASE UPDATE------");
-music.updateSongDB();
-setTimeout(function(){
-  music.updateSongDBSpecific('2016-08-27')
-}, 30000);
+if (process.env.NODE_ENV == 'production') {
+    console.log("------STARTING SONG DATABASE UPDATE------");
+    music.updateSongDB();
+    setTimeout(function(){
+    music.updateSongDBSpecific('2016-08-27')
+    }, 30000);
 
-setTimeout(function(){
-  music.updateSongDBSpecific('2013-08-27')
-}, 60000);
+    setTimeout(function(){
+    music.updateSongDBSpecific('2013-08-27')
+    }, 60000);
 
-setTimeout(function(){
-  music.updateSongDBSpecific('2010-08-27')
-}, 90000);
+    setTimeout(function(){
+    music.updateSongDBSpecific('2010-08-27')
+    }, 90000);
 
-setTimeout(function(){
-  music.updateSongDBSpecific('2007-08-27')
-}, 120000);
+    setTimeout(function(){
+    music.updateSongDBSpecific('2007-08-27')
+    }, 120000);
 
-setTimeout(function(){
-  music.updateSongDBSpecific('2004-08-27')
-}, 150000);
+    setTimeout(function(){
+    music.updateSongDBSpecific('2004-08-27')
+    }, 150000);
 
-setInterval(music.alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20);
-setInterval(music.updateSongDB, 10 * 24 * 60 * 60 * 1000);
+    setInterval(music.alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20);
+    setInterval(music.updateSongDB, 10 * 24 * 60 * 60 * 1000);
+}
