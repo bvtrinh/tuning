@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 const pool = require('../db/connection');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const genres = ['pop', 'rap', 'country', 'hip hop', 'rock', 'trap'];
+const genres_types = ['pop', 'rap', 'country', 'hip hop', 'rock', 'trap'];
 
 
 router.get('/signup', (req, res) => {
@@ -170,7 +170,9 @@ router.get('/leaderboard', (req, res) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now", genres});
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, 
+            bestgenre: "placeholder for now", genre: "placeholder for now", 
+            gamesplayed: "placeholder for now", genres:genres_types});
       }
     });
   } else {

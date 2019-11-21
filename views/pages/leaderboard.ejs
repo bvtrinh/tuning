@@ -16,9 +16,10 @@
               <p>Leaderboard</p>
           </div>
           <div class="scoretitle">
-            <% for(var genre in genres){ %>
+
+            <% genres.forEach(function(genre) { %>
             <form method="get" action=<% '"/leaderboard/:'+ genre + '"' %>><button type="submit" class="btn btn-sm text-uppercase"><%=genre%></button></form>
-            <% } %>
+            <% }); %>
           </div>
           <div id=table>
             <table class="table table-hover table-bordered table-sm table-striped">
