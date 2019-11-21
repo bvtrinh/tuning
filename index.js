@@ -123,10 +123,19 @@ app.get('/genre/:genre', (req, res) => {
   }
 });
 
-app.get('/playtype/:playtype', (req, res) => {
+app.get('/playtype/single', (req, res) => {
   if (req.session.username) {
     req.session.playtype = req.params.playtype;
     res.render('pages/playlists', {username: req.session.username});
+  } else {
+    res.redirect('/profile');
+  }
+});
+
+app.get('/playtype/multiplayer', (req, res) => {
+  if (req.session.username) {
+    req.session.playtype = req.params.playtype;
+    res.render('pages/multiplayer', {username: req.session.username});
   } else {
     res.redirect('/profile');
   }
@@ -673,3 +682,17 @@ function getRelatedSongs(playlist, callback) {
       callback(returnPlaylist)
     })
 }
+
+// ***** MULTIPLAYER *****
+
+// Join 
+app.get('/multiplayer/join', (req, res) => {
+  if (req.session.username) {
+    var roomCode = req.body.roomCode;
+    console.log(roomCode);
+    res.redirect('play');
+    // io.join(roomCode);
+  } else {
+    res.redirect('/profile');
+  }
+});
