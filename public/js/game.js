@@ -1,4 +1,3 @@
-var percent
 $(document).ready(function () {
 
     // Set the initial volume
@@ -29,7 +28,6 @@ $(document).ready(function () {
         // Disable the button so user's don't accidentally submit before song is loaded
         $(".btn").attr('disabled', true);
 
-        show_playlist(playlist);
         // Countdown between next songs, update the song url and what current song the user is on
         // Display the multiple choice answers in the buttons
         countdown_update(playlist[curr_song], curr_song, num_songs);
@@ -40,7 +38,7 @@ $(document).ready(function () {
             $('#guess-feedback').html("<div class=\"alert alert-danger\" \
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
             </button> <strong>You ran out of time :(</strong></div>").fadeIn(300);
-
+            chg_btn_color(get_btn_i(playlist[curr_song].songname), 'green');
             // Hide the alert after a 3s 
             $(".alert").fadeTo(3000, 500).slideUp(500, function(){
                 $(".alert").slideUp(500);
@@ -54,10 +52,11 @@ $(document).ready(function () {
         // A user submits an answer, the answer is marked and the user is alerted accordingly
         $(".btn").click(function() {
             var guess = $(this).html();
+            var guess_id = $(this).attr("id").slice(3,4);
             $("#audio-playback").trigger("pause");
 
             // Validate the guess against the correct answer using the innerHTML of the buttons
-            mark_guess(guess, playlist[curr_song].songname);
+            mark_guess(guess, playlist[curr_song].songname, guess_id);
 
             // Go to the next song in the playlist
             curr_song++;
@@ -130,9 +129,13 @@ $(document).ready(function () {
         btn_nums = shuffle(btn_nums);
         var correct_btn = btn_nums.pop()
         $("#btn" + correct_btn).html(song.songname);
+        $("#btn" + correct_btn).css("background", "#23272b");
+        var id_num;
 
         for (var i=0; i < 3; i++) {
-            $("#btn"+ btn_nums.pop()).html(song.related_songs[i]);
+            id_num = btn_nums.pop();
+            $("#btn" + id_num).html(song.related_songs[i]);
+            $("#btn" + id_num).css("background", "#23272b");
         }
     }
 
@@ -159,8 +162,23 @@ $(document).ready(function () {
 
     }
 
+    function chg_btn_color(id, color) {
+        $('#btn' + id).css("background", color);
+    }
+
+    function get_btn_i(song) {
+        var val;
+        song = song.replace("&#039;","'");
+        for (var i = 0; i < 4; i++) {
+            val = $('#btn' + i).html();
+            if (val == song) {
+                return i;
+            }
+        }
+    }
+
     // Check if the user has guessed correctly
-    function mark_guess(song_guess, correct_song) {
+    function mark_guess(song_guess, correct_song, guess_id) {
         correct_song = correct_song.replace("&#039;","'");
         if (song_guess == correct_song ) {
             $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
@@ -176,8 +194,10 @@ $(document).ready(function () {
             $('#guess-feedback').html("<div id=\"alert\" class=\"alert alert-danger\" \
             role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
             </button> <strong>That's incorrect...</strong></div>").fadeIn(300);
+            chg_btn_color(guess_id,'red');
         }
 
+        chg_btn_color(get_btn_i(correct_song), 'green');
         // This is hides the alert after a set amount of time 
         $(".alert").fadeTo(3000, 500).slideUp(500, function(){
             $(".alert").slideUp(500);

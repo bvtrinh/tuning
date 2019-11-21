@@ -285,7 +285,7 @@ app.post('/upScore', (req, res) => {
     }
 
   })
-})
+});
 
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
