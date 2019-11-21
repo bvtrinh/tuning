@@ -15,8 +15,9 @@
     "node",
     "express",
     "bootstrap",
+    "music",
     "spotify-api",
-    "google-api"
+    "trivia-game"
   ],
   "author": "",
   "license": "ISC",
@@ -37,7 +38,9 @@
     "fs": "0.0.1-security",
     "jsonfile": "^5.0.0",
     "node-spotify-api": "^1.1.1",
-    "nodemon": "^1.19.4",
     "pg": "^7.12.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
   }
 }
