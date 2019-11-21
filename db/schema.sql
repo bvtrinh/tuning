@@ -24,9 +24,3 @@ CREATE TABLE scores
     genre varchar,
     dateplayed timestamp  
 );
-
-INSERT INTO users
-    (
-    username, password)
-VALUES
-    ('ttrinh', 'tst');
