@@ -310,7 +310,7 @@ app.post('/upScore', (req, res) => {
 })
 
 // Join 
-app.get('/multiplayer/join', (req, res) => {
+app.post('/multiplayer/join', (req, res) => {
   if (req.session.username) {
     var roomCode = req.body.roomCode;
     console.log(req.body)
