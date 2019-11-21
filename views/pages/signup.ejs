@@ -21,7 +21,7 @@
                   <% }} %>
                 </ul>
               </div>
-              <form class="form-signin" method="POST" action="/sign_up">
+              <form class="form-signin" method="POST" action="/users/sign_up">
                 <div class="form-label-group">
                   <label for="inputUsername">Username</label>
                   <input type="text" id="inputUsername" class="form-control" name="username" minlength="5" maxlength="15 "pattern = "^[a-zA-Z0-9]*$" title = "The username you entered contains spaces" required autofocus>
@@ -41,7 +41,7 @@
                 <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign up</button>
 
                 <div align="center" class="">
-                  <a href="/login">Already have an account?</a>
+                  <a href="/users/login">Already have an account?</a>
                 </div>
               </form>
             </div>

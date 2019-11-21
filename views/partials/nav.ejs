@@ -18,18 +18,18 @@
         <ul class="nav navbar-nav navbar-right">
             <% if (typeof username !== 'undefined') { %>
             <li class="navbar-right">
-                <a class="nav-link" href="/profile"><i class="fas fa-user"></i>
+                <a class="nav-link" href="/users/profile"><i class="fas fa-user"></i>
                     <%=username%></a>
             </li>
             <li class="navbar-right">
-                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="nav-link" href="/users/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </li>
             <% } else { %>
             <li class="navbar-right">
-                <a class="nav-link" href="/signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+                <a class="nav-link" href="/users/signup"><i class="fas fa-user-plus"></i> Sign Up</a>
             </li>
             <li class="navbar-right">
-                <a class="nav-link" href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a class="nav-link" href="/users/login"><i class="fas fa-sign-in-alt"></i> Login</a>
             </li>
             <% } %>
         </ul>

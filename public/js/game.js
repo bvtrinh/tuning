@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     // Get the playlist object from the server
     $.ajax({
-        url: "/playlist",
+        url: "/play/get_playlist",
         method: "POST",
         dataType: "JSON",
         success: function(data) {
@@ -231,7 +231,7 @@ $(document).ready(function () {
     function upload_score(score){
 
         $.ajax({
-            url: "/upScore",
+            url: "/users/upscore",
             method: "POST",
             data: {userScore: score},
             dataType: "application/json",
