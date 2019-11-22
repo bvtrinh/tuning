@@ -2,54 +2,9 @@
 <html>
 
 <head>
+    <% include ../partials/header.ejs %>
     <title>Socket.IO chat</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font: 13px Helvetica, Arial;
-        }
-
-        form {
-            background: #000;
-            padding: 3px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        form input {
-            border: 0;
-            padding: 10px;
-            width: 90%;
-            margin-right: .5%;
-        }
-
-        form button {
-            width: 9%;
-            background: rgb(130, 224, 255);
-            border: none;
-            padding: 10px;
-        }
-
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        #messages li {
-            padding: 5px 10px;
-        }
-
-        #messages li:nth-child(odd) {
-            background: #eee;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/lobby.css">
 </head>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -93,10 +48,121 @@
 
 
 <body>
-    <ul id="messages"></ul>
-    <form action="">
-        <input id="m" autocomplete="off" /><button>Join</button>
-    </form>
+    <!-- NAVBAR -->
+  <% include ../partials/nav.ejs %>
+
+  <div class="content">
+    <div class="actions">
+
+      <div class="title arvo">
+        Lobby
+      </div>
+
+      <div class="container">
+
+        <div class="row">
+          <div class="col-12 col-md-10 btn-row"> <!-- players list -->
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Ready</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>readyState</td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+
+          <div class="col-12 col-md-2 btn-row"> <!-- genres drop down-->
+            <div class="row-6 row-md-12">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Genre
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> <!-- all genres -->
+                        <button class="dropdown-item">Pop</button>
+                        <button class="dropdown-item">Rap</button>
+                        <button class="dropdown-item">Country</button>
+                        <button class="dropdown-item">Hip Hop</button>
+                        <button class="dropdown-item">Rock</button>
+                        <button class="dropdown-item">Trap</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row-6 row-md-12 subRow"> <!-- number of players in room -->
+                <div class="card">
+                    <div class="card-body numPlayers">
+                        x/8
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-12 col-md-10 btn-row"> <!-- chat -->
+                <div class="chatBox">
+                    <ul id="messages">
+                        <li>Chat</li>
+                    </ul>
+                    <form action="" method="POST" id="chatForm">
+                        <input type="text" id="chatInput" autocomplete="off" autofocus="on" placeholder="type your message here"><button>Send</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-2 btn-row">
+
+                <div class="row-6 row-md-12"> <!-- ready button-->
+                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Ready</button>
+                </div>
+
+                <div class="row-6 row-md-6 subRowLeave"> <!-- leave button-->
+                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Leave</button>
+                </div>
+
+            </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </body>
 
 </html>
