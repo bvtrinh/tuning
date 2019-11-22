@@ -41,6 +41,8 @@ app.get('*', function (req, res) {
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
+module.exports = app;
+
 console.log("Loading " + process.env.NODE_ENV + " environment...");
 //10 days we update the database
 if (process.env.NODE_ENV == 'production') {

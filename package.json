@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node node_modules/mocha/bin/mocha ./tests"
   },
   "repository": {
     "type": "git",
@@ -40,9 +40,14 @@
     "fs": "0.0.1-security",
     "jsonfile": "^5.0.0",
     "node-spotify-api": "^1.1.1",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "psql": "0.0.1"
   },
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "nodemon": "^1.19.4",
+    "superagent": "^5.1.1",
+    "supertest": "^4.0.2"
   }
 }
