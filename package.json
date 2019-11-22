@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "node node_modules/mocha/bin/mocha ./tests"
+    "test": "node_modules/mocha/bin/mocha ./tests"
   },
   "repository": {
     "type": "git",

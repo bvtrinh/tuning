@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 5001
 const app = express();
 
 // Load environment variables
+// Need this for testing
 require('dotenv').config();
 
 // Configuration settings
