@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 5001
 const app = express();
 
 // Load environment variables
-// require('dotenv').config();
+require('dotenv').config();
 
 // Configuration settings
 app.use(express.static(path.join(__dirname, 'public')));
