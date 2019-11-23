@@ -752,6 +752,7 @@ io.on('connection', (socket) =>{
       started: false,
       pCount: 0,
       genre: 'pop',
+      ready: [],
     }
     // console.log(roomCode)
     // console.log(rooms)
@@ -761,43 +762,50 @@ io.on('connection', (socket) =>{
   socket.on('join', function(room, user){
     roomID = room
     username = user
-    console.log("this is " + room)
-    // console.log(username)
 
-    if(room in rooms){
+    if(room in rooms && (rooms[room].pCount != 8)){
       socket.join(room)
       rooms[room].players.push(user)
       rooms[room].pCount += 1
       console.log(rooms[room])
-      io.sockets.in(room).emit('message', user)
+      io.sockets.in(room).emit('userJoin', rooms[room])
     }
     else{
       console.log("no room")
     }
   })
 
-  socket.on('ready', function(){
-
+  socket.on('ready', function(user, code){
+    rooms[code].ready.push(user)
+    //send message to other clients in room to update
+    io.sockets.in(code).emit('ready', user)
   })
 
-  socket.on('unready', function(){
-
+  socket.on('unready', function(user, code){
+    rooms[code].ready.pop(user)
+    //send message to other clients in room to update
+    io.sockets.in(code).emit('unready', user)
   })
 
   socket.on('message', function(){
-
+    //send message into chat broadcast
   })
 
-  socket.on('genre', function(){
-
+  socket.on('genre', function(newGenre, code){
+    rooms[code].genre = newGenre
+    //send message that genre changed to room
+    io.sockets.in(code).emit('updateGenre', rooms[code])
   })
 
   socket.on('disconnect', function(){
     rooms[roomID].players.pop(username)
     rooms[roomID].pCount -= 1
-    if(rooms[roomID].pCount == 0){
+    if(rooms[roomID].pCount == 0 && rooms[roomID].started == false){
       delete rooms[roomID]
     }
+
+    io.sockets.in(roomID).emit('userLeave', rooms[roomID])
+
     console.log(rooms)
     console.log('user disconnected');
   });

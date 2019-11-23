@@ -3,7 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
-    <title>Socket.IO chat</title>
+    <title>Lobby</title>
     <link rel="stylesheet" type="text/css" href="/stylesheets/lobby.css">
 </head>
 
@@ -11,158 +11,195 @@
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
 
-<script type="text/javascript">  
+<script type="text/javascript" defer>
     var socket = io.connect('localhost:5000')
     var roomCode
     var type = "<%=room%>"
     var user = "<%=username%>"
 
-    if(type == "create"){
+    //create room if the user hit create, if not join room
+    if (type == "create") {
         socket.emit('create')
     }
-    else{
-        console.log(roomCode)
-        if("<%=code%>")
+    else {
         roomCode = "<%=code%>"
         socket.emit('join', roomCode, user)
     }
-    
-    socket.on('roomcode', function(code){
+
+
+    socket.on('roomcode', function (code) {
         roomCode = code
         socket.emit('join', roomCode, user)
     })
 
-    socket.on('message', function(name){
-        console.log(name)
+    //updates the room info when user joins
+    socket.on('userJoin', function (room) {
+        let players = room.players
+        let pCount = room.pCount
+        let roomGenre = room.genre
+        $("#players").empty();
+        for (let i = 0; i < players.length; i++) {
+            updatePlayerTable(players[i], room)
+        }
+
+        $(".numPlayers").html(`${pCount}/8 Players`)
+
+        $('.genre').val(roomGenre)
     })
 
-    $(function() {
-        $('form').submit(function(e){
-            e.preventDefault() //prevents page reload
-            socket.emit('joinRoom', $('#m').val())
-            $('#m').val('')
-            return false
+    //updates the room info when user leaves
+    socket.on('userLeave', function (room) {
+        let players = room.players
+        let pCount = room.pCount
+        let roomGenre = room.genre
+        $("#players").empty();
+        for (let i = 0; i < players.length; i++) {
+            updatePlayerTable(players[i], room)
+        }
+
+        $(".numPlayers").html(`${pCount}/8 Players`)
+
+        $('.genre').val(roomGenre)
+    })
+
+    function updatePlayerTable(username, room) {
+        let state = "Unready"
+        if(room.ready.includes(username)){
+            state = "Ready"
+        }
+        $("#players").append(`<tr class="${username}"><td class='name'>${username}</td><td class="state">${state}</td></tr>`)
+    }
+
+    $(document).ready(function () {
+        $("#readyState").click(function () {
+            if($(`.${user} > .state`).html() == "Unready"){
+                socket.emit('ready', user, roomCode)
+            }
+            else{          
+                socket.emit('unready', user, roomCode)
+            }
         })
-    }) 
+    })
+
+    socket.on('ready', function(user){
+        $(`.${user} > .state`).html("Ready")
+    })
+
+    socket.on('unready', function(user){
+      $(`.${user} > .state`).html("Unready")
+    })
+
+    $(function(){
+        $('#genre').on('change', function(){
+            let newGenre = $('option:selected').val()
+            socket.emit('genre', newGenre, roomCode)
+        })
+    })
+
+    socket.on('updateGenre', function(room){
+        let roomGenre = room.genre
+        $('.genre').val(roomGenre)
+    })
 </script>
 
+//add ROOM CODE SOMEWHERE
 
 <body>
     <!-- NAVBAR -->
-  <% include ../partials/nav.ejs %>
+    <% include ../partials/nav.ejs %>
 
-  <div class="content">
-    <div class="actions">
+    <div class="content">
+        <div class="actions">
 
-      <div class="title arvo">
-        Lobby
-      </div>
+            <div class="title arvo">
+                Lobby
+            </div>
 
-      <div class="container">
+            <div class="container">
 
-        <div class="row">
-          <div class="col-12 col-md-10 btn-row"> <!-- players list -->
-            <table class="table table-dark">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Ready</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                    <tr>
-                        <td>name</td>
-                        <td>readyState</td>
-                    </tr>
-                </tbody>
-            </table>
-          </div>
+                <div class="row">
+                    <div class="col-12 col-md-10 btn-row">
+                        <!-- players list -->
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Ready/Unready</th>
+                                </tr>
+                            </thead>
+                            <tbody id="players">
+                                <tr>
+                                    <td class="name">name</td>
+                                    <td>hi</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-          <div class="col-12 col-md-2 btn-row"> <!-- genres drop down-->
-            <div class="row-6 row-md-12">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Genre
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> <!-- all genres -->
-                        <button class="dropdown-item">Pop</button>
-                        <button class="dropdown-item">Rap</button>
-                        <button class="dropdown-item">Country</button>
-                        <button class="dropdown-item">Hip Hop</button>
-                        <button class="dropdown-item">Rock</button>
-                        <button class="dropdown-item">Trap</button>
+                    <div class="col-12 col-md-2 btn-row">
+                        <!-- genres drop down-->
+                        <div class="row-6 row-md-12">
+                            <div class="dropdown">
+                                <select class="browser-default custom-select genre" id="genre">
+                                    <option value="" disabled selected>Genre</option>
+                                    <option value="pop">Pop</option>
+                                    <option value="rap">Rap</option>
+                                    <option value="country">Country</option>
+                                    <option value="hip hop">Hip Hop</option>
+                                    <option value="rock">Rock</option>
+                                    <option value="trap">Trap</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row-6 row-md-12 subRow">
+                            <!-- number of players in room -->
+                            <div class="card">
+                                <div class="card-body numPlayers">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row-6 row-md-12 subRow"> <!-- number of players in room -->
-                <div class="card">
-                    <div class="card-body numPlayers">
-                        x/8
+
+                <div class="row">
+
+                    <div class="col-12 col-md-10 btn-row">
+                        <!-- chat -->
+                        <div class="chatBox">
+                            <ul id="messages">
+                                <li>Chat</li>
+                            </ul>
+                            <form action="" method="POST" id="chatForm">
+                                <input type="text" id="chatInput" autocomplete="off" autofocus="on"
+                                    placeholder="type your message here"><button>Send</button>
+                            </form>
+                        </div>
                     </div>
+
+                    <div class="col-12 col-md-2 btn-row">
+
+                        <div class="row-6 row-md-12">
+                            <!-- ready button-->
+                            <button type="submit" class="btn btn-outline-light btn-lg actionBtns"
+                                id="readyState">Ready</button>
+                        </div>
+
+                        <div class="row-6 row-md-6 subRowLeave">
+                            <!-- leave button-->
+                            <form action="/playtype/multiplayer" method="get">
+                                <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Leave</button>
+                            </form>
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
-          </div>
         </div>
 
-        <div class="row">
-
-            <div class="col-12 col-md-10 btn-row"> <!-- chat -->
-                <div class="chatBox">
-                    <ul id="messages">
-                        <li>Chat</li>
-                    </ul>
-                    <form action="" method="POST" id="chatForm">
-                        <input type="text" id="chatInput" autocomplete="off" autofocus="on" placeholder="type your message here"><button>Send</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-2 btn-row">
-
-                <div class="row-6 row-md-12"> <!-- ready button-->
-                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Ready</button>
-                </div>
-
-                <div class="row-6 row-md-6 subRowLeave"> <!-- leave button-->
-                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Leave</button>
-                </div>
-
-            </div>
-
-        </div>
-
-      </div>
     </div>
-
-  </div>
 </body>
 
 </html>
