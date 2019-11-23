@@ -787,8 +787,9 @@ io.on('connection', (socket) =>{
     io.sockets.in(code).emit('unready', user)
   })
 
-  socket.on('message', function(){
+  socket.on('messageSent', function(user, code, msg){
     //send message into chat broadcast
+    io.sockets.in(code).emit('messageReceived', msg, user)
   })
 
   socket.on('genre', function(newGenre, code){

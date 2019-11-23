@@ -100,10 +100,23 @@
         let roomGenre = room.genre
         $('.genre').val(roomGenre)
     })
+
+    $(document).ready(function () {
+        $("#messageSend").click(function () {
+            var msg = $("#messageInput").val();
+            
+            socket.emit('messageSent', user, roomCode, msg)
+            $("#messageInput").val("")
+        })
+    })
+
+    socket.on('messageReceived', function(msg, user){
+        $("#history").append($(`<p>${user}: ${msg}</p>`))
+    })
 </script>
 
 //add ROOM CODE SOMEWHERE
-
+//fix UI
 <body>
     <!-- NAVBAR -->
     <% include ../partials/nav.ejs %>
@@ -167,12 +180,12 @@
                     <div class="col-12 col-md-10 btn-row">
                         <!-- chat -->
                         <div class="chatBox">
-                            <ul id="messages">
-                                <li>Chat</li>
-                            </ul>
-                            <form action="" method="POST" id="chatForm">
-                                <input type="text" id="chatInput" autocomplete="off" autofocus="on"
-                                    placeholder="type your message here"><button>Send</button>
+                            <h2>Chat</h2>
+                            <div id="history"></div>
+                            <form id="chatInput">
+                                <input type="text" id="messageInput" autocomplete="off" autofocus="on"
+                                    placeholder="type your message here"/>
+                                <button href="#" type="button" id="messageSend">Send</button>
                             </form>
                         </div>
                     </div>
