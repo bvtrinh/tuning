@@ -1,3 +1,4 @@
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,12 +7,14 @@ const bodyparser = require('body-parser');
 const users = require('./routes/users');
 const gameplay = require('./routes/play');
 const music = require('./scripts/music')
-const PORT = process.env.PORT || 5001
-const app = express();
 
 // Load environment variables
 // Need this for testing
 require('dotenv').config();
+
+const PORT = process.env.PORT || 5001
+const app = express();
+
 
 // Configuration settings
 app.use(express.static(path.join(__dirname, 'public')));
