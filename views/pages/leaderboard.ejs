@@ -17,8 +17,10 @@
           </div>
           <div class="scoretitle">
 
-            <% genres.forEach(function(genre) { %>
-            <form method="get" action=<% '"/leaderboard/:'+ genre + '"' %>><button type="submit" class="btn btn-sm text-uppercase"><%=genre%></button></form>
+            <% genres.forEach(function(genre) { 
+                var action = `/leaderboard/${genre}`;
+                %>
+            <form method="get" action=<%= action %>><button type="submit" class="btn btn-sm text-uppercase"><%=genre%></button></form>
             <% }); %>
           </div>
           <div id=table>
