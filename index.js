@@ -763,7 +763,7 @@ io.on('connection', (socket) =>{
     roomID = room
     username = user
 
-    if(room in rooms && (rooms[room].pCount != 8)){
+    if(room in rooms && (rooms[room].pCount != 8) && (rooms[room].started == false)){
       socket.join(room)
       rooms[room].players.push(user)
       rooms[room].pCount += 1
@@ -771,7 +771,7 @@ io.on('connection', (socket) =>{
       io.sockets.in(room).emit('userJoin', rooms[room])
     }
     else{
-      console.log("no room")
+      console.log("no room or has started already")
     }
   })
 
@@ -779,6 +779,42 @@ io.on('connection', (socket) =>{
     rooms[code].ready.push(user)
     //send message to other clients in room to update
     io.sockets.in(code).emit('ready', user)
+
+    if(rooms[code].ready.length == rooms[code].players.length){
+      let time = 3000
+      io.sockets.in(code).emit('messageReceived', "Game is beginning in", "Server")
+
+      let lobbyTimer = setInterval(() => {
+        
+        if(rooms[code].ready.length != rooms[code].players.length){
+          clearInterval(lobbyTimer)
+        }
+
+        //change this into a mod something
+        if(time == 3000){
+          io.sockets.in(code).emit('messageReceived', "3", "Server")
+        }
+        else if(time == 2000){
+          io.sockets.in(code).emit('messageReceived', "2", "Server")
+        }
+        else if(time == 1000){
+          io.sockets.in(code).emit('messageReceived', "1", "Server")
+        }
+        else if(time == 0){
+          io.sockets.in(code).emit('messageReceived', "Go", "Server")
+          getRelatedArtists(rooms[code].genre, function (returnVal) {
+            getRelatedSongs(returnVal, function (finalPlaylist) {
+              console.log(finalPlaylist)
+              io.sockets.in(code).emit('loadPlaylist', finalPlaylist)
+              rooms[code].started = true
+            })
+          })
+          clearInterval(lobbyTimer)
+        }
+        time = time - 100
+      
+      }, 100);
+    }
   })
 
   socket.on('unready', function(user, code){
@@ -799,8 +835,20 @@ io.on('connection', (socket) =>{
   })
 
   socket.on('disconnect', function(){
-    rooms[roomID].players.pop(username)
+
+    //removes user from room
+    var i = rooms[roomID].players.indexOf(username)
+    var j = rooms[roomID].ready.indexOf(username)
+    
+    if(i != -1){
+      rooms[roomID].players.splice(i, 1)
+    }
+    if(j != -1){
+      rooms[roomID].ready.splice(j,1)
+    }
+
     rooms[roomID].pCount -= 1
+
     if(rooms[roomID].pCount == 0 && rooms[roomID].started == false){
       delete rooms[roomID]
     }

@@ -14,6 +14,7 @@
 <script type="text/javascript" defer>
     var socket = io.connect('localhost:5000')
     var roomCode
+    var playlist
     var type = "<%=room%>"
     var user = "<%=username%>"
 
@@ -64,7 +65,7 @@
 
     function updatePlayerTable(username, room) {
         let state = "Unready"
-        if(room.ready.includes(username)){
+        if (room.ready.includes(username)) {
             state = "Ready"
         }
         $("#players").append(`<tr class="${username}"><td class='name'>${username}</td><td class="state">${state}</td></tr>`)
@@ -72,31 +73,31 @@
 
     $(document).ready(function () {
         $("#readyState").click(function () {
-            if($(`.${user} > .state`).html() == "Unready"){
+            if ($(`.${user} > .state`).html() == "Unready") {
                 socket.emit('ready', user, roomCode)
             }
-            else{          
+            else {
                 socket.emit('unready', user, roomCode)
             }
         })
     })
 
-    socket.on('ready', function(user){
+    socket.on('ready', function (user) {
         $(`.${user} > .state`).html("Ready")
     })
 
-    socket.on('unready', function(user){
-      $(`.${user} > .state`).html("Unready")
+    socket.on('unready', function (user) {
+        $(`.${user} > .state`).html("Unready")
     })
 
-    $(function(){
-        $('#genre').on('change', function(){
+    $(function () {
+        $('#genre').on('change', function () {
             let newGenre = $('option:selected').val()
             socket.emit('genre', newGenre, roomCode)
         })
     })
 
-    socket.on('updateGenre', function(room){
+    socket.on('updateGenre', function (room) {
         let roomGenre = room.genre
         $('.genre').val(roomGenre)
     })
@@ -104,115 +105,124 @@
     $(document).ready(function () {
         $("#messageSend").click(function () {
             var msg = $("#messageInput").val();
-            
+
             socket.emit('messageSent', user, roomCode, msg)
             $("#messageInput").val("")
         })
     })
 
-    socket.on('messageReceived', function(msg, user){
+    socket.on('messageReceived', function (msg, user) {
         $("#history").append($(`<p>${user}: ${msg}</p>`))
+
+    })
+
+    socket.on('loadPlaylist', function (loadPlaylist) {
+        playlist = loadPlaylist
+        $("#lobby").hide()
     })
 </script>
 
 //add ROOM CODE SOMEWHERE
 //fix UI
+
 <body>
     <!-- NAVBAR -->
     <% include ../partials/nav.ejs %>
+    <div id="lobby">
+        <div class="content">
+            <div class="actions">
 
-    <div class="content">
-        <div class="actions">
+                <div class="title arvo">
+                    Lobby
+                </div>
 
-            <div class="title arvo">
-                Lobby
-            </div>
+                <div class="container">
 
-            <div class="container">
-
-                <div class="row">
-                    <div class="col-12 col-md-10 btn-row">
-                        <!-- players list -->
-                        <table class="table table-dark">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Ready/Unready</th>
-                                </tr>
-                            </thead>
-                            <tbody id="players">
-                                <tr>
-                                    <td class="name">name</td>
-                                    <td>hi</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="col-12 col-md-2 btn-row">
-                        <!-- genres drop down-->
-                        <div class="row-6 row-md-12">
-                            <div class="dropdown">
-                                <select class="browser-default custom-select genre" id="genre">
-                                    <option value="" disabled selected>Genre</option>
-                                    <option value="pop">Pop</option>
-                                    <option value="rap">Rap</option>
-                                    <option value="country">Country</option>
-                                    <option value="hip hop">Hip Hop</option>
-                                    <option value="rock">Rock</option>
-                                    <option value="trap">Trap</option>
-                                </select>
-                            </div>
+                    <div class="row">
+                        <div class="col-12 col-md-10 btn-row">
+                            <!-- players list -->
+                            <table class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Ready/Unready</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="players">
+                                    <tr>
+                                        <td class="name">name</td>
+                                        <td>hi</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="row-6 row-md-12 subRow">
-                            <!-- number of players in room -->
-                            <div class="card">
-                                <div class="card-body numPlayers">
 
+                        <div class="col-12 col-md-2 btn-row">
+                            <!-- genres drop down-->
+                            <div class="row-6 row-md-12">
+                                <div class="dropdown">
+                                    <select class="browser-default custom-select genre" id="genre">
+                                        <option value="" disabled selected>Genre</option>
+                                        <option value="pop">Pop</option>
+                                        <option value="rap">Rap</option>
+                                        <option value="country">Country</option>
+                                        <option value="hip hop">Hip Hop</option>
+                                        <option value="rock">Rock</option>
+                                        <option value="trap">Trap</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row-6 row-md-12 subRow">
+                                <!-- number of players in room -->
+                                <div class="card">
+                                    <div class="card-body numPlayers">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
+                    <div class="row">
 
-                    <div class="col-12 col-md-10 btn-row">
-                        <!-- chat -->
-                        <div class="chatBox">
-                            <h2>Chat</h2>
-                            <div id="history"></div>
-                            <form id="chatInput">
-                                <input type="text" id="messageInput" autocomplete="off" autofocus="on"
-                                    placeholder="type your message here"/>
-                                <button href="#" type="button" id="messageSend">Send</button>
-                            </form>
+                        <div class="col-12 col-md-10 btn-row">
+                            <!-- chat -->
+                            <div class="chatBox">
+                                <h2>Chat</h2>
+                                <div id="history"></div>
+                                <form id="chatInput">
+                                    <input type="text" id="messageInput" autocomplete="off" autofocus="on"
+                                        placeholder="type your message here" />
+                                    <button href="#" type="button" id="messageSend">Send</button>
+                                </form>
+                            </div>
                         </div>
+
+                        <div class="col-12 col-md-2 btn-row">
+
+                            <div class="row-6 row-md-12">
+                                <!-- ready button-->
+                                <button type="submit" class="btn btn-outline-light btn-lg actionBtns"
+                                    id="readyState">Ready</button>
+                            </div>
+
+                            <div class="row-6 row-md-6 subRowLeave">
+                                <!-- leave button-->
+                                <form action="/playtype/multiplayer" method="get">
+                                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Leave</button>
+                                </form>
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div class="col-12 col-md-2 btn-row">
-
-                        <div class="row-6 row-md-12">
-                            <!-- ready button-->
-                            <button type="submit" class="btn btn-outline-light btn-lg actionBtns"
-                                id="readyState">Ready</button>
-                        </div>
-
-                        <div class="row-6 row-md-6 subRowLeave">
-                            <!-- leave button-->
-                            <form action="/playtype/multiplayer" method="get">
-                                <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Leave</button>
-                            </form>
-                        </div>
-
-                    </div>
-
                 </div>
-
             </div>
-        </div>
 
+        </div>
     </div>
+
 </body>
 
 </html>
