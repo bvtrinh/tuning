@@ -170,8 +170,8 @@ router.get('/leaderboard', (req, res) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, 
-            bestgenre: "placeholder for now", genre: "placeholder for now", 
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
+            bestgenre: "placeholder for now", genre: "placeholder for now",
             gamesplayed: "placeholder for now", genres:genres_types});
       }
     });
@@ -180,7 +180,7 @@ router.get('/leaderboard', (req, res) => {
   }
 });
 
-router.get('/leaderboard:genre', (req, res) => {
+router.get('/leaderboard/:genre', (req, res) => {
   if (req.session.username) {
     // just in case we access this straigh after a game, we reset the genre and playtype
     req.session.genre = null;
