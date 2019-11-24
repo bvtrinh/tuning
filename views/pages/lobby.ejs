@@ -119,7 +119,29 @@
     socket.on('loadPlaylist', function (loadPlaylist) {
         playlist = loadPlaylist
         $("#lobby").hide()
+        $("gameplay").show()
+        socket.emit('Ready', user)
     })
+
+    socket.on('countdown', function(){
+        //hide buttons
+        //display countdown
+        //if(countdown==0 show buttons) 
+        
+    })
+
+    socket.on('loadNextSong', function(index){
+
+    })
+
+    //ifbuttonpressedforsubmission emit to server that they have answered
+    //Update score for everyone 
+
+    socket.on('loadResultsPage', function(){
+        
+    }
+
+
 </script>
 
 //add ROOM CODE SOMEWHERE
