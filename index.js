@@ -764,6 +764,8 @@ io.on('connection', (socket) =>{
       pCount: 0,
       genre: 'pop',
       ready: [],
+      answered: [],
+      songIndex: 0
     }
     // console.log(roomCode)
     // console.log(rooms)
@@ -798,6 +800,7 @@ io.on('connection', (socket) =>{
       let lobbyTimer = setInterval(() => {
         
         if(rooms[code].ready.length != rooms[code].players.length){
+          io.sockets.in(code).emit('messageReceived', "Timer stopped", "Server")
           clearInterval(lobbyTimer)
         }
 
@@ -844,6 +847,24 @@ io.on('connection', (socket) =>{
     //send message that genre changed to room
     io.sockets.in(code).emit('updateGenre', rooms[code])
   })
+
+  socket.on('answered', function(username){
+    rooms[roomID].answered.push(username)
+    if(rooms[roomID].answered.length == rooms[roomID].players.length){
+      io.sockets.in(roomID).emit('loadNextSong', rooms[roomID].songIndex)
+      rooms[roomID].songIndex += 1
+      rooms[roomID].answered = []
+      let time = 3000
+      let roundCountdown = setInterval(() => {
+        if(time == 0){
+          clearInterval(roundCountdown)
+        }
+        io.sockets.in(roomID).emit('countdown', time % 1000)
+        time -= 1000
+      }, 1000);
+    }
+  })
+
 
   socket.on('disconnect', function(){
 
