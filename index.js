@@ -329,8 +329,6 @@ app.get('/tylertest', (req, res) => {
     var results = {
         username: 'testuser',
         genre: 'Pop'
-
-
     };
     res.render('pages/game_multi.ejs',results);
 

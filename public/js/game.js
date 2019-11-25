@@ -1,4 +1,3 @@
-var percent
 $(document).ready(function () {
 
     // Set the initial volume
@@ -25,22 +24,18 @@ $(document).ready(function () {
     function gameplay(playlist) {
         var num_songs = playlist.length;
         var curr_song = 0;
-        var correct_num;
 
         // Disable the button so user's don't accidentally submit before song is loaded
         $(".btn").attr('disabled', true);
 
         // Countdown between next songs, update the song url and what current song the user is on
         // Display the multiple choice answers in the buttons
-        correct_num = countdown_update(playlist[curr_song], curr_song, num_songs);
+        countdown_update(playlist[curr_song], curr_song, num_songs);
 
         // The case where the user doesn't submit any answers before the preview ends
         $("#audio-playback").on("ended", function() {
 
-            $('#guess-feedback').html("<div class=\"alert alert-danger\" \
-            role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
-            </button> <strong>You ran out of time :(</strong></div>").fadeIn(300);
-
+            chg_btn_color(get_btn_i(playlist[curr_song].songname), 'green');
             // Hide the alert after a 3s 
             $(".alert").fadeTo(3000, 500).slideUp(500, function(){
                 $(".alert").slideUp(500);
@@ -48,21 +43,21 @@ $(document).ready(function () {
 
             // Go to the next song in the playlist
             curr_song++;
-            correct_num = next_song(playlist[curr_song], curr_song, num_songs)
+            next_song(playlist, curr_song, num_songs);
         });
 
         // A user submits an answer, the answer is marked and the user is alerted accordingly
         $(".btn").click(function() {
-            var id_num = $(this).attr("id").slice(3,4);
+            var guess = $(this).html();
+            var guess_id = $(this).attr("id").slice(3,4);
             $("#audio-playback").trigger("pause");
 
-            // The correct answer is one of the buttons which is determined when updating the view
-            mark_guess(id_num, correct_num);
+            // Validate the guess against the correct answer using the innerHTML of the buttons
+            mark_guess(guess, playlist[curr_song].songname, guess_id);
 
             // Go to the next song in the playlist
             curr_song++;
-            correct_num = next_song(playlist[curr_song], curr_song, num_songs)
-
+            next_song(playlist, curr_song, num_songs);
         });
 
         // Update the progress bar visually to match the current time of the song
@@ -104,9 +99,9 @@ $(document).ready(function () {
                 $("#audio-playback").trigger("play");
                 $(".btn").attr('disabled', false);
                 $("#countdown").html("&nbsp;");
+                update_song_view(song, curr_song, num_songs);
             }
         },1000);
-        return update_song_view(song, curr_song, num_songs);
     }
 
     function shuffle(arr) {
@@ -131,15 +126,18 @@ $(document).ready(function () {
         btn_nums = shuffle(btn_nums);
         var correct_btn = btn_nums.pop()
         $("#btn" + correct_btn).html(song.songname);
+        $("#btn" + correct_btn).css("background", "#23272b");
+        var id_num;
 
         for (var i=0; i < 3; i++) {
-            $("#btn"+ btn_nums.pop()).html(song.related_songs[i]);
+            id_num = btn_nums.pop();
+            $("#btn" + id_num).html(song.related_songs[i]);
+            $("#btn" + id_num).css("background", "#23272b");
         }
-        return correct_btn;
     }
 
     // Load the next song in the playlist
-    function next_song(song, curr_song, num_songs, score) {
+    function next_song(playlist, curr_song, num_songs) {
 
         // Disable buttons to prevent accidental submissions
         $(".btn").attr('disabled', true);
@@ -150,34 +148,50 @@ $(document).ready(function () {
             score = parseFloat(score.slice(6, score.length));
             // Show the final score and button to redirect to other pages
             upload_score(score)
-            show_results(score);
+            show_results();
+            show_playlist(playlist);
 
         }
         else {
             // Songs still remaining
-            return countdown_update(song, curr_song, num_songs);
+            countdown_update(playlist[curr_song], curr_song, num_songs);
         }
 
     }
 
+    function chg_btn_color(id, color) {
+        $('#btn' + id).css("background", color);
+    }
+
+    function get_btn_i(song) {
+        var val;
+        song = song.replace("&#039;","'");
+        for (var i = 0; i < 4; i++) {
+            val = $('#btn' + i).html();
+            if (val == song) {
+                return i;
+            }
+        }
+    }
+
     // Check if the user has guessed correctly
-    function mark_guess(btn_num, correct_btn_num) {
-        if (btn_num == correct_btn_num) {
+    function mark_guess(song_guess, correct_song, guess_id) {
+
+        // There are escaped HTML characters in the string for "'"
+        correct_song = correct_song.replace("&#039;","'");
+
+        if (song_guess == correct_song ) {
             $("#progressbar").css("width", 100 + "%").attr( "aria-valuenow", 100);
-            $('#guess-feedback').html("<div class=\"alert alert-success\" \
-            role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
-            </button> <strong>You got it right!</strong></div>").fadeIn(300);
             var score = $("#score").html();
             score = parseFloat(score.slice(6, score.length));
             score = score + parseInt(1000*(percent/100))
             $("#score").html("Score: " + score);
         }
         else {
-            $('#guess-feedback').html("<div id=\"alert\" class=\"alert alert-danger\" \
-            role=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">x \
-            </button> <strong>That's incorrect...</strong></div>").fadeIn(300);
+            chg_btn_color(guess_id,'red');
         }
 
+        chg_btn_color(get_btn_i(correct_song), 'green');
         // This is hides the alert after a set amount of time 
         $(".alert").fadeTo(3000, 500).slideUp(500, function(){
             $(".alert").slideUp(500);
@@ -198,10 +212,20 @@ $(document).ready(function () {
         $('#page-title').html('Results').hide().fadeIn(500);
     }
 
+    // Show the playlist after the game is finished
+    function show_playlist(playlist) {
+
+        var list = "";
+        playlist.forEach(function(song) {
+            list += "<li>" + song.songname + "</li>";
+        });
+        $('#songlist').append(list);
+    }
+
     function upload_score(score){
 
         $.ajax({
-            url: "/upScore",
+            url: "/users/upscore",
             method: "POST",
             data: {userScore: score},
             dataType: "application/json",
