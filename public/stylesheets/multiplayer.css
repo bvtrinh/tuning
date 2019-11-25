@@ -70,26 +70,3 @@ body {
     margin-bottom: 6%;
 }
 
-.results-btns {
-    display: none;
-}
-
-.mc {
-    padding: 5rem 7rem;
-    width: 100%;
-    height: 90%;
-    margin: 3px;
-}
-
-.gameplay {
-    background: white;
-    padding-bottom: 15px;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    position: unset;
-}
-
-.game-title {
-    color: black;
-}
