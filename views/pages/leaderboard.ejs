@@ -8,6 +8,16 @@
 </head>
 
 <body>
+<script>
+          function reloadGenre() {
+                var g = document.getElementById("selectGenres").value;
+                if(g == "Overall"){
+                  window.location.replace("/users/leaderboard");
+                } else{
+                  window.location.replace(`/users/leaderboard/${g}`);
+                }
+              }
+</script>
 
 <% include ../partials/nav.ejs %>
   <div class="content">
@@ -16,12 +26,12 @@
               <p>Leaderboard</p>
           </div>
           <div class="scoretitle">
-
-            <% genres.forEach(function(genre) {
-                var action = `/users/leaderboard/${genre}`;
-                %>
-            <form method="get" action=<%= action %>><button type="submit" class="btn btn-sm text-uppercase"><%=genre%></button></form>
-            <% }); %>
+            <select id="selectGenres" onchange="reloadGenre();">
+              <option value="Overall">Overall</option>
+              <% genres.forEach(function(genre) { %>
+                <option value=<%=genre%>><%=genre%></option>
+              <% }); %>
+            </select>
           </div>
           <div id=table>
             <table class="table table-hover table-bordered table-sm table-striped">
