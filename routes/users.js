@@ -170,31 +170,33 @@ router.get('/leaderboard', (req, res) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, 
-            bestgenre: "placeholder for now", genre: "placeholder for now", 
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
+            bestgenre: "placeholder for now",
             gamesplayed: "placeholder for now", genres:genres_types});
       }
     });
   } else {
-    res.redirect('login');
+    res.redirect('/users/login');
   }
 });
 
-router.get('/leaderboard:genre', (req, res) => {
+router.get('/leaderboard/:genre', (req, res) => {
   if (req.session.username) {
     // just in case we access this straigh after a game, we reset the genre and playtype
     req.session.genre = null;
     req.session.playtype = null;
 
-    pool.query(`select * from scores where genre = '${req.prarams.genre}' order by score desc limit 10`, (err, results) => {
+    pool.query(`select username, score, genre, from scores where genre = '${req.params.genre}' order by score desc limit 10`, (err, results) => {
       if (err) {
         throw err;
       }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now", genres});
+        res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
+					bestgenre: "placeholder for now",
+					gamesplayed: "placeholder for now", genres_types});
       }
     });
   } else {
-    res.redirect('login');
+    res.redirect('/users/login');
   }
 });
 
