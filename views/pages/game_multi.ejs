@@ -3,7 +3,7 @@
 
 <head>
     <% include ../partials/header.ejs %>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/multiplayer.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/game.css">
     <title>Play Now</title>
 </head>
 
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <h1 align="center" id="player-title" class="arvo py-3">Players</h1>
-                <table class="table table-sm">
+                <table id="scoreboard" class="table table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Name</th>
@@ -49,7 +49,6 @@
                 <h1 id="page-title" class="title game-title arvo px-3 py-3">
                     Guess the Song!
                 </h1>
-                <h2 id="score" align="center" class="pt-3">Score: 200</h2>
 
                 <hr>
 
@@ -100,6 +99,33 @@
 
     </div>
 
+    <script type="text/javascript">
+
+        var items = {
+            "ttrinh": 2000,
+            "bvtrinh": 123123,
+            "kevin": 123,
+            "andy": 9000
+        };
+        // Create array from dictionary
+        var answered = Object.keys(items).map(function(key) {
+            return [key, items[key]];
+        });
+
+        // Sort the array based on the second element
+        answered.sort(function(first, second) {
+            return second[1] - first[1];
+        });
+
+        // Clear the body of the table
+        $("#scoreboard tbody").empty()
+
+        // Instead reformat table here
+        answered.forEach(function(item) {
+            var row = `<tr> <td>${item[0]}</td> <td>${item[1]}</td> </tr>`;
+            $("#scoreboard tbody").append(row);
+        });
+    </script>
 </body>
 
 </html>

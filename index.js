@@ -763,7 +763,8 @@ io.on('connection', (socket) =>{
       genre: 'pop',
       ready: [],
       answered: [],
-      songIndex: 0
+      songIndex: 0,
+      scores: {}
     }
     // console.log(roomCode)
     // console.log(rooms)
@@ -846,20 +847,37 @@ io.on('connection', (socket) =>{
     io.sockets.in(code).emit('updateGenre', rooms[code])
   })
 
-  socket.on('answered', function(username){
+  socket.on('answered', function(username, value){
+    if(!(username in rooms[roomID].scores)){
+      rooms[roomID].scores[username] = 0
+      io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
+    }
+    else{
+      rooms[roomID].scores[username] += value
+      io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
+    }
+
     rooms[roomID].answered.push(username)
+    console.log(rooms[roomID])
+
     if(rooms[roomID].answered.length == rooms[roomID].players.length){
-      io.sockets.in(roomID).emit('loadNextSong', rooms[roomID].songIndex)
-      rooms[roomID].songIndex += 1
-      rooms[roomID].answered = []
-      let time = 3000
-      let roundCountdown = setInterval(() => {
+      if(rooms[roomID].songIndex == 5){
+        io.sockets.in(roomID).emit('loadResultsPage', rooms[roomID])
+      }
+      else{
+        var time = 3
+        var roundCountdown = setInterval(() => {
         if(time == 0){
+          io.sockets.in(roomID).emit('countdown', 0)
+          io.sockets.in(roomID).emit('loadNextSong', rooms[roomID].songIndex)
+          rooms[roomID].songIndex += 1
+          rooms[roomID].answered = []
           clearInterval(roundCountdown)
         }
-        io.sockets.in(roomID).emit('countdown', time % 1000)
-        time -= 1000
+        io.sockets.in(roomID).emit('countdown', time)
+        time -= 1
       }, 1000);
+      }
     }
   })
 
@@ -869,6 +887,7 @@ io.on('connection', (socket) =>{
     //removes user from room
     var i = rooms[roomID].players.indexOf(username)
     var j = rooms[roomID].ready.indexOf(username)
+    var l = rooms[roomID].answered.indexOf(username)
     
     if(i != -1){
       rooms[roomID].players.splice(i, 1)
@@ -876,6 +895,10 @@ io.on('connection', (socket) =>{
     if(j != -1){
       rooms[roomID].ready.splice(j,1)
     }
+    if(l != -1){
+      rooms[roomID].answered.splice(j,1)
+    }
+    delete rooms[roomID].scores[username]
 
     rooms[roomID].pCount -= 1
 
