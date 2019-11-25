@@ -325,6 +325,17 @@ app.post('/multiplayer/join', (req, res) => {
   }
 });
 
+app.get('/tylertest', (req, res) => {
+    var results = {
+        username: 'testuser',
+        genre: 'Pop'
+
+
+    };
+    res.render('pages/game_multi.ejs',results);
+
+});
+
 app.get('*', function (req, res) {
   res.status(404).send('ERROR 404: The page you requested is invalid or is missing, please try something else')
 });

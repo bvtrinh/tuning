@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ../partials/header.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/multiplayer.css">
+    <title>Play Now</title>
+</head>
+
+<body>
+
+    <% include ../partials/game_nav.ejs %>
+    <div class="container gameplay">
+
+        <div class="row">
+            <div class="col-lg-3">
+                <h1 align="center" id="player-title" class="arvo py-3">Players</h1>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ttrinh</td>
+                            <td>2000</td>
+                        </tr>
+                        <tr>
+                            <td>bvtrinh</td>
+                            <td>1900</td>
+                        </tr>
+                        <tr>
+                            <td>andy</td>
+                            <td>1500</td>
+                        </tr>
+                        <tr>
+                            <td>kevin</td>
+                            <td>1000</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-lg-9">
+
+                <h2 align="right" class="pt-3" id="song_counter"></h2>
+                <h1 id="page-title" class="title game-title arvo px-3 py-3">
+                    Guess the Song!
+                </h1>
+                <h2 id="score" align="center" class="pt-3">Score: 200</h2>
+
+                <hr>
+
+                <div id="progress-box" class="progress">
+                    <div class="pb-5 progress-bar" 
+                        role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                        id="progressbar" style="width: 100%"></div>
+                </div>
+
+                <h1 align="center" id="countdown" class="pt-5">
+                    &nbsp;
+                </h1>
+
+                <div class="playback">
+                    <audio id="audio-playback">
+                        <source id="song-playback" type="audio/mpeg">
+                    </audio>
+                </div>
+                
+                <div id="guess-feedback" class="mx-5 my-5">
+
+                </div>
+
+                <div id="mc_btns" class="row justify-content-center">
+                    <div class="col-lg-6 btn-row">
+                        <button id="btn0" type="button" class="mc btn btn-dark"></button>
+                    </div>
+                    <div class="col-lg-6 btn-row">
+                        <button id="btn1" type="button" class="mc btn btn-dark"></button>
+                    </div>
+                    <div class="col-lg-6 btn-row">
+                        <button id="btn2" type="button" class="mc btn btn-dark"></button>
+                    </div>
+                    <div class="col-lg-6 btn-row">
+                        <button id="btn3" type="button" class="mc btn btn-dark"></button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div align="center" id="result-btns" class="results-btns px-5 py-5 justify-content-center">
+            <a href="/play" class="btn btn-primary">Return to Home</a>
+            <a href="/playtype/single" class="btn btn-primary">Select a different genre</a>
+            <a href="" class="btn btn-primary">Play again</a>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
