@@ -868,7 +868,6 @@ io.on('connection', (socket) =>{
         io.sockets.in(roomID).emit('loadResultsPage', rooms[roomID])
         
         Object.keys(rooms[roomID].scores).forEach(function(user){
-          console.log(user, rooms[roomID].scores[user])
           let d = new Date()
 
           dformat = [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-')
@@ -877,6 +876,13 @@ io.on('connection', (socket) =>{
                     d.getSeconds()].join(':');
           pool.query(`insert into scores values ('${user}',${rooms[roomID].scores[user]}, 'multiplayer', '${rooms[roomID].genre}', '${dformat}')`)
         })
+
+        rooms[roomID].started = false
+        rooms[roomID].ready = []
+        rooms[roomID].answered = []
+        rooms[roomID].songIndex = 0
+        rooms[roomID].scores = {}
+        
 
       }
       else{
