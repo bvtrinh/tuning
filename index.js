@@ -831,7 +831,11 @@ io.on('connection', (socket) =>{
   })
 
   socket.on('unready', function(user, code){
-    rooms[code].ready.pop(user)
+    var m = rooms[code].ready.indexOf(user)
+    
+    if(m != -1){
+      rooms[code].ready.splice(m, 1)
+    }
     //send message to other clients in room to update
     io.sockets.in(code).emit('unready', user)
   })
@@ -905,6 +909,7 @@ io.on('connection', (socket) =>{
     if(rooms[roomID].pCount == 0 && rooms[roomID].started == false){
       delete rooms[roomID]
     }
+    io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
 
     io.sockets.in(roomID).emit('userLeave', rooms[roomID])
 
