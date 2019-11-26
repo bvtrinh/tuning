@@ -113,9 +113,51 @@ router.get('/profile', (req, res) => {
 				res.render('pages/profile', {
 					username: req.session.username,
 					results: results.rows,
+					selected: "Recent Scores",
+					genres: genres_types
 				});
 			}
 		);
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
+router.get('/profile/:data', (req, res) => {
+	if (req.session.username) {
+		if(req.params.data == "Overall"){
+			pool.query(
+				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE username = '${req.session
+					.username}' GROUP BY username`,
+				(error, results) => {
+					if (error) {
+						throw error;
+					}
+					res.render('pages/profile', {
+						username: req.session.username,
+						results: results.rows,
+						selected: req.params.data,
+						genres: genres_types
+					});
+				}
+			);
+		} else {
+			pool.query(
+				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE (username = '${req.session
+					.username}' AND genre = '${req.params.data}') GROUP BY username`,
+				(error, results) => {
+					if (error) {
+						throw error;
+					}
+					res.render('pages/profile', {
+						username: req.session.username,
+						results: results.rows,
+						selected: req.params.data,
+						genres: genres_types
+					});
+				}
+			);
+		}
 	} else {
 		res.redirect('/users/login');
 	}
