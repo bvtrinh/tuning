@@ -1,3 +1,4 @@
+
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,11 +7,14 @@ const bodyparser = require('body-parser');
 const users = require('./routes/users');
 const gameplay = require('./routes/play');
 const music = require('./scripts/music')
+
+// Load environment variables
+// Need this for testing
+require('dotenv').config();
+
 const PORT = process.env.PORT || 5001
 const app = express();
 
-// Load environment variables
-// require('dotenv').config();
 
 // Configuration settings
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,6 +44,8 @@ app.get('*', function (req, res) {
 });
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+module.exports = app;
 
 console.log("Loading " + process.env.NODE_ENV + " environment...");
 //10 days we update the database
