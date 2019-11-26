@@ -313,9 +313,6 @@
     }
 </script>
 
-//add ROOM CODE SOMEWHERE
-//fix UI
-
 <body>
     <!-- NAVBAR -->
     <% include ../partials/nav.ejs %>
@@ -323,7 +320,7 @@
         <div class="content">
             <div class="actions">
 
-                <div class="title arvo">
+                <div class="display-3 text-center arvo">
                     Lobby
                 </div>
 
@@ -349,8 +346,15 @@
                         </div>
 
                         <div class="col-12 col-md-2 btn-row">
-                            <!-- genres drop down-->
+                            
                             <div class="row-6 row-md-12">
+
+                                <!-- room code -->
+                                <div class="text-center numPlayers" id="roomCode">
+                                    4k2k4n <!-- FILLER TEXT : TO REMOVE -->
+                                </div>
+
+                                <!-- genres drop down-->
                                 <div class="dropdown">
                                     <select class="browser-default custom-select genre" id="genre">
                                         <option value="" disabled selected>Genre</option>
@@ -379,13 +383,15 @@
                         <div class="col-12 col-md-10 btn-row">
                             <!-- chat -->
                             <div class="chatBox">
-                                <h2>Chat</h2>
+                                <div class="text-center numPlayers">
+                                    <h2>Chat</h2>
+                                </div>
                                 <div id="history"></div>
-                                <form id="chatInput">
+                                <div id="chatInput">
                                     <input type="text" id="messageInput" autocomplete="off" autofocus="on"
                                         placeholder="type your message here" />
                                     <button href="#" type="button" id="messageSend">Send</button>
-                                </form>
+                                </div>
                             </div>
                         </div>
 
