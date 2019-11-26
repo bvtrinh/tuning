@@ -80,11 +80,6 @@ body {
 
 .infoBoxes {
     background-color: #364167;
-    /* text-shadow:
-		-1px -1px 0 #000,
-		1px -1px 0 #000,
-		-1px 1px 0 #000,
-        1px 1px 0 #000; */
     border-color: white;
     color: #eee;
 }
@@ -105,7 +100,7 @@ body {
     border-top-width: 1px;
 } */
 
-#chatInput input { 
+.chatInput input { 
     border-style: solid; 
     border-width: 1px; 
     padding: 10px; 
@@ -113,7 +108,7 @@ body {
     margin-right: .5%; 
 }
 
-#chatInput button { 
+.chatInput button { 
     width: 9%; 
     background: #364167; 
     border: none; 
@@ -132,16 +127,7 @@ body {
     overflow: auto;
 }
 
-#messages li { 
-    padding: 5px 10px; 
-}
-
-#messages li:nth-child(odd) { 
-    background: #364167;
-    color: #eee;
-}
-
-#history{
+.history{
     width: 100%;
     height: 200px;
     overflow-y: auto;
@@ -173,4 +159,22 @@ body {
 
 .game-title {
     color: black;
+}
+
+#roomCode {
+    height: 20vh;
+    padding-top: 7vh;
+}
+
+.results {
+    background: white;
+    padding-bottom: 15px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    position: unset;
+}
+
+.resultsTitle {
+    color: #364167; 
 }
