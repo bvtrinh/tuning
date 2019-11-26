@@ -26,17 +26,14 @@ body {
     font-family: 'Arvo', serif;
 }
 
-.title{
-    text-align: center;
-    font-size: 40px;
-    position: relative;
-    top: 4%;
+.display-3 {
     color: white;
     text-shadow:
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
 		-1px 1px 0 #000,
-		1px 1px 0 #000;
+        1px 1px 0 #000;
+    border-color: white;
 }
 
 .actions{
@@ -60,43 +57,55 @@ body {
 
 .actionBtns {
     background-color: #364167;
-    text-shadow:
+    /* text-shadow:
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
 		-1px 1px 0 #000,
-        1px 1px 0 #000;
-        border-color: white;
+        1px 1px 0 #000; */
+    border-color: white;
     margin-bottom: 2%;
-    width: 100%;
+    width: 97%;
 }
 
 .numPlayers {
     background-color: #364167;
-    text-shadow:
+    /* text-shadow:
 		-1px -1px 0 #000,
 		1px -1px 0 #000,
 		-1px 1px 0 #000,
-        1px 1px 0 #000;
-        border-color: white;
+        1px 1px 0 #000; */
+    border-color: white;
+    color: #eee;
+}
+
+.infoBoxes {
+    background-color: #364167;
+    /* text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000; */
+    border-color: white;
     color: #eee;
 }
 
 .chatBox {
     width: 100%;
     background-color: #eee; 
-    border: solid 1px white;
+    border: solid 1px #f3f3f3;
+
 }
 
-form { 
+/* form { 
     background: #eee; 
     padding: 3px; 
     bottom: 0;  
     border-color: #000; 
     border-top-style: solid; 
     border-top-width: 1px;
-}
+} */
 
-form input { 
+#chatInput input { 
     border-style: solid; 
     border-width: 1px; 
     padding: 10px; 
@@ -104,12 +113,12 @@ form input {
     margin-right: .5%; 
 }
 
-form button { 
+#chatInput button { 
     width: 9%; 
     background: #364167; 
     border: none; 
-    padding: 10px; 
-    margin-left: 2%; 
+    padding: 1%; 
+    margin-left: 0.5%; 
     color: #eee;
 }
 

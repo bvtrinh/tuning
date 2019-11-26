@@ -317,9 +317,8 @@ app.post('/multiplayer/join', (req, res) => {
       res.render('pages/lobby', {username: req.session.username, room: 'join', code: roomCode});
     }
     else{
-      res.render('pages/multiplayer', {username: req.session.username, error: "yes"})
+      res.render('pages/multiplayer', {username: req.session.username, errors: [{ msg: 'Invalid code. Please try again' }] })
     }
-    // io.join(roomCode);
   } else {
     res.redirect('/login');
   }

@@ -15,7 +15,7 @@
 <script type="text/javascript" defer>
 
 
-    var socket = io.connect('localhost:5000')
+    var socket = io.connect('localhost:5002')
     var roomCode
     var playlist
     var currSong
@@ -111,6 +111,14 @@
         $("#messageSend").click(function () {
             var msg = $("#messageInput").val();
 
+            // auto scrolling chat box
+            var height = 0;
+            $("#history p").each(function(i, value){
+            height += parseInt($(this).height());
+            });
+            height += '';
+            $("#history").animate({scrollTop: height});
+
             socket.emit('messageSent', user, roomCode, msg)
             $("#messageInput").val("")
         })
@@ -118,7 +126,6 @@
 
     socket.on('messageReceived', function (msg, user) {
         $("#history").append($(`<p>${user}: ${msg}</p>`))
-
     })
 
     socket.on('loadPlaylist', function (loadPlaylist) {
@@ -327,9 +334,6 @@
     }
 </script>
 
-//add ROOM CODE SOMEWHERE
-//fix UI
-
 <body>
     <!-- NAVBAR -->
     <% include ../partials/nav.ejs %>
@@ -337,7 +341,7 @@
         <div class="content">
             <div class="actions">
 
-                <div class="title arvo">
+                <div class="display-3 text-center arvo">
                     Lobby
                 </div>
 
@@ -363,8 +367,15 @@
                         </div>
 
                         <div class="col-12 col-md-2 btn-row">
-                            <!-- genres drop down-->
+                            
                             <div class="row-6 row-md-12">
+
+                                <!-- room code -->
+                                <div class="text-center infoBoxes" id="roomCode">
+                                    4k2k4n <!-- FILLER TEXT : TO REMOVE -->
+                                </div>
+
+                                <!-- genres drop down-->
                                 <div class="dropdown">
                                     <select class="browser-default custom-select genre" id="genre">
                                         <option value="" disabled selected>Genre</option>
@@ -393,13 +404,15 @@
                         <div class="col-12 col-md-10 btn-row">
                             <!-- chat -->
                             <div class="chatBox">
-                                <h2>Chat</h2>
+                                <div class="text-center infoBoxes">
+                                    <h2>Chat</h2>
+                                </div>
                                 <div id="history"></div>
-                                <form id="chatInput">
+                                <div id="chatInput">
                                     <input type="text" id="messageInput" autocomplete="off" autofocus="on"
                                         placeholder="type your message here" />
                                     <button href="#" type="button" id="messageSend">Send</button>
-                                </form>
+                                </div>
                             </div>
                         </div>
 
