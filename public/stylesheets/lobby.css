@@ -78,6 +78,17 @@ body {
     color: #eee;
 }
 
+.infoBoxes {
+    background-color: #364167;
+    /* text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000; */
+    border-color: white;
+    color: #eee;
+}
+
 .chatBox {
     width: 100%;
     background-color: #eee; 

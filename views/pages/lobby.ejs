@@ -15,7 +15,7 @@
 <script type="text/javascript" defer>
 
 
-    var socket = io.connect('localhost:5000')
+    var socket = io.connect('localhost:5002')
     var roomCode
     var playlist
     var currSong
@@ -111,6 +111,14 @@
         $("#messageSend").click(function () {
             var msg = $("#messageInput").val();
 
+            // auto scrolling chat box
+            var height = 0;
+            $("#history p").each(function(i, value){
+            height += parseInt($(this).height());
+            });
+            height += '';
+            $("#history").animate({scrollTop: height});
+
             socket.emit('messageSent', user, roomCode, msg)
             $("#messageInput").val("")
         })
@@ -118,7 +126,6 @@
 
     socket.on('messageReceived', function (msg, user) {
         $("#history").append($(`<p>${user}: ${msg}</p>`))
-
     })
 
     socket.on('loadPlaylist', function (loadPlaylist) {
@@ -350,7 +357,7 @@
                             <div class="row-6 row-md-12">
 
                                 <!-- room code -->
-                                <div class="text-center numPlayers" id="roomCode">
+                                <div class="text-center infoBoxes" id="roomCode">
                                     4k2k4n <!-- FILLER TEXT : TO REMOVE -->
                                 </div>
 
@@ -383,7 +390,7 @@
                         <div class="col-12 col-md-10 btn-row">
                             <!-- chat -->
                             <div class="chatBox">
-                                <div class="text-center numPlayers">
+                                <div class="text-center infoBoxes">
                                     <h2>Chat</h2>
                                 </div>
                                 <div id="history"></div>
