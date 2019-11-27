@@ -69,8 +69,8 @@ app.get('/leaderboard', (req, res) => {
     pool.query(`select * from scores order by score desc limit 10`, (err, results) => {
       if (err) {
         throw err;
-      }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now"});
+      } else {
+        res.render('pages/leaderboard', { username: req.session.username, data: results.rows, bestgenre: "placeholder for now", genre: "placeholder for now", gamesplayed: "placeholder for now" });
       }
     });
   } else {
@@ -130,7 +130,7 @@ app.get('/genre/:genre', (req, res) => {
 app.get('/playtype/single', (req, res) => {
   if (req.session.username) {
     req.session.playtype = req.params.playtype;
-    res.render('pages/playlists', {username: req.session.username});
+    res.render('pages/playlists', { username: req.session.username });
   } else {
     res.redirect('/profile');
   }
@@ -139,17 +139,17 @@ app.get('/playtype/single', (req, res) => {
 app.get('/playtype/multiplayer', (req, res) => {
   if (req.session.username) {
     req.session.playtype = req.params.playtype;
-    res.render('pages/multiplayer', {username: req.session.username});
+    res.render('pages/multiplayer', { username: req.session.username });
   } else {
     res.redirect('/login');
   }
 });
 
 app.get('/multiplayer/create', (req, res) => {
-  if(req.session.username){
-    res.render('pages/lobby', {username: req.session.username, room: 'create', code: null});
+  if (req.session.username) {
+    res.render('pages/lobby', { username: req.session.username, room: 'create', code: null });
   }
-  else{
+  else {
     res.redirect('/login')
   }
 })
@@ -218,7 +218,7 @@ app.post('/sign_in', (req, res) => {
   });
 });
 
-app.post('/sign_up', [check('password', 'password is too short').isLength({ min: 5 }), check('username', 'username is too long').isLength({ max: 15}), check('username', 'username is too short').isLength({ min: 5 })], (req, res) => {
+app.post('/sign_up', [check('password', 'password is too short').isLength({ min: 5 }), check('username', 'username is too long').isLength({ max: 15 }), check('username', 'username is too short').isLength({ min: 5 })], (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
   var confirmPassword = req.body.confirmPassword;
@@ -261,7 +261,7 @@ app.get('/play', (req, res) => {
   if (req.session.username) {
     req.session.playtype = null;
     req.session.genre = null;
-    res.render('pages/landing', { username: req.session.username});
+    res.render('pages/landing', { username: req.session.username });
   } else {
     res.redirect('login');
   }
@@ -313,11 +313,11 @@ app.post('/upScore', (req, res) => {
 app.post('/multiplayer/join', (req, res) => {
   if (req.session.username) {
     var roomCode = req.body.roomCode;
-    if(roomCode in rooms){
-      res.render('pages/lobby', {username: req.session.username, room: 'join', code: roomCode});
+    if (roomCode in rooms) {
+      res.render('pages/lobby', { username: req.session.username, room: 'join', code: roomCode });
     }
-    else{
-      res.render('pages/multiplayer', {username: req.session.username, errors: [{ msg: 'Invalid code. Please try again' }] })
+    else {
+      res.render('pages/multiplayer', { username: req.session.username, errors: [{ msg: 'Invalid code. Please try again' }] })
     }
   } else {
     res.redirect('/login');
@@ -325,11 +325,11 @@ app.post('/multiplayer/join', (req, res) => {
 });
 
 app.get('/tylertest', (req, res) => {
-    var results = {
-        username: 'testuser',
-        genre: 'Pop'
-    };
-    res.render('pages/game_multi.ejs',results);
+  var results = {
+    username: 'testuser',
+    genre: 'Pop'
+  };
+  res.render('pages/game_multi.ejs', results);
 
 });
 
@@ -367,7 +367,7 @@ app.get('*', function (req, res) {
 
 //capitalize_Words
 function capitalize_words(str) {
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  return str.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 }
 
 function updateSongDB() {
@@ -698,7 +698,7 @@ function getRelatedSongs(playlist, callback) {
       }
 
       relatedSongsPool = relatedSongsPool.filter(function (song) {
-        return ((song.id != returnPlaylist[counter-1].songid) && !(song.name.includes(returnPlaylist[counter-1].songname)))
+        return ((song.id != returnPlaylist[counter - 1].songid) && !(song.name.includes(returnPlaylist[counter - 1].songname)))
       })
 
       // randomly select 3 of those top tracks
@@ -708,7 +708,7 @@ function getRelatedSongs(playlist, callback) {
       }
 
       // place related songs into playlist to return
-      returnPlaylist[counter-1].related_songs = relatedSongs;
+      returnPlaylist[counter - 1].related_songs = relatedSongs;
       callback()
     })
   },
@@ -738,22 +738,19 @@ var server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server)
 
-
-
-
 var rooms = []
 
-io.on('connection', (socket) =>{
+io.on('connection', (socket) => {
   console.log("made socket connection")
   var roomID
-  var username 
-  socket.on('create', function(){
+  var username
+  socket.on('create', function () {
     let roomCode
 
-    do{
+    do {
       roomCode = generateCode()
-    }while(roomCode in rooms)
-    
+    } while (roomCode in rooms)
+
     rooms[roomCode] = {
       id: roomCode,
       players: [],
@@ -770,49 +767,49 @@ io.on('connection', (socket) =>{
     socket.emit('roomcode', roomCode)
   })
 
-  socket.on('join', function(room, user){
+  socket.on('join', function (room, user) {
     roomID = room
     username = user
 
-    if(room in rooms && (rooms[room].pCount != 8) && (rooms[room].started == false)){
+    if (room in rooms && (rooms[room].pCount != 8) && (rooms[room].started == false)) {
       socket.join(room)
       rooms[room].players.push(user)
       rooms[room].pCount += 1
       console.log(rooms[room])
       io.sockets.in(room).emit('userJoin', rooms[room])
     }
-    else{
+    else {
       console.log("no room or has started already")
     }
   })
 
-  socket.on('ready', function(user, code){
+  socket.on('ready', function (user, code) {
     rooms[code].ready.push(user)
     //send message to other clients in room to update
     io.sockets.in(code).emit('ready', user)
 
-    if(rooms[code].ready.length == rooms[code].players.length){
+    if (rooms[code].ready.length == rooms[code].players.length) {
       let time = 3000
       io.sockets.in(code).emit('messageReceived', "Game is beginning in", "Server")
 
       let lobbyTimer = setInterval(() => {
-        
-        if(rooms[code].ready.length != rooms[code].players.length){
+        if (rooms[code].ready.length != rooms[code].players.length) {
+          console.log(rooms[code])
           io.sockets.in(code).emit('messageReceived', "Timer stopped", "Server")
           clearInterval(lobbyTimer)
         }
 
         //change this into a mod something
-        if(time == 3000){
+        if (time == 3000) {
           io.sockets.in(code).emit('messageReceived', "3", "Server")
         }
-        else if(time == 2000){
+        else if (time == 2000) {
           io.sockets.in(code).emit('messageReceived', "2", "Server")
         }
-        else if(time == 1000){
+        else if (time == 1000) {
           io.sockets.in(code).emit('messageReceived', "1", "Server")
         }
-        else if(time == 0){
+        else if (time == 0) {
           io.sockets.in(code).emit('messageReceived', "Go", "Server")
           getRelatedArtists(rooms[code].genre, function (returnVal) {
             getRelatedSongs(returnVal, function (finalPlaylist) {
@@ -824,114 +821,120 @@ io.on('connection', (socket) =>{
           clearInterval(lobbyTimer)
         }
         time = time - 100
-      
+
       }, 100);
     }
   })
 
-  socket.on('unready', function(user, code){
+  socket.on('unready', function (user, code) {
     var m = rooms[code].ready.indexOf(user)
-    
-    if(m != -1){
+
+    if (m != -1) {
       rooms[code].ready.splice(m, 1)
     }
     //send message to other clients in room to update
     io.sockets.in(code).emit('unready', user)
   })
 
-  socket.on('messageSent', function(user, code, msg){
+  socket.on('messageSent', function (user, code, msg) {
     //send message into chat broadcast
     io.sockets.in(code).emit('messageReceived', msg, user)
   })
 
-  socket.on('genre', function(newGenre, code){
+  socket.on('genre', function (newGenre, code) {
     rooms[code].genre = newGenre
     //send message that genre changed to room
     io.sockets.in(code).emit('updateGenre', rooms[code])
   })
 
-  socket.on('answered', function(username, value){
-    if(!(username in rooms[roomID].scores)){
+  socket.on('answered', function (username, value, start) {
+    if (!(username in rooms[roomID].scores)) {
       rooms[roomID].scores[username] = 0
       io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
     }
-    else{
+    else {
       rooms[roomID].scores[username] += value
       io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
     }
 
     rooms[roomID].answered.push(username)
+
+
     console.log(rooms[roomID])
 
-    if(rooms[roomID].answered.length == rooms[roomID].players.length){
-      if(rooms[roomID].songIndex == 5){
+    if (rooms[roomID].answered.length >= rooms[roomID].players.length && rooms[roomID].started == true) {
+      if (rooms[roomID].songIndex == 5) {
         io.sockets.in(roomID).emit('loadResultsPage', rooms[roomID])
-        
-        Object.keys(rooms[roomID].scores).forEach(function(user){
+        let scores = rooms[roomID].scores
+        let genre = rooms[roomID].genre
+        Object.keys(scores).forEach(function (user) {
           let d = new Date()
 
           dformat = [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-')
-                    + ' ' + [d.getHours(),
-                    d.getMinutes(),
-                    d.getSeconds()].join(':');
-          pool.query(`insert into scores values ('${user}',${rooms[roomID].scores[user]}, 'multiplayer', '${rooms[roomID].genre}', '${dformat}')`)
+            + ' ' + [d.getHours(),
+            d.getMinutes(),
+            d.getSeconds()].join(':');
+          pool.query(`insert into scores values ('${user}',${scores[user]}, 'multiplayer', '${genre}', '${dformat}')`)
         })
 
-        rooms[roomID].started = false
-        rooms[roomID].ready = []
-        rooms[roomID].answered = []
-        rooms[roomID].songIndex = 0
-        rooms[roomID].scores = {}
-        
-
       }
-      else{
+      else {
         var time = 3
         var roundCountdown = setInterval(() => {
-        if(time == 0){
-          io.sockets.in(roomID).emit('countdown', 0)
-          io.sockets.in(roomID).emit('loadNextSong', rooms[roomID].songIndex)
-          rooms[roomID].songIndex += 1
-          rooms[roomID].answered = []
-          clearInterval(roundCountdown)
-        }
-        io.sockets.in(roomID).emit('countdown', time)
-        time -= 1
-      }, 1000);
+          if (time == 0 && rooms[roomID].started == true) {
+            io.sockets.in(roomID).emit('countdown', 0)
+            io.sockets.in(roomID).emit('loadNextSong', rooms[roomID].songIndex)
+            rooms[roomID].songIndex += 1
+            rooms[roomID].answered = []
+            clearInterval(roundCountdown)
+          }
+          io.sockets.in(roomID).emit('countdown', time)
+          time -= 1
+        }, 1000);
       }
     }
   })
 
+  socket.on('playagain', function () {
+    rooms[roomID].started = false
+    rooms[roomID].ready = []
+    rooms[roomID].answered = []
+    rooms[roomID].songIndex = 0
+    rooms[roomID].scores = {}
+    socket.emit('again')
+    console.log(rooms[roomID])
+  })
+  
+  socket.on('disconnect', function () {
+    if (roomID in rooms) {
+      //removes user from room
+      var i = rooms[roomID].players.indexOf(username)
+      var j = rooms[roomID].ready.indexOf(username)
+      var l = rooms[roomID].answered.indexOf(username)
 
-  socket.on('disconnect', function(){
+      if (i != -1) {
+        rooms[roomID].players.splice(i, 1)
+      }
+      if (j != -1) {
+        rooms[roomID].ready.splice(j, 1)
+      }
+      if (l != -1) {
+        rooms[roomID].answered.splice(j, 1)
+      }
 
-    //removes user from room
-    var i = rooms[roomID].players.indexOf(username)
-    var j = rooms[roomID].ready.indexOf(username)
-    var l = rooms[roomID].answered.indexOf(username)
-    
-    if(i != -1){
-      rooms[roomID].players.splice(i, 1)
+      delete rooms[roomID].scores[username]
+      rooms[roomID].pCount -= 1
+
+      if (rooms[roomID].pCount == 0 && rooms[roomID].started == false) {
+        delete rooms[roomID]
+      }
+      io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
+
+      io.sockets.in(roomID).emit('userLeave', rooms[roomID])
+
+      console.log(rooms)
+      console.log('user disconnected');
     }
-    if(j != -1){
-      rooms[roomID].ready.splice(j,1)
-    }
-    if(l != -1){
-      rooms[roomID].answered.splice(j,1)
-    }
-    delete rooms[roomID].scores[username]
-
-    rooms[roomID].pCount -= 1
-
-    if(rooms[roomID].pCount == 0 && rooms[roomID].started == false){
-      delete rooms[roomID]
-    }
-    io.sockets.in(roomID).emit('updateGameTable', rooms[roomID])
-
-    io.sockets.in(roomID).emit('userLeave', rooms[roomID])
-
-    console.log(rooms)
-    console.log('user disconnected');
   });
 })
 

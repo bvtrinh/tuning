@@ -131,6 +131,8 @@ body {
     width: 100%;
     height: 200px;
     overflow-y: auto;
+    text-align: justify;
+    padding-left: 10px;
 }
 
 .results-btns {
@@ -177,4 +179,8 @@ body {
 
 .resultsTitle {
     color: #364167; 
+}
+
+#results{
+    display: none;
 }

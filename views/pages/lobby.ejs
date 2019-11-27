@@ -22,10 +22,15 @@
     var type = "<%=room%>"
     var user = "<%=username%>"
     var percent
+    var results
 
     //create room if the user hit create, if not join room
     if (type == "create") {
         socket.emit('create')
+    }
+    if(type == "playagain"){
+        roomCode = "<%=code%>"
+        socket.emit('playagain', roomCode)
     }
     else {
         roomCode = "<%=code%>"
@@ -43,6 +48,9 @@
         let players = room.players
         let pCount = room.pCount
         let roomGenre = room.genre
+
+        $("#roomCode").html(`Room code: <br>${roomCode}`)
+
         $("#players").empty();
         for (let i = 0; i < players.length; i++) {
             updatePlayerTable(players[i], room)
@@ -155,6 +163,7 @@
     socket.on('loadPlaylist', function (loadPlaylist) {
         playlist = loadPlaylist
         $("#lobby").hide()
+        $('#results').hide()
         $("#game").show()
 
         // Disable the button so user's don't accidentally submit before song is loaded
@@ -230,8 +239,6 @@
         }
     }
 
-
-
     socket.on('updateGameTable', function (room) {
         var answered = room.scores //{username -> score}
         // https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
@@ -302,32 +309,71 @@
         });
     })
 
-    $(document).ready(function () {
-        $("#readyState").click(function () {
-            if ($(`.${user} > .state`).html() == "Unready") {
-                socket.emit('ready', user, roomCode)
-            }
-            else {
-                socket.emit('unready', user, roomCode)
-            }
-        })
-    })
-
     socket.on('loadResultsPage', function (room) {
         $(document).ready(function () {
             $("#audio-playback").trigger("pause");
         })
+
+        room.players.forEach(function(user){
+            $(`.${user} > .state`).html("Unready")
+        })
+
+        //POSTS PLAYERLIST AT END
+        var answered = room.scores //{username -> score}
+        // https://stackoverflow.com/questions/25500316/sort-a-dictionary-by-value-in-javascript
+        // Create array from dictionary
+        var items = Object.keys(answered).map(function (key) {
+            return [key, answered[key]];
+        });
+
+        // Sort the array based on the second element
+        items.sort(function (first, second) {
+            return second[1] - first[1];
+        });
+
+        // Clear the body of the table
+        $("#resultsPlayers").empty()
+
+        // Instead reformat table here
+        items.forEach(function (item) {
+            console.log(item)
+            var row = `<tr> <td>${item[0]}</td> <td>${item[1]}</td> </tr>`;
+            console.log(row)
+            $("#resultsPlayers").append(row);
+        });
+
+        let songNum = 1
+        $("#resultsSongs").empty()
+
+        playlist.forEach(function(song){
+            var row = `<tr> <td>${songNum}</td> <td>${song.songname}</td> <td>${song.artistname}</td> </tr>`;
+            $("#resultsSongs").append(row)
+            songNum += 1
+        })
+        
+
+
         setTimeout(() => {
             $('#game').hide()
+            $('#results').show()
         }, 3000);
         //Display page
         //upload score
         //$('#lobby').show()
-
-        $('#game').hide()
-        $('#results').show()
     })
 
+    $(document).ready(function () {
+        $("#playagain").click(function () {
+            $('#results').hide()
+            socket.emit("playagain")
+        })
+    })
+
+    socket.on('again', function(){
+        $("#lobby").show()
+        $('#results').hide()
+    })
+    
     function update_song_view(song, i) {
         $("#song_counter").html(parseFloat(i + 1) + "/5");
         $("#song-playback").attr("src", song.url);
@@ -550,29 +596,7 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
-            <div align="center" id="result-btns" class="results-btns px-5 py-5 justify-content-center">
-                <a href="/play" class="btn btn-primary">Return to Home</a>
-                <a href="/playtype/single" class="btn btn-primary">Select a different genre</a>
-                <a href="" class="btn btn-primary">Play again</a>
-            </div>
-
-            <!-- chat -->
-            <div class="chatBox">
-                <div class="text-center infoBoxes">
-                    <h2>Chat</h2>
-                </div>
-                <div class="history"></div>
-                <div class="chatInput">
-                    <input type="text" class="messageInput" autocomplete="off" autofocus="autofocus"
-                        placeholder="type your message here" />
-                    <button href="#" type="button" class="messageSend">Send</button>
-                </div>
-            </div>
-
         </div>
 
     </div>
@@ -591,7 +615,6 @@
                     <table class="table table-dark" id="resultsTable">
                         <thead>
                             <tr>
-                                <th scope="col">Rank</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Score</th>
                             </tr>
@@ -599,7 +622,7 @@
                         <tbody id="resultsPlayers">
                             <tr>
                                 <td class="name">name</td>
-                                <td>hi</td>
+                                <td>50</td>
                             </tr>
                         </tbody>
                     </table>
@@ -612,28 +635,34 @@
                             <tr>
                                 <th scope="col">Round</th>
                                 <th scope="col">Song Name</th>
+                                <th scope="col">Artist</th>
                             </tr>
                         </thead>
                         <tbody id="resultsSongs">
                             <tr>
                                 <td class="name">1</td>
                                 <td>hi</td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td class="name">2</td>
                                 <td>hi</td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td class="name">3</td>
                                 <td>hi</td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td class="name">4</td>
                                 <td>hi</td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td class="name">5</td>
                                 <td>hi</td>
+                                <td></td>
                             </tr>
                         </tbody>
                     </table>
@@ -643,7 +672,9 @@
             <div class="row">
                 <div class="col-12 col-md-6">
                     <!-- play again button -->
-                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Play Again</button>
+                   
+                    <button type="submit" class="btn btn-outline-light btn-lg actionBtns" id="playagain"> Play Again</button>
+                    
                 </div>
                 <div class="col-12 col-md-6">
                     <!-- leave button-->
