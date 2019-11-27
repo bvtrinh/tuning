@@ -5,6 +5,16 @@
   <% include ../partials/header.ejs %>
   <link rel="stylesheet" type="text/css" href="/stylesheets/profile.css">
   <title>Profile</title>
+  <script>
+  function reloadGenre() {
+        var g = document.getElementById("selectGenres").value;
+        if(g == "Recent Scores"){
+          window.location.replace("/users/profile");
+        } else{
+          window.location.replace(`/users/profile/${g}`);
+        }
+      }
+  </script>
 </head>
 
 <body>
@@ -16,27 +26,48 @@
               <p><%=username%></p>
           </div>
           <div class="scoretitle">
-              <p>Recent Scores</p>
+              <p><%=selected%></p>
+              <select id="selectGenres" onchange="reloadGenre();">
+                <option value="Recent Scores" <% if(selected == "Recent Scores"){ %>selected <%}%>>Recent Scores</option>
+                <option value="Overall Stats" <% if(selected == "Overall Stats"){ %>selected <%}%>>Overall Stats</option>
+                <% genres.forEach(function(genre) { %>
+                  <option value=<%=genre%> <% if(selected == genre){ %>selected <%}%>><%=genre%></option>
+                <% }); %>
+              </select>
           </div>
           <div id=table>
             <table class="table table-hover table-bordered table-sm table-striped">
               <thead class="thead-dark">
                 <tr>
+                  <% if(selected == "Recent Scores"){ %>
                   <th scope="col">Date</th>
                   <th scope="col">Score</th>
                   <th scope="col">Genre</th>
                   <th scope="col">Mode</th>
+              <%  } else { %>
+                <th scope="col">Total Score</th>
+                <th scope="col">Games Played</th>
+                <th scope="col">Average Score</th>
+                <% } %>
                 </tr>
               </thead>
               <tbody>
-                <% for (let i=0; i < results.length; i++){ %>
+                <% if(selected == "Recent Scores"){
+                  for (let i=0; i < results.length; i++){ %>
+                    <tr>
+                      <th scope="row" width='40%'><%=results[i].dateplayed.toString().substr(0,results[i].dateplayed.toString().indexOf(' GMT'))%></th>
+                      <td width='2o%'><%=results[i].score%></td>
+                      <td width='2o%'><%=results[i].genre%></td>
+                      <td width='2o%'><%=results[i].mode%></td>
+                    </tr>
+                <% }} else {
+                  for (let i=0; i < results.length; i++){ %>
                   <tr>
-                    <th scope="row" width='40%'><%=results[i].dateplayed.toString().substr(0,results[i].dateplayed.toString().indexOf(' GMT'))%></th>
-                    <td width='2o%'><%=results[i].score%></td>
-                    <td width='2o%'><%=results[i].genre%></td>
-                    <td width='2o%'><%=results[i].mode%></td>
+                    <td><%=results[i].total%></td>
+                    <td><%=results[i].games%></td>
+                    <td><%=results[i].total/results[i].games%></td>
                   </tr>
-                <% } %>
+            <%  }}%>
               </tbody>
             </table>
           </div>

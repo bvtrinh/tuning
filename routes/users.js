@@ -22,17 +22,20 @@ router.post(
 		var username = req.body.username;
 		var password = req.body.password;
 		var confirmPassword = req.body.confirmPassword;
+		var msg = "Username is already in use"
 		pool.query(`SELECT * FROM users WHERE username = '${username}'`, (error, results) => {
 			if (error) {
 				throw error;
 			}
 
 			if (results.rows.length != 0) {
-				res.render('pages/signup', { errors: [ { msg: 'Username is already in use' } ] });
+
+				res.render('pages/signup', { errors: [ { msg: msg } ] });
 			} else {
 				var errors = validationResult(req);
 				if (!(password === confirmPassword)) {
-					res.render('pages/signup', { errors: [ { msg: 'Passwords do not match' } ] });
+					msg = "Passwords do not match"
+					res.render('pages/signup', { errors: [ { msg: msg } ] });
 				} else if (!errors.isEmpty()) {
 					res.render('pages/signup', errors);
 				} else {
@@ -65,13 +68,14 @@ router.post('/sign_in', (req, res) => {
 	var errors = null;
 	// hash
 	// validate on db
+	var msg = "Incorrect username and/or password"
 	pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
 		if (error) {
 			throw error;
 		}
 
 		if (results.rows.length == 0) {
-			res.render('pages/login', { errors: [ { msg: 'Incorrect username and/or password' } ] });
+			res.render('pages/login', { errors: [ { msg: msg } ] });
 		} else {
 			const hash = results.rows[0].password.toString();
 			bcrypt.compare(password, hash, function(err, response) {
@@ -79,7 +83,9 @@ router.post('/sign_in', (req, res) => {
 					req.session.username = username;
 					res.redirect('/play');
 				} else {
-					res.render('pages/login', { errors: [ { msg: 'Incorrect username and/or password' } ] });
+					msg = "Incorrect username and/or password"
+					res.render('pages/login', { errors: [ { msg: msg } ] });
+					return msg;
 				}
 			});
 		}
@@ -107,9 +113,51 @@ router.get('/profile', (req, res) => {
 				res.render('pages/profile', {
 					username: req.session.username,
 					results: results.rows,
+					selected: "Recent Scores",
+					genres: genres_types
 				});
 			}
 		);
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
+router.get('/profile/:data', (req, res) => {
+	if (req.session.username) {
+		if(req.params.data == "Overall"){
+			pool.query(
+				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE username = '${req.session
+					.username}' GROUP BY username`,
+				(error, results) => {
+					if (error) {
+						throw error;
+					}
+					res.render('pages/profile', {
+						username: req.session.username,
+						results: results.rows,
+						selected: req.params.data,
+						genres: genres_types
+					});
+				}
+			);
+		} else {
+			pool.query(
+				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE (username = '${req.session
+					.username}' AND genre = '${req.params.data}') GROUP BY username`,
+				(error, results) => {
+					if (error) {
+						throw error;
+					}
+					res.render('pages/profile', {
+						username: req.session.username,
+						results: results.rows,
+						selected: req.params.data,
+						genres: genres_types
+					});
+				}
+			);
+		}
 	} else {
 		res.redirect('/users/login');
 	}
@@ -128,6 +176,7 @@ router.post('/reset', (req, res) => {
 	var newpassword = req.body.Newpassword;
 	var confirm = req.body.ConfirmNewpassword;
 	var username = req.session.username;
+	var msg = "Passwords do nost match"
 
 	// hash old password and compare this with password in database
 	pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
@@ -147,14 +196,15 @@ router.post('/reset', (req, res) => {
 				} else {
 					res.render('pages/reset', {
 						username: req.session.username,
-						errors: [ { msg: 'Passwords do not match' } ],
+						errors: [ { msg: msg } ],
 					});
 				}
 			} else {
-				res.render('pages/reset', {
-					username: req.session.username,
-					errors: [ { msg: 'Incorrect password' } ],
-				});
+					msg = "Incorrect password";
+					res.render('pages/reset', {
+						username: req.session.username,
+						errors: [ { msg: msg } ],
+					});
 			}
 		});
 	});
@@ -171,7 +221,7 @@ router.get('/leaderboard', (req, res) => {
         throw err;
       }else {
         res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
-            bestgenre: "placeholder for now",
+            bestgenre: "placeholder for now", genre: "placeholder for now",
             gamesplayed: "placeholder for now", genres:genres_types});
       }
     });
