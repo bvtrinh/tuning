@@ -125,7 +125,7 @@ router.get('/profile', (req, res) => {
 
 router.get('/profile/:data', (req, res) => {
 	if (req.session.username) {
-		if(req.params.data == "Overall"){
+		if(req.params.data == "Overall Stats"){
 			pool.query(
 				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE username = '${req.session
 					.username}' GROUP BY username`,
@@ -133,6 +133,7 @@ router.get('/profile/:data', (req, res) => {
 					if (error) {
 						throw error;
 					}
+          console.log(results);
 					res.render('pages/profile', {
 						username: req.session.username,
 						results: results.rows,
@@ -222,7 +223,8 @@ router.get('/leaderboard', (req, res) => {
       }else {
         res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
             bestgenre: "placeholder for now", genre: "placeholder for now",
-            gamesplayed: "placeholder for now", genres:genres_types});
+            gamesplayed: "placeholder for now", genres:genres_types,
+            selected: req.params.genre});
       }
     });
   } else {
@@ -236,13 +238,15 @@ router.get('/leaderboard/:genre', (req, res) => {
     req.session.genre = null;
     req.session.playtype = null;
 
-    pool.query(`select username, score, genre, from scores where genre = '${req.params.genre}' order by score desc limit 10`, (err, results) => {
+    pool.query(`select username, score, genre from scores where genre = '${req.params.genre}' order by score desc limit 10`, (err, results) => {
       if (err) {
         throw err;
       }else {
         res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
 					bestgenre: "placeholder for now",
-					gamesplayed: "placeholder for now", genres_types});
+					gamesplayed: "placeholder for now", genres: genres_types,
+          selected: req.params.genre}
+        );
       }
     });
   } else {
