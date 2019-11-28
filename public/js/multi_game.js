@@ -125,7 +125,7 @@ $(document).ready(function() {
         $("#game").show()
 
         // Disable the button so user's don't accidentally submit before song is loaded
-        $(".btn").attr('disabled', true);
+        $(".mc").attr('disabled', true);
 
         socket.emit('answered', user, 0)
     })
@@ -142,7 +142,7 @@ $(document).ready(function() {
             $("#audio-playback").prop("volume", 0.1);
             $("#audio-playback").trigger("load");
             $("#audio-playback").trigger("play");
-            $(".btn").attr('disabled', false);
+            $(".mc").attr('disabled', false);
         }
         else {
             //display countdown
@@ -180,6 +180,7 @@ $(document).ready(function() {
             $(".alert").slideUp(500);
         });
 
+        $(".mc").attr('disabled', true);
     }
 
     function chg_btn_color(id, color) {
@@ -257,7 +258,7 @@ $(document).ready(function() {
     })
 
     $(document).ready(function () {
-        $(".btn").click(function () {
+        $(".mc").click(function () {
             var guess = $(this).html();
             var guess_id = $(this).attr("id").slice(3, 4);
             //$("#audio-playback").trigger("pause");
@@ -315,16 +316,13 @@ $(document).ready(function() {
 
     $(document).ready(function () {
         $("#playagain").click(function () {
-            $('#results').hide()
-            $("#lobby").show()
-
             socket.emit("playagain")
         })
     })
 
     socket.on('again', function(){
-        $("#lobby").show()
         $('#results').hide()
+        $("#lobby").show()
     })
     
     function update_song_view(song, i) {

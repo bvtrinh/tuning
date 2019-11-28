@@ -255,7 +255,7 @@ router.post('/upscore', (req, res) => {
   let username = req.session.username
   let score = req.body.userScore
   let genre = req.session.genre
-  let gamemode = req.session.playtype
+  let gamemode = "single"
   let d = new Date()
 
   //format date properly

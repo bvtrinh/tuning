@@ -60,7 +60,7 @@ router.post('/get_playlist', (req, res) => {
 router.get('/playtype/multiplayer', (req, res) => {
   if (req.session.username) {
     req.session.playtype = req.params.playtype;
-    res.render('pages/multiplayer', { username: req.session.username });
+    res.render('pages/multiplayer', { username: req.session.username, errors: null });
   } else {
     res.redirect('/login');
   }

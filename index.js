@@ -204,7 +204,10 @@ io.on('connection', (socket) => {
 			io.sockets.in(code).emit('messageReceived', 'Game is beginning in', 'Server');
 
 			let lobbyTimer = setInterval(() => {
-				if (rooms[code].ready.length != rooms[code].players.length) {
+				if(!(roomID in rooms)){
+					clearInterval(lobbyTimer);
+				}
+				else if (rooms[code].ready.length != rooms[code].players.length) {
 					console.log(rooms[code]);
 					io.sockets.in(code).emit('messageReceived', 'Timer stopped', 'Server');
 					clearInterval(lobbyTimer);
