@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   });
 
 
-router.get('/playtype/:playtype', (req, res) => {
+router.get('/playtype/single', (req, res) => {
   if (req.session.username) {
     req.session.playtype = req.params.playtype;
     res.render('pages/playlists', {username: req.session.username});
@@ -56,6 +56,24 @@ router.post('/get_playlist', (req, res) => {
     })
   })
 });
+
+router.get('/playtype/multiplayer', (req, res) => {
+  if (req.session.username) {
+    req.session.playtype = req.params.playtype;
+    res.render('pages/multiplayer', { username: req.session.username });
+  } else {
+    res.redirect('/login');
+  }
+});
+
+router.get('/multiplayer/create', (req, res) => {
+  if (req.session.username) {
+    res.render('pages/lobby', { username: req.session.username, room: 'create', code: null });
+  }
+  else {
+    res.redirect('/login')
+  }
+})
 
 function capitalize_words(str) {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
