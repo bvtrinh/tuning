@@ -1,0 +1,186 @@
+html, body{
+    height: 100%;
+}
+
+/* Set a background image by replacing the URL below */
+body {
+    background: url('https://images.unsplash.com/photo-1526327760257-75f515c74478?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+.content{
+    height: 80%;
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+    top: 5%;
+    border-radius: 10px;
+    min-height: 300px;
+    
+}
+
+.arvo {
+    font-family: 'Arvo', serif;
+}
+
+.display-3 {
+    color: white;
+    text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000;
+    border-color: white;
+}
+
+.actions{
+    height: 100%;
+}
+
+.container{
+    height: 80%;
+    width: 100%;
+    position: relative;
+}
+
+.row {
+    margin-top: 4%;
+    text-align: center;
+}
+
+.subRow {
+    margin-top: 180%;
+}
+
+.actionBtns {
+    background-color: #364167;
+    /* text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000; */
+    border-color: white;
+    margin-bottom: 2%;
+    width: 97%;
+}
+
+.numPlayers {
+    background-color: #364167;
+    /* text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+        1px 1px 0 #000; */
+    border-color: white;
+    color: #eee;
+}
+
+.infoBoxes {
+    background-color: #364167;
+    border-color: white;
+    color: #eee;
+}
+
+.chatBox {
+    width: 100%;
+    background-color: #eee; 
+    border: solid 1px #f3f3f3;
+
+}
+
+/* form { 
+    background: #eee; 
+    padding: 3px; 
+    bottom: 0;  
+    border-color: #000; 
+    border-top-style: solid; 
+    border-top-width: 1px;
+} */
+
+.chatInput input { 
+    border-style: solid; 
+    border-width: 1px; 
+    padding: 10px; 
+    width: 85%; 
+    margin-right: .5%; 
+}
+
+.chatInput button { 
+    width: 9%; 
+    background: #364167; 
+    border: none; 
+    padding: 1%; 
+    margin-left: 0.5%; 
+    color: #eee;
+}
+
+#messages { 
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
+    height: auto;
+    max-height: 300px;
+    min-height: 200px;
+    overflow: auto;
+}
+
+.history{
+    width: 100%;
+    height: 200px;
+    overflow-y: auto;
+    text-align: justify;
+    padding-left: 10px;
+}
+
+.results-btns {
+    display: none;
+}
+
+#game {
+    display: none;
+}
+
+.mc {
+    padding: 5rem 7rem;
+    width: 100%;
+    height: 90%;
+    margin: 3px;
+}
+
+.gameplay {
+    background: white;
+    padding-bottom: 15px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    position: unset;
+}
+
+.game-title {
+    color: black;
+}
+
+#roomCode {
+    height: 20vh;
+    padding-top: 7vh;
+}
+
+.results {
+    background: white;
+    padding-bottom: 15px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    position: unset;
+}
+
+.resultsTitle {
+    color: #364167; 
+}
+
+#results{
+    display: none;
+}

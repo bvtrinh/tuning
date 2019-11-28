@@ -38,16 +38,18 @@
     "express-session": "^1.17.0",
     "express-validator": "^6.2.0",
     "fs": "0.0.1-security",
+    "http": "0.0.0",
     "jsonfile": "^5.0.0",
     "node-spotify-api": "^1.1.1",
     "pg": "^7.12.1",
-    "psql": "0.0.1"
+    "psql": "0.0.1",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.4",
-    "superagent": "^5.1.1",
-    "supertest": "^4.0.2"
+    "pg": "^7.12.1",
+    "socket.io": "^2.3.0"
   }
 }
