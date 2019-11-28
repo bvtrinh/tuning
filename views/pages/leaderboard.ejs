@@ -11,9 +11,13 @@
 <script>
           function reloadGenre() {
                 var g = document.getElementById("selectGenres").value;
+                if(g == 'hip')
+                  g+= ' hop';
                 if(g == "Overall"){
+                  window.location.href = ("/users/leaderboard");
                   window.location.replace("/users/leaderboard");
                 } else{
+                  window.location.href = (`/users/leaderboard/${g}`);
                   window.location.replace(`/users/leaderboard/${g}`);
                 }
               }
@@ -27,9 +31,9 @@
           </div>
           <div class="scoretitle">
             <select id="selectGenres" onchange="reloadGenre();">
-              <option value="Overall">Overall</option>
+              <option value="Overall" <% if(selected == "Overall"){ %>selected <%}%> >Overall</option>
               <% genres.forEach(function(genre) { %>
-                <option value=<%=genre%>><%=genre%></option>
+                <option value=<%=genre%> <% if(selected == genre){ %>selected <%}%>><%=genre%></option>
               <% }); %>
             </select>
           </div>

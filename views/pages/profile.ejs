@@ -8,9 +8,13 @@
   <script>
   function reloadGenre() {
         var g = document.getElementById("selectGenres").value;
+        if(g == 'hip')
+          g+= ' hop';
         if(g == "Recent Scores"){
+          window.location.href = ("/users/profile");
           window.location.replace("/users/profile");
         } else{
+          window.location.href = (`/users/profile/${g}`);
           window.location.replace(`/users/profile/${g}`);
         }
       }
