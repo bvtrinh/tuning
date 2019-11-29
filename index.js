@@ -8,6 +8,7 @@ const gameplay = require('./routes/play');
 const music = require('./scripts/music');
 const http = require('http');
 const pool = require('./db/connection');
+const fs = require('fs');
 const socketIO = require('socket.io');
 const PORT = process.env.PORT || 5000;
 
@@ -64,6 +65,7 @@ app.get('*', function(req, res) {
 		.send('ERROR 404: The page you requested is invalid or is missing, please try something else');
 });
 
+console.log('Running ' + process.env.NODE_ENV + ' environment...');
 if (process.env.NODE_ENV == 'production') {
 	console.log('------STARTING SONG DATABASE UPDATE------');
 	music.updateSongDB();
@@ -204,10 +206,9 @@ io.on('connection', (socket) => {
 			io.sockets.in(code).emit('messageReceived', 'Game is beginning in', 'Server');
 
 			let lobbyTimer = setInterval(() => {
-				if(!(roomID in rooms)){
+				if (!(roomID in rooms)) {
 					clearInterval(lobbyTimer);
-				}
-				else if (rooms[code].ready.length != rooms[code].players.length) {
+				} else if (rooms[code].ready.length != rooms[code].players.length) {
 					console.log(rooms[code]);
 					io.sockets.in(code).emit('messageReceived', 'Timer stopped', 'Server');
 					clearInterval(lobbyTimer);
@@ -223,13 +224,29 @@ io.on('connection', (socket) => {
 				} else if (time == 0) {
 					io.sockets.in(code).emit('messageReceived', 'Go', 'Server');
 
-					music.getRelatedArtists(rooms[code].genre, function(returnVal) {
-						music.getRelatedSongs(returnVal, function(finalPlaylist) {
-							console.log(finalPlaylist);
-							io.sockets.in(code).emit('loadPlaylist', finalPlaylist);
+					if (rooms[code].genre == 'demo1') {
+						fs.readFile('demo1.json', 'utf-8', function(err, contents) {
+							var playlist = JSON.parse(contents);
+							console.log(playlist);
+							io.sockets.in(code).emit('loadPlaylist', playlist);
 							rooms[code].started = true;
 						});
-					});
+					} else if (rooms[code].genre == 'demo2') {
+						fs.readFile('demo2.json', 'utf-8', function(err, contents) {
+							var playlist = JSON.parse(contents);
+							console.log(playlist);
+							io.sockets.in(code).emit('loadPlaylist', playlist);
+							rooms[code].started = true;
+						});
+					} else {
+						music.getRelatedArtists(rooms[code].genre, function(returnVal) {
+							music.getRelatedSongs(returnVal, function(finalPlaylist) {
+								console.log(finalPlaylist);
+								io.sockets.in(code).emit('loadPlaylist', finalPlaylist);
+								rooms[code].started = true;
+							});
+						});
+					}
 					clearInterval(lobbyTimer);
 				}
 				time = time - 100;
