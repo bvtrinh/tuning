@@ -30,13 +30,10 @@
           <div class="col-12 col-md-6 btn-row">
             <form method="post" action="/multiplayer/join">
                 <button type="submit" class="btn btn-outline-light btn-lg actionBtns">Join</button>
-                <input type="text" id="roomCode" name="roomCode" minlength="6" maxlength="6" placeholder="Enter room code here" required>
+                <input align="center" type="text" class=" mb-1 col-lg-6 col-centered form-control" id="roomCode" name="roomCode" minlength="6" maxlength="6" placeholder="Enter room code here" required>
+                <div id="error_room"></div>
             </form>
           </div>
-        </div>
-
-        <div class="row">
-
         </div>
 
       </div>
@@ -44,11 +41,16 @@
     </div>
 
   </div>
+  <% if (errors != null) { %>
+  <script>
+    $(document).ready(function() {
+        $("#error_room").html("<div class=\"alert alert-danger\" " +
+        "role=\"alert\">Invalid room code or room does not exist, please try again</div>");
+        console.log('is this thing on?');
+    });
+
+  </script>
+  <% } %>
 </body>
 
-<% if(errors != null) { %>
-  <script defer>
-    alert("Invalid room code or room does not exist, please try again")  
-  </script>
-<%}%>
 </html>
