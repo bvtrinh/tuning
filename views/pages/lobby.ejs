@@ -27,7 +27,6 @@
     }
     else {
         roomCode = "<%=code%>"
-        console.log(roomCode)
         socket.emit('join', roomCode, user)
     }
 
