@@ -42,11 +42,13 @@ app.get('/', (req, res) => {
 app.use('/users', users);
 app.use('/play', gameplay);
 
+var rooms = [];
+
 // Join
 app.post('/multiplayer/join', (req, res) => {
 	if (req.session.username) {
 		var roomCode = req.body.roomCode;
-		if (roomCode in rooms) {
+		if (roomCode in rooms && !rooms[roomCode].started) {
 			res.render('pages/lobby', { username: req.session.username, room: 'join', code: roomCode });
 		} else {
 			res.render('pages/multiplayer', {
@@ -151,8 +153,6 @@ var server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 module.exports = app;
 
 const io = socketIO(server);
-
-var rooms = [];
 
 io.on('connection', (socket) => {
 	console.log('made socket connection');
