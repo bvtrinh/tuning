@@ -34,6 +34,17 @@ before(function(done) {
 /*        check to see if pages are being successfully rendered when user is signed in             */
 /***************************************************************************************************/
 
+//ensure user is logged in
+	describe('Ensure signed in', function() {
+	//checks to see if we are signed in
+	it('Checks to see if we are signed in', function(done) {
+		request(app).post('/users/sign_in').send(userCredentials).end(function(err, response) {
+			expect(response.statusCode).to.equal(302);
+
+			done();
+		});
+	});
+});
 //check to see if profile page is being rendered when when are signed in
 describe('testing /users/profile', function(done) {
 	//if the user is logged in we should get a 200 status code, because we render the profile page
