@@ -42,7 +42,7 @@ router.post(
 					} else {
 						bcrypt.hash(password, saltRounds, (err, hash) => {
 							pool.query(
-								`INSERT INTO users (LOWER(username), password) VALUES ('${username}', '${hash}')`,
+								`INSERT INTO users (username, password) VALUES ('${username}', '${hash}')`,
 								(error) => {
 									if (error) {
 										throw error;

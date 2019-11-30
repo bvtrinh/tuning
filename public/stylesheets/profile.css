@@ -37,14 +37,14 @@ body {
 
 .scoretitle {
 	font-family: 'Arvo', serif;
-	font-size: 3vw;
+	font-size: 2vw;
 	text-align: center;
 	padding: 10px;
 }
 
 .title {
 	text-align: center;
-	font-size: 8vw;
+	font-size: 6vw;
 	position: relative;
 	top: 5%;
 }
