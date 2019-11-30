@@ -59,6 +59,11 @@ const user_long = {
 	password: '12345',
 	confirmPassword: '12345',
 };
+const user_lower_case = {
+	username: 'UseROne',
+	password: '12345',
+	confirmPassword: '12345',
+};
 
 /***************************************************************************************************/
 /* BELOW ARE THE TEST CASES FOR ERRORS WE SHOULD GET IF WE HAVE INCORRECT USERNAME AND/OR PASSWORD */
@@ -106,6 +111,24 @@ describe('Sign up and Sign in testing', function() {
 		request(app).post('/users/sign_up').send(user_long).end(function(err, response) {
 			expect(response.statusCode).to.equal(400);
 			expect(response.text).to.include('username is too long');
+			done();
+		});
+	});
+
+	//signing UP with an existing account but using uppercase instead for username
+	it('Checks to see if case insensitive username signs us up', function(done) {
+		request(app).post('/users/sign_up').send(user_lower_case).end(function(err, response) {
+			expect(response.statusCode).to.equal(400);
+			expect(response.text).to.include('Username is already in use');
+			done();
+		});
+	});
+
+	//signing IN with an existing account but using uppercase for some letters in username
+	it('Checks to see if case insensitive username logs us in', function(done) {
+		request(app).post('/users/sign_in').send(user_lower_case).end(function(err, response) {
+			expect(response.statusCode).to.equal(302);
+
 			done();
 		});
 	});
