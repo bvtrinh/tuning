@@ -4,8 +4,8 @@ const async = require("async") //https://www.npmjs.com/package/async
 const pool = require('../db/connection');
 
 const spotify = new Spotify({
-  id: 'c8d6a311fb184475bd84053aed97f3fb',
-  secret: '2b8f0bc2b6cf493ba50bb93583ee4fcc',
+  id: process.env.SPOTIFY_ID,
+  secret: process.env.SPOTIFY_SECRET
 });
 
 //Used with .filter function to grab only unique artists in an array
