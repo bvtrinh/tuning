@@ -4,8 +4,7 @@ const { check, validationResult } = require('express-validator');
 const pool = require('../db/connection');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const genres_types = ['pop', 'rap', 'country', 'hip hop', 'rock', 'trap'];
-
+const genres_types = [ 'pop', 'rap', 'country', 'hip hop', 'rock', 'trap' ];
 
 router.get('/signup', (req, res) => {
 	res.render('pages/signup', { errors: null });
@@ -22,22 +21,22 @@ router.post(
 		var username = req.body.username;
 		var password = req.body.password;
 		var confirmPassword = req.body.confirmPassword;
-		var msg = "Username is already in use"
+		var msg;
 		pool.query(`SELECT * FROM users WHERE username = '${username}'`, (error, results) => {
 			if (error) {
 				throw error;
 			}
 
 			if (results.rows.length != 0) {
-
-				res.render('pages/signup', { errors: [ { msg: msg } ] });
+				msg = 'Username is already in use';
+				res.status(400).render('pages/signup', { errors: [ { msg: msg } ] });
 			} else {
 				var errors = validationResult(req);
 				if (!(password === confirmPassword)) {
-					msg = "Passwords do not match"
-					res.render('pages/signup', { errors: [ { msg: msg } ] });
+					msg = 'Passwords do not match';
+					res.status(400).render('pages/signup', { errors: [ { msg: msg } ] });
 				} else if (!errors.isEmpty()) {
-					res.render('pages/signup', errors);
+					res.status(400).render('pages/signup', errors);
 				} else {
 					bcrypt.hash(password, saltRounds, (err, hash) => {
 						pool.query(
@@ -68,7 +67,7 @@ router.post('/sign_in', (req, res) => {
 	var errors = null;
 	// hash
 	// validate on db
-	var msg = "Incorrect username and/or password"
+	var msg = 'Incorrect username and/or password';
 	pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
 		if (error) {
 			throw error;
@@ -83,7 +82,7 @@ router.post('/sign_in', (req, res) => {
 					req.session.username = username;
 					res.redirect('/play');
 				} else {
-					msg = "Incorrect username and/or password"
+					msg = 'Incorrect username and/or password';
 					res.render('pages/login', { errors: [ { msg: msg } ] });
 					return msg;
 				}
@@ -113,8 +112,8 @@ router.get('/profile', (req, res) => {
 				res.render('pages/profile', {
 					username: req.session.username,
 					results: results.rows,
-					selected: "Recent Scores",
-					genres: genres_types
+					selected: 'Recent Scores',
+					genres: genres_types,
 				});
 			}
 		);
@@ -125,27 +124,27 @@ router.get('/profile', (req, res) => {
 
 router.get('/profile/:data', (req, res) => {
 	if (req.session.username) {
-		if(req.params.data == "Overall Stats"){
+		if (req.params.data == 'Overall Stats') {
 			pool.query(
-				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE username = '${req.session
-					.username}' GROUP BY username`,
+				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE username = '${req
+					.session.username}' GROUP BY username`,
 				(error, results) => {
 					if (error) {
 						throw error;
 					}
-          console.log(results);
+					console.log(results);
 					res.render('pages/profile', {
 						username: req.session.username,
 						results: results.rows,
 						selected: req.params.data,
-						genres: genres_types
+						genres: genres_types,
 					});
 				}
 			);
 		} else {
 			pool.query(
-				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE (username = '${req.session
-					.username}' AND genre = '${req.params.data}') GROUP BY username`,
+				`SELECT SUM(score) as total, COUNT(username) as games FROM scores WHERE (username = '${req
+					.session.username}' AND genre = '${req.params.data}') GROUP BY username`,
 				(error, results) => {
 					if (error) {
 						throw error;
@@ -154,7 +153,7 @@ router.get('/profile/:data', (req, res) => {
 						username: req.session.username,
 						results: results.rows,
 						selected: req.params.data,
-						genres: genres_types
+						genres: genres_types,
 					});
 				}
 			);
@@ -177,7 +176,7 @@ router.post('/reset', (req, res) => {
 	var newpassword = req.body.Newpassword;
 	var confirm = req.body.ConfirmNewpassword;
 	var username = req.session.username;
-	var msg = "Passwords do nost match"
+	var msg = 'Passwords do nost match';
 
 	// hash old password and compare this with password in database
 	pool.query(`SELECT password FROM users WHERE username = '${username}'`, (error, results) => {
@@ -201,79 +200,91 @@ router.post('/reset', (req, res) => {
 					});
 				}
 			} else {
-					msg = "Incorrect password";
-					res.render('pages/reset', {
-						username: req.session.username,
-						errors: [ { msg: msg } ],
-					});
+				msg = 'Incorrect password';
+				res.render('pages/reset', {
+					username: req.session.username,
+					errors: [ { msg: msg } ],
+				});
 			}
 		});
 	});
 });
 
 router.get('/leaderboard', (req, res) => {
-  if (req.session.username) {
-    // just in case we access this straigh after a game, we reset the genre and playtype
-    req.session.genre = null;
-    req.session.playtype = null;
+	if (req.session.username) {
+		// just in case we access this straigh after a game, we reset the genre and playtype
+		req.session.genre = null;
+		req.session.playtype = null;
 
-    pool.query(`select * from scores order by score desc limit 10`, (err, results) => {
-      if (err) {
-        throw err;
-      }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
-            bestgenre: "placeholder for now", genre: "placeholder for now",
-            gamesplayed: "placeholder for now", genres:genres_types,
-            selected: req.params.genre});
-      }
-    });
-  } else {
-    res.redirect('/users/login');
-  }
+		pool.query(`select * from scores order by score desc limit 10`, (err, results) => {
+			if (err) {
+				throw err;
+			} else {
+				res.render('pages/leaderboard', {
+					username: req.session.username,
+					data: results.rows,
+					bestgenre: 'placeholder for now',
+					genre: 'placeholder for now',
+					gamesplayed: 'placeholder for now',
+					genres: genres_types,
+					selected: req.params.genre,
+				});
+			}
+		});
+	} else {
+		res.redirect('/users/login');
+	}
 });
 
 router.get('/leaderboard/:genre', (req, res) => {
-  if (req.session.username) {
-    // just in case we access this straigh after a game, we reset the genre and playtype
-    req.session.genre = null;
-    req.session.playtype = null;
+	if (req.session.username) {
+		// just in case we access this straigh after a game, we reset the genre and playtype
+		req.session.genre = null;
+		req.session.playtype = null;
 
-    pool.query(`select username, score, genre from scores where genre = '${req.params.genre}' order by score desc limit 10`, (err, results) => {
-      if (err) {
-        throw err;
-      }else {
-        res.render('pages/leaderboard', {username: req.session.username, data: results.rows,
-					bestgenre: "placeholder for now",
-					gamesplayed: "placeholder for now", genres: genres_types,
-          selected: req.params.genre}
-        );
-      }
-    });
-  } else {
-    res.redirect('/users/login');
-  }
+		pool.query(
+			`select username, score, genre from scores where genre = '${req.params
+				.genre}' order by score desc limit 10`,
+			(err, results) => {
+				if (err) {
+					throw err;
+				} else {
+					res.render('pages/leaderboard', {
+						username: req.session.username,
+						data: results.rows,
+						bestgenre: 'placeholder for now',
+						gamesplayed: 'placeholder for now',
+						genres: genres_types,
+						selected: req.params.genre,
+					});
+				}
+			}
+		);
+	} else {
+		res.redirect('/users/login');
+	}
 });
 
 router.post('/upscore', (req, res) => {
+	let username = req.session.username;
+	let score = req.body.userScore;
+	let genre = req.session.genre;
+	let gamemode = 'single';
+	let d = new Date();
 
-  let username = req.session.username
-  let score = req.body.userScore
-  let genre = req.session.genre
-  let gamemode = "single"
-  let d = new Date()
+	//format date properly
+	dformat =
+		[ d.getFullYear(), d.getMonth() + 1, d.getDate() ].join('-') +
+		' ' +
+		[ d.getHours(), d.getMinutes(), d.getSeconds() ].join(':');
 
-  //format date properly
-  dformat = [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('-')
-    + ' ' + [d.getHours(),
-    d.getMinutes(),
-    d.getSeconds()].join(':');
-
-
-  pool.query(`INSERT INTO scores values ('${username}',${score}, '${gamemode}', '${genre}', '${dformat}')`, function (err, res) {
-    if (err) {
-      return console.log(err)
-    }
-
-  })
+	pool.query(
+		`INSERT INTO scores values ('${username}',${score}, '${gamemode}', '${genre}', '${dformat}')`,
+		function(err, res) {
+			if (err) {
+				return console.log(err);
+			}
+		}
+	);
 });
 module.exports = router;

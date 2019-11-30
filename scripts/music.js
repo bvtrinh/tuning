@@ -1,4 +1,3 @@
-
 const { getChart } = require('billboard-top-100') //https://github.com/darthbatman/billboard-top-100
 const Spotify = require('node-spotify-api') //newly added https://github.com/ceckenrode/node-spotify-api https://developer.spotify.com/documentation/web-api/reference/
 const async = require("async") //https://www.npmjs.com/package/async
