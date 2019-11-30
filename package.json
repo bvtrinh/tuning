@@ -11,7 +11,15 @@
 		"type": "git",
 		"url": "git+https://github.com/bvtrinh/tuning.git"
 	},
-	"keywords": [ "heroku", "node", "express", "bootstrap", "music", "spotify-api", "trivia-game" ],
+	"keywords": [
+		"heroku",
+		"node",
+		"express",
+		"bootstrap",
+		"music",
+		"spotify-api",
+		"trivia-game"
+	],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
@@ -35,12 +43,12 @@
 		"node-spotify-api": "^1.1.1",
 		"pg": "^7.12.1",
 		"psql": "0.0.1",
+		"socket.io": "^2.3.0",
 		"supertest": "^4.0.2"
 	},
 	"devDependencies": {
 		"chai": "^4.2.0",
 		"mocha": "^6.2.2",
-		"nodemon": "^1.19.4",
-		"socket.io": "^2.3.0"
+		"nodemon": "^1.19.4"
 	}
 }
