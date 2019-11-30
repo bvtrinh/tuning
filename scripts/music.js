@@ -3,6 +3,9 @@ const Spotify = require('node-spotify-api') //newly added https://github.com/cec
 const async = require("async") //https://www.npmjs.com/package/async
 const pool = require('../db/connection');
 
+// Load environment variables
+require('dotenv').config();
+
 const spotify = new Spotify({
   id: process.env.SPOTIFY_ID,
   secret: process.env.SPOTIFY_SECRET
