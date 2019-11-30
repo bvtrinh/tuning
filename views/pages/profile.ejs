@@ -38,7 +38,7 @@
                 <% }); %>
               </select>
           </div>
-          <div id=table>
+          <div id="table">
             <table class="table table-hover table-bordered table-sm table-striped">
               <thead class="thead-dark">
                 <tr>
@@ -68,7 +68,7 @@
                   <tr>
                     <td><%=results[i].total%></td>
                     <td><%=results[i].games%></td>
-                    <td><%=results[i].total/results[i].games%></td>
+                    <td><%=Math.round(results[i].total/results[i].games)%></td>
                   </tr>
             <%  }}%>
               </tbody>
