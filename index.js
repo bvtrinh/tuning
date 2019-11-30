@@ -57,7 +57,7 @@ app.post('/multiplayer/join', (req, res) => {
 			});
 		}
 	} else {
-		res.redirect('/login');
+		res.redirect('/users/login');
 	}
 });
 
