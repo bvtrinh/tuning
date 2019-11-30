@@ -138,7 +138,6 @@ router.get('/profile/:data', (req, res) => {
 					if (error) {
 						throw error;
 					}
-					console.log(results);
 					res.render('pages/profile', {
 						username: req.session.username,
 						results: results.rows,
