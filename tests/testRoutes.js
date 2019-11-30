@@ -97,3 +97,19 @@ describe('testing /users/logout', function(done) {
 		request(app).get('/users/logout').expect('Location', '/users/login').expect(302, done);
 	});
 });
+
+//check to see if we can access the multi player page
+describe('testing /play/multiplayer', function(done) {
+	//if the user is not logged in we should get a 302 response code and be directed to the /login page
+	it('should return a 302 response and redirect to /users/login if you are not logged in', function(done) {
+		request(app).get('/play/playtype/multiplayer').expect('Location', '/users/login').expect(302, done);
+	});
+});
+
+//check to see if we can access the multi player create room page
+describe('testing /play/multiplayer/create', function(done) {
+	//if the user is not logged in we should get a 302 response code and be directed to the /login page
+	it('should return a 302 response and redirect to /users/login if you are not logged in', function(done) {
+		request(app).get('/play//multiplayer/create').expect('Location', '/users/login').expect(302, done);
+	});
+});
