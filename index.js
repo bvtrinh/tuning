@@ -48,7 +48,7 @@ var rooms = [];
 app.post('/multiplayer/join', (req, res) => {
 	if (req.session.username) {
 		var roomCode = req.body.roomCode;
-		if (roomCode in rooms && !rooms[roomCode].started) {
+		if (roomCode in rooms && !rooms[roomCode].started && rooms[roomCode].pCount < 8) {
 			res.render('pages/lobby', { username: req.session.username, room: 'join', code: roomCode });
 		} else {
 			res.render('pages/multiplayer', {
