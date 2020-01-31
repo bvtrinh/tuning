@@ -223,30 +223,12 @@ io.on('connection', (socket) => {
 					io.sockets.in(code).emit('messageReceived', '1', 'Server');
 				} else if (time == 0) {
 					io.sockets.in(code).emit('messageReceived', 'Go', 'Server');
-
-					if (rooms[code].genre == 'demo1') {
-						fs.readFile('demo1.json', 'utf-8', function(err, contents) {
-							var playlist = JSON.parse(contents);
-							console.log(playlist);
-							io.sockets.in(code).emit('loadPlaylist', playlist);
+					music.getRelatedArtists(rooms[code].genre, function(returnVal) {
+						music.getRelatedSongs(returnVal, function(finalPlaylist) {
+							io.sockets.in(code).emit('loadPlaylist', finalPlaylist);
 							rooms[code].started = true;
 						});
-					} else if (rooms[code].genre == 'demo2') {
-						fs.readFile('demo2.json', 'utf-8', function(err, contents) {
-							var playlist = JSON.parse(contents);
-							console.log(playlist);
-							io.sockets.in(code).emit('loadPlaylist', playlist);
-							rooms[code].started = true;
-						});
-					} else {
-						music.getRelatedArtists(rooms[code].genre, function(returnVal) {
-							music.getRelatedSongs(returnVal, function(finalPlaylist) {
-								console.log(finalPlaylist);
-								io.sockets.in(code).emit('loadPlaylist', finalPlaylist);
-								rooms[code].started = true;
-							});
-						});
-					}
+					});
 					clearInterval(lobbyTimer);
 				}
 				time = time - 100;

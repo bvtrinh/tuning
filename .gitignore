@@ -14,3 +14,7 @@ docker-compose.yml
 # todo-list
 todo.txt
 gameplay.txt
+
+# demos
+demo1.json
+demo2.json

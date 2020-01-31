@@ -47,24 +47,12 @@ router.get('/genre/:genre', (req, res) => {
 });
 
 router.post('/get_playlist', (req, res) => {
-	if (req.session.genre == 'demo1') {
-		fs.readFile('demo1.json', 'utf-8', function(err, contents) {
-			console.log(contents);
-			res.send(contents);
+	music.getRelatedArtists(req.session.genre, function(returnVal) {
+		music.getRelatedSongs(returnVal, function(finalPlaylist) {
+			console.log(finalPlaylist);
+			res.send(finalPlaylist);
 		});
-	} else if (req.session.genre == 'demo2') {
-		fs.readFile('demo2.json', 'utf-8', function(err, contents) {
-			console.log(contents);
-			res.send(contents);
-		});
-	} else {
-		music.getRelatedArtists(req.session.genre, function(returnVal) {
-			music.getRelatedSongs(returnVal, function(finalPlaylist) {
-				console.log(finalPlaylist);
-				res.send(finalPlaylist);
-			});
-		});
-	}
+	});
 });
 
 router.get('/playtype/multiplayer', (req, res) => {
