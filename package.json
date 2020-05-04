@@ -41,7 +41,6 @@
 		"jsonfile": "^5.0.0",
 		"node-spotify-api": "^1.1.1",
 		"pg": "^7.12.1",
-		"psql": "0.0.1",
 		"socket.io": "^2.3.0",
 		"supertest": "^4.0.2"
 	},
