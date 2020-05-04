@@ -68,32 +68,32 @@ app.get('*', function(req, res) {
 });
 
 console.log('Running ' + process.env.NODE_ENV + ' environment...');
-if (process.env.NODE_ENV == 'production') {
-	console.log('------STARTING SONG DATABASE UPDATE------');
-	music.updateSongDB();
-	setTimeout(function() {
-		music.updateSongDBSpecific('2016-08-27');
-	}, 30000);
+// if (process.env.NODE_ENV == 'production') {
+// 	console.log('------STARTING SONG DATABASE UPDATE------');
+// 	music.updateSongDB();
+// 	setTimeout(function() {
+// 		music.updateSongDBSpecific('2016-08-27');
+// 	}, 30000);
 
-	setTimeout(function() {
-		music.updateSongDBSpecific('2013-08-27');
-	}, 60000);
+// 	setTimeout(function() {
+// 		music.updateSongDBSpecific('2013-08-27');
+// 	}, 60000);
 
-	setTimeout(function() {
-		music.updateSongDBSpecific('2010-08-27');
-	}, 90000);
+// 	setTimeout(function() {
+// 		music.updateSongDBSpecific('2010-08-27');
+// 	}, 90000);
 
-	setTimeout(function() {
-		music.updateSongDBSpecific('2007-08-27');
-	}, 120000);
+// 	setTimeout(function() {
+// 		music.updateSongDBSpecific('2007-08-27');
+// 	}, 120000);
 
-	setTimeout(function() {
-		music.updateSongDBSpecific('2004-08-27');
-	}, 150000);
+// 	setTimeout(function() {
+// 		music.updateSongDBSpecific('2004-08-27');
+// 	}, 150000);
 
-	setInterval(music.alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20);
-	setInterval(music.updateSongDB, 10 * 24 * 60 * 60 * 1000);
-}
+// 	setInterval(music.alertUpdate, 10 * 24 * 60 * 60 * 1000 - 20);
+// 	setInterval(music.updateSongDB, 10 * 24 * 60 * 60 * 1000);
+// }
 
 // ***** MULTIPLAYER *****
 

@@ -16,7 +16,6 @@ Tuning is a party game, where the players are groups of friends that compete aga
 - [Node](https://nodejs.org/en/) 
 - [Express](https://expressjs.com/)
 - [Spotify API](https://developer.spotify.com/documentation/web-api/)
-- [Billboard API](https://www.npmjs.com/package/billboard-top-100)
 - [socket.io](https://socket.io/)
 - [Postgres](https://www.postgresql.org/)
 - [Bootstrap](https://getbootstrap.com/)
