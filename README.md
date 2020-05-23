@@ -2,6 +2,8 @@
 
 Tuning is a party game, where the players are groups of friends that compete against one another in a fast-paced game of guessing the song artist that is associated with a 30 second music clip that plays.
 
+Link to website:
+https://tuning-game.herokuapp.com/
 
 ## Motivation
  The aim of Tuning is to provide entertainment and a fun activity for groups of friends to play on weekends, game nights, trivia nights, bars, etc. which gives them an opportunity to socialize and create closer bonds amongst each other, and make new friends.
